@@ -177,9 +177,16 @@
 
   /* ---------- lenis + gsap reveals ---------- */
   function start(){
-    if(typeof Lenis!=='undefined'){var l=new Lenis({lerp:0.1});
+    if(typeof Lenis!=='undefined'){var l=new Lenis({lerp:0.1});window.__lenis=l;
       if(hasG){l.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){l.raf(t*1000)});gsap.ticker.lagSmoothing(0);}
-      else{function raf(t){l.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);}}
+      else{function raf(t){l.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);}
+      /* recompute scrollable height after fonts/lottie/images reflow so the footer is always reachable */
+      var rzT;function rz(){clearTimeout(rzT);rzT=setTimeout(function(){try{l.resize();if(hasG)ScrollTrigger.refresh();}catch(e){}},120);}
+      window.addEventListener('load',rz);window.addEventListener('resize',rz);
+      if(document.fonts&&document.fonts.ready)document.fonts.ready.then(rz);
+      setTimeout(rz,600);setTimeout(rz,1600);setTimeout(rz,3000);
+      if(window.ResizeObserver){try{new ResizeObserver(rz).observe(document.body);}catch(e){}}
+    }
     if(!hasG){document.querySelectorAll('.reveal').forEach(function(e){e.style.opacity=1;e.style.transform='none'});return;}
     gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}})});
     gsap.utils.toArray('.count').forEach(function(el){var to=+el.getAttribute('data-to');
