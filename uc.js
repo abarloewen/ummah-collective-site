@@ -147,6 +147,25 @@
     }
   }
 
+  /* ---------- hero title: cycle languages every 3s ---------- */
+  function initHeroCycle(){
+    var h1=document.querySelector('header.hero h1.hero-cycle'); if(!h1) return;
+    var t1=h1.querySelector('.ht1'), t2=h1.querySelector('.ht2'); if(!t1||!t2) return;
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var order=['en','de','ms','ar','zh'], i=0;
+    h1.style.transition='opacity .55s ease, filter .55s ease, transform .55s ease';
+    setInterval(function(){
+      i=(i+1)%order.length; var d=I18N[order[i]]; if(!d) return;
+      h1.style.opacity='0'; h1.style.filter='blur(7px)'; h1.style.transform='translateY(12px)';
+      setTimeout(function(){
+        if(d.tag1!=null) t1.innerHTML=d.tag1;
+        if(d.tag2!=null) t2.innerHTML=d.tag2;
+        h1.setAttribute('dir', order[i]==='ar'?'rtl':'ltr');
+        h1.style.opacity='1'; h1.style.filter='none'; h1.style.transform='none';
+      },560);
+    },3000);
+  }
+
   /* ---------- chrome: nav, menu, cursor, magnetic ---------- */
   function initChrome(){
     var nav=document.getElementById('nav'); if(nav) addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>40)});
@@ -380,6 +399,6 @@
     var bar=b.querySelector('.boot-bar i'); setTimeout(function(){ if(bar) bar.style.width='100%'; },80);
     setTimeout(function(){ b.classList.add('done'); document.body.style.overflow=''; try{sessionStorage.setItem('uc_booted','1');}catch(e){} setTimeout(function(){ if(b.parentNode) b.remove(); },900); },1600);
   }
-  function boot(){ initBoot(); initLang(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initCmdk(); initSectionFX(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initCmdk(); initSectionFX(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
