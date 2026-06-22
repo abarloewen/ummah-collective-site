@@ -429,18 +429,18 @@ nav.scrolled .nav-in{padding-top:11px;padding-bottom:11px}
 @keyframes ubl{0%,100%{opacity:1}50%{opacity:.25}}
 
 /* ===== tighter / more polished menu ===== */
-nav .nav-in{padding-top:13px;padding-bottom:13px}
-nav.scrolled .nav-in{padding-top:9px;padding-bottom:9px}
-.brand{height:32px}.brand .logo{height:26px}
+nav .nav-in{padding-top:15px;padding-bottom:15px}
+nav.scrolled .nav-in{padding-top:10px;padding-bottom:10px}
+.brand{height:auto}.brand .logo{height:46px}
+nav.scrolled .brand .logo{height:38px;transition:height .35s ease}
 .nav-links{gap:22px}
 .nav-links>a,.has-mega>a,.has-sub>a{font-size:13.5px}
 .nav-cta{gap:11px}
 .kbd{padding:7px 10px;font-size:10.5px}
 .btn{padding:13px 22px;font-size:12px}
 nav .btn-fill{padding:11px 20px}
-.mega{top:58px;padding:26px var(--gut)}
+.mega{top:74px;padding:30px var(--gut)}
 .mega-in{gap:26px!important}
-.mega-link{padding:8px 0}
 .mega-link .ic{width:30px;height:30px}
 .mega-col h6{font-size:10.5px;margin-bottom:10px}
 .lang>button{padding:7px 11px}
