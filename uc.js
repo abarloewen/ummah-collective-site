@@ -75,6 +75,7 @@
     var _ph=_seed*6.2831;  // random phase so each load's colour drift starts differently
     function setH(u,dh,s,l){tmp.setHSL(((baseh+dh)%1+1)%1,s,l);u.value.set(tmp.r,tmp.g,tmp.b);}
     var intro=(_seed<0.5?1:-1);
+    var _hz=-1,_rootS=document.documentElement.style;  // publishes live aurora hue to CSS (--auraH) so thumbnails track the background
     var mxv=.5,myv=.5,mX=.5,mY=.5,t0=performance.now();
     addEventListener('mousemove',function(e){mxv=e.clientX/innerWidth;myv=1-e.clientY/innerHeight});
     addEventListener('resize',function(){rnd.setSize(innerWidth,innerHeight);uni.uRes.value.set(innerWidth,innerHeight)});
@@ -86,6 +87,7 @@
       uni.uBoost.value+=(UC_BOOST-uni.uBoost.value)*0.12; UC_BOOST*=0.92;  // scroll-velocity intensity
       var drift=Math.sin(tt*0.08+_ph)*0.10 + p*0.15 + intro*0.16 + UC_SEC;
       setH(uni.uC2,drift,0.72,0.30); setH(uni.uC3,drift+0.07,0.85,0.58); setH(uni.uC4,drift-0.08,0.60,0.70);
+      if(tt-_hz>0.1){_hz=tt; _rootS.setProperty('--auraH',((((baseh+drift)%1+1)%1)*360).toFixed(0)); _rootS.setProperty('--auraH2',((((baseh+drift+0.09)%1+1)%1)*360).toFixed(0));}
       mX+=(mxv-mX)*.05;mY+=(myv-mY)*.05;uni.uMouse.value.set(mX,mY);
       rnd.render(sc,cam);})();
   }
