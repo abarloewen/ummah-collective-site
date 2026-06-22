@@ -68,10 +68,12 @@
       uC2:{value:new THREE.Vector3().fromArray(tc[0])},uC3:{value:new THREE.Vector3().fromArray(tc[1])},uC4:{value:new THREE.Vector3().fromArray(tc[2])}};
     var mat=new THREE.ShaderMaterial({uniforms:uni,vertexShader:VERT,fragmentShader:FRAG});
     sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat));
-    // per-page base hue (all within UC jade/teal CI) + drift + load sweep
-    var BASEH={'default':150,'services':182,'work':208,'ventures':166,'insights':230,'contact':142,'about':224,'market':194};
+    // per-page base hue: home stays jade-family; every other subpage gets its own hue across the FULL spectrum (path hash) + per-load jitter
     var _seed=Math.random();
-    var baseh=((((BASEH[document.body.getAttribute('data-aurora')]||150)+(_seed*40-20))%360+360)%360)/360, tmp=new THREE.Color();
+    function _phash(){var s=location.pathname||'/',h=2166136261;for(var i=0;i<s.length;i++){h=((h^s.charCodeAt(i))*16777619)>>>0;}return h%360;}
+    var _last=(location.pathname.split('/').pop()||'');
+    var _pageHue=(_last===''||_last==='index.html')?(150+_seed*46):((_phash()+(_seed*30-15))%360+360)%360;
+    var baseh=((_pageHue%360+360)%360)/360, tmp=new THREE.Color();
     var _ph=_seed*6.2831;  // random phase so each load's colour drift starts differently
     function setH(u,dh,s,l){tmp.setHSL(((baseh+dh)%1+1)%1,s,l);u.value.set(tmp.r,tmp.g,tmp.b);}
     var intro=(_seed<0.5?1:-1);
@@ -85,9 +87,9 @@
       intro+=(0-intro)*0.012;   // eases out over ~1.5s on each page load -> colour sweeps in
       UC_SEC+=(UC_SECT-UC_SEC)*0.05;            // section-driven hue, eased
       uni.uBoost.value+=(UC_BOOST-uni.uBoost.value)*0.12; UC_BOOST*=0.92;  // scroll-velocity intensity
-      var drift=Math.sin(tt*0.08+_ph)*0.10 + p*0.15 + intro*0.16 + UC_SEC;
+      var drift=Math.sin(tt*0.08+_ph)*0.13 + p*0.18 + intro*0.16 + UC_SEC;
       setH(uni.uC2,drift,0.72,0.30); setH(uni.uC3,drift+0.07,0.85,0.58); setH(uni.uC4,drift-0.08,0.60,0.70);
-      if(tt-_hz>0.1){_hz=tt; _rootS.setProperty('--auraH',((((baseh+drift)%1+1)%1)*360).toFixed(0)); _rootS.setProperty('--auraH2',((((baseh+drift+0.09)%1+1)%1)*360).toFixed(0));}
+      if(tt-_hz>0.1){_hz=tt; _rootS.setProperty('--auraH',((((baseh+drift)%1+1)%1)*360).toFixed(0)); _rootS.setProperty('--auraH2',((((baseh+drift+0.07)%1+1)%1)*360).toFixed(0));}
       mX+=(mxv-mX)*.05;mY+=(myv-mY)*.05;uni.uMouse.value.set(mX,mY);
       rnd.render(sc,cam);})();
   }
