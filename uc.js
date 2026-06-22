@@ -72,7 +72,8 @@
     var _seed=Math.random();
     function _phash(){var s=location.pathname||'/',h=2166136261;for(var i=0;i<s.length;i++){h=((h^s.charCodeAt(i))*16777619)>>>0;}return h%360;}
     var _last=(location.pathname.split('/').pop()||'');
-    var _pageHue=(_last===''||_last==='index.html')?(150+_seed*46):((_phash()+(_seed*30-15))%360+360)%360;
+    var _isHome=(_last===''||_last==='index.html');
+    var _pageHue=_isHome?(150+_seed*26):((_phash()+(_seed*30-15))%360+360)%360;  // home locked to jade band; other subpages span the full wheel
     var baseh=((_pageHue%360+360)%360)/360, tmp=new THREE.Color();
     var _ph=_seed*6.2831;  // random phase so each load's colour drift starts differently
     function setH(u,dh,s,l){tmp.setHSL(((baseh+dh)%1+1)%1,s,l);u.value.set(tmp.r,tmp.g,tmp.b);}
@@ -87,7 +88,8 @@
       intro+=(0-intro)*0.012;   // eases out over ~1.5s on each page load -> colour sweeps in
       UC_SEC+=(UC_SECT-UC_SEC)*0.05;            // section-driven hue, eased
       uni.uBoost.value+=(UC_BOOST-uni.uBoost.value)*0.12; UC_BOOST*=0.92;  // scroll-velocity intensity
-      var drift=Math.sin(tt*0.08+_ph)*0.13 + p*0.18 + intro*0.16 + UC_SEC;
+      var _wander=Math.sin(tt*0.08+_ph)*0.13 + p*0.18 + intro*0.16 + UC_SEC;
+      var drift=_isHome?_wander*0.24:_wander;  // home barely wanders -> stays jade; subpages roam the full spectrum
       setH(uni.uC2,drift,0.72,0.30); setH(uni.uC3,drift+0.07,0.85,0.58); setH(uni.uC4,drift-0.08,0.60,0.70);
       if(tt-_hz>0.1){_hz=tt; _rootS.setProperty('--auraH',((((baseh+drift)%1+1)%1)*360).toFixed(0)); _rootS.setProperty('--auraH2',((((baseh+drift+0.07)%1+1)%1)*360).toFixed(0));}
       mX+=(mxv-mX)*.05;mY+=(myv-mY)*.05;uni.uMouse.value.set(mX,mY);
