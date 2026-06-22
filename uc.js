@@ -134,10 +134,21 @@
     document.body.setAttribute('lang', l);
     var d=I18N[l];
     document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n'); if(d[k]!=null) el.innerHTML=d[k];});
+    var TR=(window.TR&&window.TR[l])||null;
+    document.querySelectorAll('[data-en]').forEach(function(el){var en=el.getAttribute('data-en'); el.textContent=(TR&&TR[en])||en;});
     var lc=document.getElementById('langCur'); if(lc) lc.textContent=l.toUpperCase();
+  }
+  /* snapshot translatable body text once, so window.TR can swap it per language */
+  function snapTR(){
+    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p';
+    document.querySelectorAll(sel).forEach(function(el){
+      if(el.hasAttribute('data-i18n')||el.hasAttribute('data-en')||el.children.length) return;
+      var t=el.textContent.trim(); if(t&&t.length<=600) el.setAttribute('data-en',t);
+    });
   }
   function initLang(){
     var stored; try{stored=localStorage.getItem('uc_lang')}catch(e){}
+    snapTR();
     setLang(stored||'en');
     var box=document.getElementById('lang');
     if(box){var btn=box.querySelector('button');
