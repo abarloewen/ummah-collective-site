@@ -69,10 +69,12 @@
     var mat=new THREE.ShaderMaterial({uniforms:uni,vertexShader:VERT,fragmentShader:FRAG});
     sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),mat));
     // per-page base hue (all within UC jade/teal CI) + drift + load sweep
-    var BASEH={'default':150,'services':138,'work':172,'ventures':145,'insights':162,'contact':126,'about':178,'market':154};
-    var baseh=(BASEH[document.body.getAttribute('data-aurora')]||150)/360, tmp=new THREE.Color();
+    var BASEH={'default':150,'services':182,'work':208,'ventures':166,'insights':230,'contact':142,'about':224,'market':194};
+    var _seed=Math.random();
+    var baseh=((((BASEH[document.body.getAttribute('data-aurora')]||150)+(_seed*40-20))%360+360)%360)/360, tmp=new THREE.Color();
+    var _ph=_seed*6.2831;  // random phase so each load's colour drift starts differently
     function setH(u,dh,s,l){tmp.setHSL(((baseh+dh)%1+1)%1,s,l);u.value.set(tmp.r,tmp.g,tmp.b);}
-    var intro=1;
+    var intro=(_seed<0.5?1:-1);
     var mxv=.5,myv=.5,mX=.5,mY=.5,t0=performance.now();
     addEventListener('mousemove',function(e){mxv=e.clientX/innerWidth;myv=1-e.clientY/innerHeight});
     addEventListener('resize',function(){rnd.setSize(innerWidth,innerHeight);uni.uRes.value.set(innerWidth,innerHeight)});
@@ -82,8 +84,8 @@
       intro+=(0-intro)*0.012;   // eases out over ~1.5s on each page load -> colour sweeps in
       UC_SEC+=(UC_SECT-UC_SEC)*0.05;            // section-driven hue, eased
       uni.uBoost.value+=(UC_BOOST-uni.uBoost.value)*0.12; UC_BOOST*=0.92;  // scroll-velocity intensity
-      var drift=Math.sin(tt*0.09)*0.06 + p*0.16 + intro*0.16 + UC_SEC;
-      setH(uni.uC2,drift,0.72,0.30); setH(uni.uC3,drift+0.05,0.86,0.60); setH(uni.uC4,drift-0.06,0.62,0.70);
+      var drift=Math.sin(tt*0.08+_ph)*0.10 + p*0.15 + intro*0.16 + UC_SEC;
+      setH(uni.uC2,drift,0.72,0.30); setH(uni.uC3,drift+0.07,0.85,0.58); setH(uni.uC4,drift-0.08,0.60,0.70);
       mX+=(mxv-mX)*.05;mY+=(myv-mY)*.05;uni.uMouse.value.set(mX,mY);
       rnd.render(sc,cam);})();
   }
