@@ -304,13 +304,7 @@
     if(fx==='particles') particles2D(c); else if(fx==='grid') grid2D(c); else if(fx==='mesh') mesh2D(c); else initGL(); }
 
   /* ---------- mega menu preview pane ---------- */
-  function initMegaPreview(){
-    var pv=document.getElementById('megaPreview'); if(!pv) return;
-    var im=pv.querySelector('img'),lab=pv.querySelector('.lab'),dsc=pv.querySelector('.dsc');
-    document.querySelectorAll('.mega-link[data-title]').forEach(function(l){
-      l.addEventListener('mouseenter',function(){ var di=l.getAttribute('data-img'); if(im&&di){im.src=di;} if(lab)lab.textContent=l.getAttribute('data-title')||''; if(dsc)dsc.textContent=l.getAttribute('data-desc')||''; });
-    });
-  }
+  function initMegaPreview(){ /* mega right panel is now a static CTA + socials card — no hover image swap */ }
 
   /* ---------- ⌘K command palette ---------- */
   function initCmdk(){
