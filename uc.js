@@ -90,21 +90,41 @@
 
   /* ---------- i18n ---------- */
   var I18N={
-    en:{work:'Work',services:'Services',ventures:'Ventures',about:'About',insights:'Insights',contact:'Contact',
-      start:'Start a project',book:'Book a call',brief:'Send a brief',audit:'Free AI audit',whatsapp:'WhatsApp',
-      tag1:'Intelligence,',tag2:'with integrity.',herosub:'We build the software, AI agents and systems modern companies run on — engineered fast, grounded in a decade of trust.',menu:'Menu'},
-    de:{work:'Arbeiten',services:'Leistungen',ventures:'Ventures',about:'Über uns',insights:'Insights',contact:'Kontakt',
-      start:'Projekt starten',book:'Termin buchen',brief:'Briefing senden',audit:'Kostenloses KI-Audit',whatsapp:'WhatsApp',
-      tag1:'Intelligenz,',tag2:'mit Integrität.',herosub:'Wir bauen die Software, KI-Agenten und Systeme, auf denen moderne Unternehmen laufen — schnell entwickelt, gegründet auf einem Jahrzehnt Vertrauen.',menu:'Menü'},
-    ms:{work:'Kerja',services:'Perkhidmatan',ventures:'Usaha',about:'Tentang',insights:'Wawasan',contact:'Hubungi',
-      start:'Mulakan projek',book:'Tempah panggilan',brief:'Hantar taklimat',audit:'Audit AI percuma',whatsapp:'WhatsApp',
-      tag1:'Kecerdasan,',tag2:'dengan integriti.',herosub:'Kami membina perisian, ejen AI dan sistem yang digunakan syarikat moden — dibina pantas, berasaskan kepercayaan sedekad.',menu:'Menu'},
-    ar:{work:'أعمالنا',services:'خدماتنا',ventures:'مشاريعنا',about:'من نحن',insights:'مقالات',contact:'تواصل',
-      start:'ابدأ مشروعًا',book:'احجز مكالمة',brief:'أرسل موجزًا',audit:'تدقيق ذكاء اصطناعي مجاني',whatsapp:'واتساب',
-      tag1:'الذكاء،',tag2:'مع النزاهة.',herosub:'نبني البرمجيات ووكلاء الذكاء الاصطناعي والأنظمة التي تعتمد عليها الشركات الحديثة — بسرعة، وبثقة بُنيت على مدى عقد.',menu:'القائمة'},
-    zh:{work:'作品',services:'服务',ventures:'自有业务',about:'关于',insights:'洞察',contact:'联系',
-      start:'启动项目',book:'预约通话',brief:'发送需求',audit:'免费 AI 审计',whatsapp:'WhatsApp',
-      tag1:'智能，',tag2:'兼具诚信。',herosub:'我们构建现代企业赖以运行的软件、AI 智能体与系统——快速交付，建立在十年信任之上。',menu:'菜单'}
+    en:{work:"Work",services:"Services",ventures:"Ventures",about:"About",insights:"Insights",contact:"Contact",products:"Products",company:"Company",connect:"Connect",
+      start:"Start a project",book:"Book a call",brief:"Send a brief",audit:"Free AI audit",whatsapp:"WhatsApp",email:"Email",menu:"Menu",allsol:"All solutions &rarr;",imprint:"Imprint &amp; Privacy",
+      tag1:"Intelligence,",tag2:"with integrity.",herosub:"We build the software, AI agents and systems modern companies run on — engineered fast, grounded in a decade of trust.",
+      ftag:"Intelligence, with integrity. An applied-AI studio for the trust economy — the software, agents and systems modern companies run on.",
+      letsbuild:"Let's build",ctah2:"Build something<br>worth <em>trusting.</em>",ctalead:"Tell us what's slowing your business down. We'll show you the system that fixes it — and how fast.",lblphone:"Phone",lblstudio:"Studio",
+      abadge:"No-risk front door",audith2:"Get a <em>free AI audit</em> of your business",auditp:"A 30-minute teardown: where AI agents, automation and a better site would save you the most time and money. No pitch, just the map.",
+      shifteyebrow:"(01) — The shift",shifth2:"Anyone can <em>use</em> AI now. Almost no one turns it into systems you actually <em>trust.</em>",whatwebuild:"What we build",selwork:"Selected work",st_proj:"Projects",st_cli:"Clients",st_yrs:"Years",st_lang:"Languages"},
+    de:{work:"Arbeiten",services:"Leistungen",ventures:"Ventures",about:"Über uns",insights:"Insights",contact:"Kontakt",products:"Produkte",company:"Unternehmen",connect:"Kontakt",
+      start:"Projekt starten",book:"Termin buchen",brief:"Briefing senden",audit:"Kostenloses KI-Audit",whatsapp:"WhatsApp",email:"E-Mail",menu:"Menü",allsol:"Alle Lösungen &rarr;",imprint:"Impressum &amp; Datenschutz",
+      tag1:"Intelligenz,",tag2:"mit Integrität.",herosub:"Wir bauen die Software, KI-Agenten und Systeme, auf denen moderne Unternehmen laufen — schnell entwickelt, gegründet auf einem Jahrzehnt Vertrauen.",
+      ftag:"Intelligenz, mit Integrität. Ein Applied-AI-Studio für die Vertrauensökonomie — die Software, Agenten und Systeme, auf denen moderne Unternehmen laufen.",
+      letsbuild:"Lass uns bauen",ctah2:"Bauen wir etwas,<br>dem man <em>vertraut.</em>",ctalead:"Sagen Sie uns, was Ihr Geschäft ausbremst. Wir zeigen Ihnen das System, das es löst — und wie schnell.",lblphone:"Telefon",lblstudio:"Studio",
+      abadge:"Risikofreier Einstieg",audith2:"Holen Sie sich ein <em>kostenloses KI-Audit</em>",auditp:"Eine 30-minütige Analyse: wo KI-Agenten, Automatisierung und eine bessere Website am meisten Zeit und Geld sparen. Kein Pitch, nur die Landkarte.",
+      shifteyebrow:"(01) — Der Wandel",shifth2:"Jeder kann KI heute <em>nutzen</em>. Fast niemand macht daraus Systeme, denen man wirklich <em>vertraut.</em>",whatwebuild:"Was wir bauen",selwork:"Ausgewählte Arbeiten",st_proj:"Projekte",st_cli:"Kunden",st_yrs:"Jahre",st_lang:"Sprachen"},
+    ms:{work:"Kerja",services:"Perkhidmatan",ventures:"Usaha",about:"Tentang",insights:"Wawasan",contact:"Hubungi",products:"Produk",company:"Syarikat",connect:"Hubungi",
+      start:"Mulakan projek",book:"Tempah panggilan",brief:"Hantar taklimat",audit:"Audit AI percuma",whatsapp:"WhatsApp",email:"E-mel",menu:"Menu",allsol:"Semua penyelesaian &rarr;",imprint:"Notis &amp; Privasi",
+      tag1:"Kecerdasan,",tag2:"dengan integriti.",herosub:"Kami membina perisian, ejen AI dan sistem yang digunakan syarikat moden — dibina pantas, berasaskan kepercayaan sedekad.",
+      ftag:"Kecerdasan, dengan integriti. Studio AI gunaan untuk ekonomi kepercayaan — perisian, ejen dan sistem yang digunakan syarikat moden.",
+      letsbuild:"Mari bina",ctah2:"Bina sesuatu yang<br><em>dipercayai.</em>",ctalead:"Beritahu kami apa yang melambatkan perniagaan anda. Kami tunjukkan sistem yang membaikinya — dan secepat mana.",lblphone:"Telefon",lblstudio:"Studio",
+      abadge:"Pintu masuk tanpa risiko",audith2:"Dapatkan <em>audit AI percuma</em> untuk perniagaan anda",auditp:"Analisis 30 minit: di mana ejen AI, automasi dan laman yang lebih baik menjimatkan paling banyak masa dan wang. Tiada jualan, hanya peta.",
+      shifteyebrow:"(01) — Peralihan",shifth2:"Sesiapa boleh <em>guna</em> AI sekarang. Hampir tiada yang menjadikannya sistem yang anda benar-benar <em>percayai.</em>",whatwebuild:"Apa yang kami bina",selwork:"Kerja terpilih",st_proj:"Projek",st_cli:"Pelanggan",st_yrs:"Tahun",st_lang:"Bahasa"},
+    ar:{work:"أعمالنا",services:"خدماتنا",ventures:"مشاريعنا",about:"من نحن",insights:"مقالات",contact:"تواصل",products:"المنتجات",company:"الشركة",connect:"تواصل",
+      start:"ابدأ مشروعًا",book:"احجز مكالمة",brief:"أرسل موجزًا",audit:"تدقيق ذكاء اصطناعي مجاني",whatsapp:"واتساب",email:"البريد",menu:"القائمة",allsol:"كل الحلول &larr;",imprint:"البيان والخصوصية",
+      tag1:"الذكاء،",tag2:"مع النزاهة.",herosub:"نبني البرمجيات ووكلاء الذكاء الاصطناعي والأنظمة التي تعتمد عليها الشركات الحديثة — بسرعة، وبثقة بُنيت على مدى عقد.",
+      ftag:"الذكاء، مع النزاهة. استوديو ذكاء اصطناعي تطبيقي لاقتصاد الثقة — البرمجيات والوكلاء والأنظمة التي تعتمد عليها الشركات الحديثة.",
+      letsbuild:"لِنبدأ البناء",ctah2:"لنبنِ شيئًا<br><em>جديرًا بالثقة.</em>",ctalead:"أخبرنا بما يُبطئ أعمالك، وسنُريك النظام الذي يُصلحه — وبأي سرعة.",lblphone:"الهاتف",lblstudio:"الاستوديو",
+      abadge:"بداية بلا مخاطر",audith2:"احصل على <em>تدقيق ذكاء اصطناعي مجاني</em> لأعمالك",auditp:"جلسة 30 دقيقة: أين يوفّر وكلاء الذكاء الاصطناعي والأتمتة وموقع أفضل أكبر قدر من الوقت والمال. بلا عروض بيع، مجرد خارطة طريق.",
+      shifteyebrow:"(٠١) — التحوّل",shifth2:"يستطيع الجميع <em>استخدام</em> الذكاء الاصطناعي الآن، وقلّة من يحوّله إلى أنظمة <em>تثق</em> بها فعلًا.",whatwebuild:"ما الذي نبنيه",selwork:"أعمال مختارة",st_proj:"مشاريع",st_cli:"عملاء",st_yrs:"سنوات",st_lang:"لغات"},
+    zh:{work:"作品",services:"服务",ventures:"自有业务",about:"关于",insights:"洞察",contact:"联系",products:"产品",company:"公司",connect:"联系",
+      start:"启动项目",book:"预约通话",brief:"发送需求",audit:"免费 AI 审计",whatsapp:"WhatsApp",email:"邮箱",menu:"菜单",allsol:"全部方案 &rarr;",imprint:"版本说明与隐私",
+      tag1:"智能，",tag2:"兼具诚信。",herosub:"我们构建现代企业赖以运行的软件、AI 智能体与系统——快速交付，建立在十年信任之上。",
+      ftag:"智能，兼具诚信。面向信任经济的应用型 AI 工作室——为现代企业打造软件、智能体与系统。",
+      letsbuild:"一起打造",ctah2:"打造<br>值得<em>信赖</em>的产品。",ctalead:"告诉我们是什么拖慢了你的业务，我们会展示解决它的系统——以及多快见效。",lblphone:"电话",lblstudio:"工作室",
+      abadge:"零风险的第一步",audith2:"为你的业务获取<em>免费 AI 审计</em>",auditp:"30 分钟拆解：AI 智能体、自动化与更好的网站在哪里最能为你省时省钱。不推销，只给路线图。",
+      shifteyebrow:"(01) — 转变",shifth2:"如今人人都能<em>使用</em> AI，却几乎没人把它变成你真正<em>信赖</em>的系统。",whatwebuild:"我们构建什么",selwork:"精选作品",st_proj:"项目",st_cli:"客户",st_yrs:"年",st_lang:"语言"}
   };
   function setLang(l){
     if(!I18N[l]) l='en';
@@ -113,7 +133,7 @@
     document.body.setAttribute('dir', l==='ar'?'rtl':'ltr');
     document.body.setAttribute('lang', l);
     var d=I18N[l];
-    document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n'); if(d[k]!=null) el.textContent=d[k];});
+    document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n'); if(d[k]!=null) el.innerHTML=d[k];});
     var lc=document.getElementById('langCur'); if(lc) lc.textContent=l.toUpperCase();
   }
   function initLang(){
