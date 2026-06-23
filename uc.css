@@ -360,6 +360,21 @@ nav.scrolled .brand .logo{height:44px;transition:height .35s ease}
 .mega-link .ic-logo{padding:0;border:0;background:none;overflow:hidden}
 .mega-link .ic-logo img,.mega-link .ic-logo svg{width:32px;height:32px;border-radius:9px;object-fit:cover;display:block}
 .mega-link:hover .ic-logo{background:none;border:0;transform:translateY(-2px)}
+.mega-link .ic-word{width:auto;height:34px;padding:0 9px;background:#0a0e0f;border:1px solid rgba(134,239,172,.28);border-radius:9px;overflow:hidden;flex:0 0 auto;display:inline-flex;align-items:center}
+.mega-link .ic-word img{width:auto;height:15px;border-radius:0;object-fit:contain}
+.mega-link:hover .ic-word{transform:translateY(-2px);border-color:rgba(134,239,172,.55)}
+/* homepage product showcase */
+.prodshow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.prodcard{display:flex;align-items:center;gap:16px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(8,12,10,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:.45s cubic-bezier(.16,1,.3,1)}
+.prodcard:hover{border-color:color-mix(in srgb,var(--acc) 45%,transparent);transform:translateY(-3px);background:rgba(10,16,13,.62)}
+.prodcard .pl{flex:0 0 auto;width:54px;height:54px;display:grid;place-items:center}
+.prodcard .pl svg,.prodcard .pl img{width:54px;height:54px;border-radius:15px;object-fit:contain;display:block}
+.prodcard .pl-word{width:auto;background:#0a0e0f;border:1px solid rgba(134,239,172,.26);border-radius:13px;padding:0 14px;height:54px;display:inline-flex;align-items:center}
+.prodcard .pl-word img{width:auto;height:23px;border-radius:0}
+.prodcard .pt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.prodcard .pt b{font-family:var(--disp);font-weight:600;font-size:18px;color:var(--bone)}
+.prodcard .pt>span{font-size:13.5px;color:var(--dim)}
+@media(max-width:860px){.prodshow{grid-template-columns:1fr}}
 .mega-link b{display:block;font-size:14px;color:var(--bone);font-weight:500;line-height:1.2}
 .mega-link span{font-size:12px;color:var(--dim2);line-height:1.3}
 .mega-feat{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;min-height:170px;display:flex;flex-direction:column;justify-content:flex-end;padding:20px;background:linear-gradient(135deg,#12201a,#0a0d0b)}
