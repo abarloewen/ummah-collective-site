@@ -153,6 +153,7 @@
     var TR=(window.TR&&window.TR[l])||null;
     document.querySelectorAll('[data-en]').forEach(function(el){var en=el.getAttribute('data-en'); el.textContent=(TR&&TR[en])||en;});
     var lc=document.getElementById('langCur'); if(lc) lc.textContent=l.toUpperCase();
+    if(window.UC_heroAnchor) window.UC_heroAnchor(l);   // re-anchor the cycling hero title to the chosen language
   }
   /* snapshot translatable body text once, so window.TR can swap it per language */
   function snapTR(){
@@ -178,18 +179,18 @@
   function initHeroCycle(){
     var h1=document.querySelector('header.hero h1.hero-cycle'); if(!h1) return;
     var t1=h1.querySelector('.ht1'), t2=h1.querySelector('.ht2'); if(!t1||!t2) return;
+    var order=['en','de','ms','ar','zh'];
+    function apply(l){ var d=I18N[l]; if(!d) return; if(d.tag1!=null) t1.innerHTML=d.tag1; if(d.tag2!=null) t2.innerHTML=d.tag2; h1.setAttribute('dir', l==='ar'?'rtl':'ltr'); }
+    var cur='en'; try{cur=localStorage.getItem('uc_lang')||'en'}catch(e){}
+    var i=order.indexOf(cur); if(i<0) i=0;
+    apply(order[i]);                                   // begin on the language the user has selected
+    window.UC_heroAnchor=function(l){ var k=order.indexOf(l); if(k<0) return; i=k; apply(l); };  // re-anchor when the user switches language
     if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-    var order=['en','de','ms','ar','zh'], i=0;
     h1.style.transition='opacity .55s ease, filter .55s ease, transform .55s ease';
     setInterval(function(){
-      i=(i+1)%order.length; var d=I18N[order[i]]; if(!d) return;
+      i=(i+1)%order.length;
       h1.style.opacity='0'; h1.style.filter='blur(7px)'; h1.style.transform='translateY(12px)';
-      setTimeout(function(){
-        if(d.tag1!=null) t1.innerHTML=d.tag1;
-        if(d.tag2!=null) t2.innerHTML=d.tag2;
-        h1.setAttribute('dir', order[i]==='ar'?'rtl':'ltr');
-        h1.style.opacity='1'; h1.style.filter='none'; h1.style.transform='none';
-      },560);
+      setTimeout(function(){ apply(order[i]); h1.style.opacity='1'; h1.style.filter='none'; h1.style.transform='none'; },560);
     },3000);
   }
 
