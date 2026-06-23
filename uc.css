@@ -360,9 +360,9 @@ nav.scrolled .brand .logo{height:44px;transition:height .35s ease}
 .mega-link .ic-logo{padding:0;border:0;background:none;overflow:hidden}
 .mega-link .ic-logo img,.mega-link .ic-logo svg{width:32px;height:32px;border-radius:9px;object-fit:cover;display:block}
 .mega-link:hover .ic-logo{background:none;border:0;transform:translateY(-2px)}
-.mega-link .ic-word{padding:0;background:#0a0e0f;border:1px solid rgba(134,239,172,.32);border-radius:9px;overflow:hidden;display:grid;place-items:center}
-.mega-link .ic-word img{width:26px;height:auto;border-radius:0;object-fit:contain;display:block}
-.mega-link:hover .ic-word{transform:translateY(-2px);border-color:rgba(134,239,172,.6)}
+.mega-link .ic-word{width:auto!important;height:30px;padding:0 9px;background:#0a0e0f;border:1px solid rgba(134,239,172,.45);border-radius:8px;overflow:hidden;display:inline-flex;align-items:center;flex:0 0 auto;align-self:center}
+.mega-link .ic-word img{width:auto;height:13px;border-radius:0;object-fit:contain;display:block}
+.mega-link:hover .ic-word{transform:translateY(-2px);border-color:var(--acc2)}
 /* homepage product showcase */
 .prodshow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .prodcard{display:flex;align-items:center;gap:16px;padding:20px 22px;border:1px solid var(--line);border-radius:18px;background:rgba(8,12,10,.5);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:.45s cubic-bezier(.16,1,.3,1)}
