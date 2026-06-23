@@ -190,7 +190,7 @@ body[dir=rtl] .idx-row::after{transform:translateX(101%)}body[dir=rtl] .idx-row:
 .tile .top{margin-bottom:7px}
 .tile .top{display:flex;justify-content:space-between}.tile .cat{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2)}
 .tile .nm{font-family:var(--disp);font-weight:500;font-size:clamp(20px,2.1vw,32px);line-height:1}
-.tile .res{font-size:14.5px;color:var(--dim);margin-top:8px;max-width:36ch}
+.tile .res{display:none}
 
 /* stats */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,4vw,46px)}
