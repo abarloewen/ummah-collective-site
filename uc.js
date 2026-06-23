@@ -306,6 +306,18 @@
 
   /* ---------- mega menu preview pane ---------- */
   function initMegaPreview(){ /* mega right panel is now a static CTA + socials card — no hover image swap */ }
+  function initMicro(){
+    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    if(window.matchMedia&&window.matchMedia('(hover:none)').matches) return;
+    document.querySelectorAll('.btn-fill').forEach(function(b){
+      b.addEventListener('mousemove',function(e){ var r=b.getBoundingClientRect(); var x=(e.clientX-r.left-r.width/2)/r.width, y=(e.clientY-r.top-r.height/2)/r.height; b.style.transform='translate('+(x*7).toFixed(1)+'px,'+(y*7).toFixed(1)+'px)'; });
+      b.addEventListener('mouseleave',function(){ b.style.transform=''; });
+    });
+    document.querySelectorAll('.tile').forEach(function(t){
+      var ph=t.querySelector('.ph'); if(!ph) return;
+      t.addEventListener('mousemove',function(e){ var r=ph.getBoundingClientRect(); t.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%'); t.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%'); });
+    });
+  }
 
   /* ---------- ⌘K command palette ---------- */
   function initCmdk(){
@@ -421,6 +433,6 @@
     var bar=b.querySelector('.boot-bar i'); setTimeout(function(){ if(bar) bar.style.width='100%'; },80);
     setTimeout(function(){ b.classList.add('done'); document.body.style.overflow=''; try{sessionStorage.setItem('uc_booted','1');}catch(e){} setTimeout(function(){ if(b.parentNode) b.remove(); },900); },1600);
   }
-  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initCmdk(); initSectionFX(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
