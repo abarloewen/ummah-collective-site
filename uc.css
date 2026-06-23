@@ -370,7 +370,7 @@ nav.scrolled .nav-in{padding-top:11px;padding-bottom:11px}
 @media(max-width:1024px){.subnav{display:none}}
 
 /* ===== mega preview pane ===== */
-.mega-in{grid-template-columns:1fr 1fr 1fr 1.2fr!important;align-items:stretch}
+.mega-in{grid-template-columns:repeat(4,1fr) 1.1fr!important;align-items:stretch}
 .mega-preview{border:1px solid var(--line);border-radius:16px;overflow:hidden;position:relative;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;padding:24px;background:#0a0d0b}
 .mp-glow{position:absolute;inset:0;z-index:0;background:radial-gradient(130% 100% at 82% 8%,hsl(var(--auraH2,150) 60% 30% / .55),transparent 58%),linear-gradient(155deg,hsl(var(--auraH2,150) 46% 14%),#080b0a)}
 .mega-preview .pv{position:relative;z-index:2}
