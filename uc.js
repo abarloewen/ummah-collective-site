@@ -98,35 +98,35 @@
 
   /* ---------- i18n ---------- */
   var I18N={
-    en:{work:"Work",services:"Services",solutions:"Solutions",ventures:"Ventures",about:"About",insights:"Insights",contact:"Contact",products:"Products",company:"Company",club:"Founders Club",exploreclub:"Explore the Founders Club",connect:"Connect",
+    en:{work:"Work",services:"Services",solutions:"Solutions",ventures:"Ventures",about:"About",insights:"Insights",contact:"Contact",products:"Products",company:"Company",club:"Founders Club",exploreclub:"Explore the Founders Club",clubeyebrow:"Community · Founders Club",clubh:"Build alongside founders who <em>mean it.</em>",clubp:"A free community of Muslim and values-aligned founders — meeting online and in person in Kuala Lumpur.",clubtag:"Free to join · KL & Online",clubwhatson:"What’s on",clubev1:"<span>01</span> KL mixers & dinners",clubev2:"<span>02</span> Masterclasses & workshops",clubev3:"<span>03</span> Online webinars & AMAs",clubev4:"<span>04</span> Demo & pitch nights",homequote:"“They built our entire ecosystem — brand, site, tracking and a flagship store. <em>Not a campaign. An asset.</em>”",homequoteby:"ANAAKA — Halal Skincare · Flagship @ TRX, Kuala Lumpur",connect:"Connect",
       start:"Start a project",book:"Book a call",brief:"Send a brief",audit:"Free AI audit",whatsapp:"WhatsApp",email:"Email",menu:"Menu",allsol:"All solutions &rarr;",imprint:"Imprint &amp; Privacy",
       tag1:"Intelligence,",tag2:"with integrity.",herosub:"We build the software, AI agents and systems modern companies run on — engineered fast, grounded in a decade of trust.",
       ftag:"Intelligence, with integrity. An applied-AI studio for the trust economy — the software, agents and systems modern companies run on.",
       letsbuild:"Let's build",ctah2:"Build something<br>worth <em>trusting.</em>",ctalead:"Tell us what's slowing your business down. We'll show you the system that fixes it — and how fast.",lblphone:"Phone",lblstudio:"Studio",
       abadge:"No-risk front door",audith2:"Get a <em>free AI audit</em> of your business",auditp:"A 30-minute teardown: where AI agents, automation and a better site would save you the most time and money. No pitch, just the map.",
       shifteyebrow:"(01) — The shift",shifth2:"Anyone can <em>use</em> AI now. Almost no one turns it into systems you actually <em>trust.</em>",whatwebuild:"What we build",selwork:"Selected work",st_proj:"Projects",st_cli:"Clients",st_yrs:"Years",st_lang:"Languages"},
-    de:{work:"Arbeiten",services:"Leistungen",solutions:"Lösungen",ventures:"Ventures",about:"Über uns",insights:"Insights",contact:"Kontakt",products:"Produkte",company:"Unternehmen",club:"Founders Club",exploreclub:"Founders Club entdecken",connect:"Kontakt",
+    de:{work:"Arbeiten",services:"Leistungen",solutions:"Lösungen",ventures:"Ventures",about:"Über uns",insights:"Insights",contact:"Kontakt",products:"Produkte",company:"Unternehmen",club:"Founders Club",exploreclub:"Founders Club entdecken",clubeyebrow:"Community · Founders Club",clubh:"Bauen Sie mit Gründern, die es <em>ernst meinen.</em>",clubp:"Eine kostenlose Community muslimischer und werteorientierter Gründer — online und persönlich in Kuala Lumpur.",clubtag:"Kostenlos · KL & Online",clubwhatson:"Was läuft",clubev1:"<span>01</span> KL-Mixer & Dinner",clubev2:"<span>02</span> Masterclasses & Workshops",clubev3:"<span>03</span> Online-Webinare & AMAs",clubev4:"<span>04</span> Demo- & Pitch-Nights",homequote:"„Sie haben unser gesamtes Ökosystem aufgebaut — Marke, Website, Tracking und einen Flagship-Store. <em>Keine Kampagne. Ein Asset.</em>“",homequoteby:"ANAAKA — Halal-Hautpflege · Flagship @ TRX, Kuala Lumpur",connect:"Kontakt",
       start:"Projekt starten",book:"Termin buchen",brief:"Briefing senden",audit:"Kostenloses KI-Audit",whatsapp:"WhatsApp",email:"E-Mail",menu:"Menü",allsol:"Alle Lösungen &rarr;",imprint:"Impressum &amp; Datenschutz",
       tag1:"Intelligenz,",tag2:"mit Integrität.",herosub:"Wir bauen die Software, KI-Agenten und Systeme, auf denen moderne Unternehmen laufen — schnell entwickelt, gegründet auf einem Jahrzehnt Vertrauen.",
       ftag:"Intelligenz, mit Integrität. Ein Applied-AI-Studio für die Vertrauensökonomie — die Software, Agenten und Systeme, auf denen moderne Unternehmen laufen.",
       letsbuild:"Lass uns bauen",ctah2:"Bauen wir etwas,<br>dem man <em>vertraut.</em>",ctalead:"Sagen Sie uns, was Ihr Geschäft ausbremst. Wir zeigen Ihnen das System, das es löst — und wie schnell.",lblphone:"Telefon",lblstudio:"Studio",
       abadge:"Risikofreier Einstieg",audith2:"Holen Sie sich ein <em>kostenloses KI-Audit</em>",auditp:"Eine 30-minütige Analyse: wo KI-Agenten, Automatisierung und eine bessere Website am meisten Zeit und Geld sparen. Kein Pitch, nur die Landkarte.",
       shifteyebrow:"(01) — Der Wandel",shifth2:"Jeder kann KI heute <em>nutzen</em>. Fast niemand macht daraus Systeme, denen man wirklich <em>vertraut.</em>",whatwebuild:"Was wir bauen",selwork:"Ausgewählte Arbeiten",st_proj:"Projekte",st_cli:"Kunden",st_yrs:"Jahre",st_lang:"Sprachen"},
-    ms:{work:"Kerja",services:"Perkhidmatan",solutions:"Penyelesaian",ventures:"Usaha",about:"Tentang",insights:"Wawasan",contact:"Hubungi",products:"Produk",company:"Syarikat",club:"Kelab Pengasas",exploreclub:"Terokai Kelab Pengasas",connect:"Hubungi",
+    ms:{work:"Kerja",services:"Perkhidmatan",solutions:"Penyelesaian",ventures:"Usaha",about:"Tentang",insights:"Wawasan",contact:"Hubungi",products:"Produk",company:"Syarikat",club:"Kelab Pengasas",exploreclub:"Terokai Kelab Pengasas",clubeyebrow:"Komuniti · Kelab Pengasas",clubh:"Membina bersama pengasas yang <em>bersungguh-sungguh.</em>",clubp:"Komuniti percuma pengasas Muslim dan sehaluan nilai — secara dalam talian dan bersemuka di Kuala Lumpur.",clubtag:"Sertai percuma · KL & Dalam Talian",clubwhatson:"Apa yang ada",clubev1:"<span>01</span> Mixer & makan malam KL",clubev2:"<span>02</span> Masterclass & bengkel",clubev3:"<span>03</span> Webinar & AMA dalam talian",clubev4:"<span>04</span> Malam demo & pitch",homequote:"“Mereka membina seluruh ekosistem kami — jenama, laman, penjejakan dan kedai utama. <em>Bukan kempen. Satu aset.</em>”",homequoteby:"ANAAKA — Penjagaan Kulit Halal · Flagship @ TRX, Kuala Lumpur",connect:"Hubungi",
       start:"Mulakan projek",book:"Tempah panggilan",brief:"Hantar taklimat",audit:"Audit AI percuma",whatsapp:"WhatsApp",email:"E-mel",menu:"Menu",allsol:"Semua penyelesaian &rarr;",imprint:"Notis &amp; Privasi",
       tag1:"Kecerdasan,",tag2:"dengan integriti.",herosub:"Kami membina perisian, ejen AI dan sistem yang digunakan syarikat moden — dibina pantas, berasaskan kepercayaan sedekad.",
       ftag:"Kecerdasan, dengan integriti. Studio AI gunaan untuk ekonomi kepercayaan — perisian, ejen dan sistem yang digunakan syarikat moden.",
       letsbuild:"Mari bina",ctah2:"Bina sesuatu yang<br><em>dipercayai.</em>",ctalead:"Beritahu kami apa yang melambatkan perniagaan anda. Kami tunjukkan sistem yang membaikinya — dan secepat mana.",lblphone:"Telefon",lblstudio:"Studio",
       abadge:"Pintu masuk tanpa risiko",audith2:"Dapatkan <em>audit AI percuma</em> untuk perniagaan anda",auditp:"Analisis 30 minit: di mana ejen AI, automasi dan laman yang lebih baik menjimatkan paling banyak masa dan wang. Tiada jualan, hanya peta.",
       shifteyebrow:"(01) — Peralihan",shifth2:"Sesiapa boleh <em>guna</em> AI sekarang. Hampir tiada yang menjadikannya sistem yang anda benar-benar <em>percayai.</em>",whatwebuild:"Apa yang kami bina",selwork:"Kerja terpilih",st_proj:"Projek",st_cli:"Pelanggan",st_yrs:"Tahun",st_lang:"Bahasa"},
-    ar:{work:"أعمالنا",services:"خدماتنا",solutions:"الحلول",ventures:"مشاريعنا",about:"من نحن",insights:"مقالات",contact:"تواصل",products:"المنتجات",company:"الشركة",club:"نادي المؤسّسين",exploreclub:"اكتشف نادي المؤسّسين",connect:"تواصل",
+    ar:{work:"أعمالنا",services:"خدماتنا",solutions:"الحلول",ventures:"مشاريعنا",about:"من نحن",insights:"مقالات",contact:"تواصل",products:"المنتجات",company:"الشركة",club:"نادي المؤسّسين",exploreclub:"اكتشف نادي المؤسّسين",clubeyebrow:"مجتمع · نادي المؤسّسين",clubh:"ابنِ إلى جانب مؤسّسين <em>جادّين فعلاً.</em>",clubp:"مجتمع مجاني من المؤسّسين المسلمين وأصحاب القيم — عبر الإنترنت وحضوريًا في كوالالمبور.",clubtag:"انضمام مجاني · كوالالمبور وأونلاين",clubwhatson:"ما الذي يجري",clubev1:"<span>01</span> لقاءات وعشاء كوالالمبور",clubev2:"<span>02</span> ورش وماستر كلاس",clubev3:"<span>03</span> ندوات وأسئلة مفتوحة أونلاين",clubev4:"<span>04</span> أمسيات عروض وبيتشينغ",homequote:"«لقد بنوا منظومتنا بالكامل — العلامة والموقع والتتبّع ومتجرًا رئيسيًا. <em>ليست حملة. بل أصل.</em>»",homequoteby:"ANAAKA — عناية بشرة حلال · المتجر الرئيسي @ TRX، كوالالمبور",connect:"تواصل",
       start:"ابدأ مشروعًا",book:"احجز مكالمة",brief:"أرسل موجزًا",audit:"تدقيق ذكاء اصطناعي مجاني",whatsapp:"واتساب",email:"البريد",menu:"القائمة",allsol:"كل الحلول &larr;",imprint:"البيان والخصوصية",
       tag1:"الذكاء،",tag2:"مع النزاهة.",herosub:"نبني البرمجيات ووكلاء الذكاء الاصطناعي والأنظمة التي تعتمد عليها الشركات الحديثة — بسرعة، وبثقة بُنيت على مدى عقد.",
       ftag:"الذكاء، مع النزاهة. استوديو ذكاء اصطناعي تطبيقي لاقتصاد الثقة — البرمجيات والوكلاء والأنظمة التي تعتمد عليها الشركات الحديثة.",
       letsbuild:"لِنبدأ البناء",ctah2:"لنبنِ شيئًا<br><em>جديرًا بالثقة.</em>",ctalead:"أخبرنا بما يُبطئ أعمالك، وسنُريك النظام الذي يُصلحه — وبأي سرعة.",lblphone:"الهاتف",lblstudio:"الاستوديو",
       abadge:"بداية بلا مخاطر",audith2:"احصل على <em>تدقيق ذكاء اصطناعي مجاني</em> لأعمالك",auditp:"جلسة 30 دقيقة: أين يوفّر وكلاء الذكاء الاصطناعي والأتمتة وموقع أفضل أكبر قدر من الوقت والمال. بلا عروض بيع، مجرد خارطة طريق.",
       shifteyebrow:"(٠١) — التحوّل",shifth2:"يستطيع الجميع <em>استخدام</em> الذكاء الاصطناعي الآن، وقلّة من يحوّله إلى أنظمة <em>تثق</em> بها فعلًا.",whatwebuild:"ما الذي نبنيه",selwork:"أعمال مختارة",st_proj:"مشاريع",st_cli:"عملاء",st_yrs:"سنوات",st_lang:"لغات"},
-    zh:{work:"作品",services:"服务",solutions:"解决方案",ventures:"自有业务",about:"关于",insights:"洞察",contact:"联系",products:"产品",company:"公司",club:"创始人俱乐部",exploreclub:"探索创始人俱乐部",connect:"联系",
+    zh:{work:"作品",services:"服务",solutions:"解决方案",ventures:"自有业务",about:"关于",insights:"洞察",contact:"联系",products:"产品",company:"公司",club:"创始人俱乐部",exploreclub:"探索创始人俱乐部",clubeyebrow:"社群 · 创始人俱乐部",clubh:"与<em>真正用心</em>的创始人并肩前行。",clubp:"一个面向穆斯林及价值观一致创始人的免费社群——线上与吉隆坡线下同步进行。",clubtag:"免费加入 · 吉隆坡与线上",clubwhatson:"活动内容",clubev1:"<span>01</span> 吉隆坡聚会与晚宴",clubev2:"<span>02</span> 大师课与工作坊",clubev3:"<span>03</span> 线上网络研讨与问答",clubev4:"<span>04</span> 演示与路演之夜",homequote:"“他们打造了我们的整个生态——品牌、网站、追踪和旗舰店。<em>不是一场活动，而是一项资产。</em>”",homequoteby:"ANAAKA — 清真护肤 · 旗舰店 @ 吉隆坡 TRX",connect:"联系",
       start:"启动项目",book:"预约通话",brief:"发送需求",audit:"免费 AI 审计",whatsapp:"WhatsApp",email:"邮箱",menu:"菜单",allsol:"全部方案 &rarr;",imprint:"版本说明与隐私",
       tag1:"智能，",tag2:"兼具诚信。",herosub:"我们构建现代企业赖以运行的软件、AI 智能体与系统——快速交付，建立在十年信任之上。",
       ftag:"智能，兼具诚信。面向信任经济的应用型 AI 工作室——为现代企业打造软件、智能体与系统。",
@@ -157,7 +157,7 @@
   }
   /* snapshot translatable body text once, so window.TR can swap it per language */
   function snapTR(){
-    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p';
+    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .prodcard .pt span, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer h6, footer a, footer p';
     document.querySelectorAll(sel).forEach(function(el){
       if(el.hasAttribute('data-i18n')||el.hasAttribute('data-en')||el.children.length) return;
       var t=el.textContent.trim(); if(t&&t.length<=600) el.setAttribute('data-en',t);
@@ -306,6 +306,17 @@
 
   /* ---------- mega menu preview pane ---------- */
   function initMegaPreview(){ /* mega right panel is now a static CTA + socials card — no hover image swap */ }
+  function initWorkCar(){
+    var c=document.getElementById('workCar'); if(!c) return;
+    function step(dir){ var t=c.querySelector('.tile'); var dx=(t?t.offsetWidth+18:300)*dir; c.scrollBy({left:dx,behavior:'smooth'}); }
+    document.querySelectorAll('.wcar-btn').forEach(function(b){ b.addEventListener('click',function(){ step(parseInt(b.getAttribute('data-dir'),10)||1); }); });
+    var down=false,moved=false,sx=0,sl=0;
+    c.addEventListener('pointerdown',function(e){ down=true; moved=false; sx=e.clientX; sl=c.scrollLeft; });
+    c.addEventListener('pointermove',function(e){ if(!down) return; var d=e.clientX-sx; if(Math.abs(d)>6){ moved=true; c.classList.add('drag'); } c.scrollLeft=sl-d; });
+    function up(){ down=false; setTimeout(function(){ c.classList.remove('drag'); },0); }
+    window.addEventListener('pointerup',up); window.addEventListener('pointercancel',up);
+    c.querySelectorAll('a.tile').forEach(function(a){ a.addEventListener('click',function(e){ if(moved){ e.preventDefault(); } }); });
+  }
   function initMicro(){
     if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
     if(window.matchMedia&&window.matchMedia('(hover:none)').matches) return;
@@ -433,6 +444,6 @@
     var bar=b.querySelector('.boot-bar i'); setTimeout(function(){ if(bar) bar.style.width='100%'; },80);
     setTimeout(function(){ b.classList.add('done'); document.body.style.overflow=''; try{sessionStorage.setItem('uc_booted','1');}catch(e){} setTimeout(function(){ if(b.parentNode) b.remove(); },900); },1600);
   }
-  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
