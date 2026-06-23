@@ -157,7 +157,7 @@
   }
   /* snapshot translatable body text once, so window.TR can swap it per language */
   function snapTR(){
-    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .prodcard .pt span, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer h6, footer a, footer p';
+    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .cap, main .prodcard .pt span, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer h6, footer a, footer p';
     document.querySelectorAll(sel).forEach(function(el){
       if(el.hasAttribute('data-i18n')||el.hasAttribute('data-en')||el.children.length) return;
       var t=el.textContent.trim(); if(t&&t.length<=600) el.setAttribute('data-en',t);
