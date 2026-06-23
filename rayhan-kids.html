@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rayhan Kids — Muslim childhood, joyful and rooted</title>
+<meta name="description" content="Premium Islamic games, apps and animated series for Muslim children — values, manners, Quran and Arabic through play, story and characters kids love. A venture by Ummah Collective.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#fff8ee;--cream2:#fdeed8;--green:#2fa36b;--green-d:#23895a;--berry:#e76f88;--sun:#f6b53f;--sky:#6ab6e0;--ink:#43302a;--mut:#8a7268;--line:rgba(67,48,42,.1)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.62;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.disp{font-family:'Baloo 2',cursive}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.uc-bar{background:var(--ink);color:#e9d8c8;font-size:13px}
+.uc-bar .wrap{display:flex;justify-content:space-between;align-items:center;height:40px}
+.uc-bar a{color:#ffce7a;font-weight:700}
+nav{position:sticky;top:0;z-index:50;background:rgba(255,248,238,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
+.logo{display:flex;align-items:center;gap:11px;font-family:'Baloo 2';font-weight:800;font-size:24px;color:var(--green-d)}
+.logo .mk{width:38px;height:38px;border-radius:14px;background:linear-gradient(135deg,var(--green),var(--green-d));display:grid;place-items:center;color:#fff;font-size:20px;transform:rotate(-6deg)}
+.nlinks{display:flex;gap:28px;font-weight:700;font-size:15px;color:var(--mut)}.nlinks a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Baloo 2';font-weight:700;font-size:16px;padding:12px 24px;border-radius:100px;transition:.2s;cursor:pointer;border:2px solid transparent}
+.btn-p{background:var(--green-d);color:#fff;box-shadow:0 8px 0 #1c6e48}.btn-p:hover{transform:translateY(2px);box-shadow:0 6px 0 #1c6e48}
+.btn-g{border-color:var(--line);color:var(--ink)}.btn-g:hover{border-color:var(--green-d);color:var(--green-d)}
+@media(max-width:760px){.nlinks{display:none}}
+.hero{padding:66px 0 40px;text-align:center;position:relative;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(8px);opacity:.5;z-index:0}
+.b1{width:200px;height:200px;background:var(--sun);top:30px;left:-40px}
+.b2{width:240px;height:240px;background:var(--berry);bottom:-60px;right:-50px;opacity:.35}
+.hero .inner{position:relative;z-index:2;max-width:760px;margin:0 auto}
+.tag{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--green-d);font-weight:700;font-size:13.5px;padding:8px 16px;border-radius:100px;border:2px solid var(--cream2)}
+.hero h1{font-family:'Baloo 2';font-size:clamp(40px,7vw,80px);font-weight:800;line-height:1.02;margin:20px 0 16px;color:var(--ink)}
+.hero h1 em{color:var(--green-d);font-style:normal}
+.hero p{font-size:clamp(17px,2.2vw,21px);color:var(--mut);max-width:30ch;margin:0 auto;font-weight:600}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:30px}
+.chars{display:flex;justify-content:center;gap:14px;margin-top:44px;flex-wrap:wrap}
+.char{width:96px;height:96px;border-radius:26px;display:grid;place-items:center;font-size:46px;box-shadow:0 14px 30px -14px rgba(67,48,42,.4);transform:rotate(var(--r))}
+section{padding:52px 0}
+.eyebrow{font-family:'Baloo 2';font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--berry);text-align:center}
+.h2{font-family:'Baloo 2';font-size:clamp(28px,4.4vw,46px);font-weight:800;text-align:center;margin:8px 0 6px}
+.sub{text-align:center;color:var(--mut);max-width:54ch;margin:0 auto;font-weight:600}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+@media(max-width:880px){.feat{grid-template-columns:1fr}}
+.fc{background:#fff;border:2px solid var(--cream2);border-radius:24px;padding:28px;text-align:center}
+.fc .ic{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:32px;margin:0 auto 14px}
+.fc h3{font-family:'Baloo 2';font-size:21px;font-weight:700;margin-bottom:6px}.fc p{color:var(--mut);font-size:15px;font-weight:600}
+.trust{background:#fff;border:2px solid var(--cream2);border-radius:26px;padding:34px;display:flex;gap:26px;flex-wrap:wrap;justify-content:center;text-align:center}
+.trust div{flex:1;min-width:150px}.trust .t{font-family:'Baloo 2';font-weight:700;color:var(--green-d);font-size:17px;margin-bottom:4px}
+.trust p{color:var(--mut);font-size:14px;font-weight:600}
+.strip{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;border-radius:30px;padding:54px 40px;text-align:center}
+.strip h2{font-family:'Baloo 2';font-size:clamp(28px,4.4vw,44px);font-weight:800}
+.strip p{color:#d9f3e6;max-width:44ch;margin:13px auto 24px;font-weight:600}
+.strip .btn-p{background:#fff;color:var(--green-d);box-shadow:0 8px 0 #cbe9d8}.strip .btn-p:hover{box-shadow:0 6px 0 #cbe9d8}
+.strip .btn-g{border-color:rgba(255,255,255,.5);color:#fff}
+footer{padding:38px 0;border-top:1px solid var(--line);color:var(--mut);font-size:14px;font-weight:600}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+footer a{color:var(--green-d)}
+</style>
+</head>
+<body>
+<div class="uc-bar"><div class="wrap"><span>A standalone venture, powered by Ummah Collective</span><a href="index.html">← Back to Ummah Collective</a></div></div>
+<nav><div class="wrap">
+  <a class="logo"><span class="mk">🌿</span> Rayhan Kids</a>
+  <div class="nlinks"><a href="#what">What we make</a><a href="#trust">For parents</a></div>
+  <a class="btn btn-p" href="#notify">Get early access</a>
+</div></nav>
+
+<header class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="inner">
+    <span class="tag">✦ Powered by Ummah Collective</span>
+    <h1>Muslim childhood, <em>joyful and rooted.</em></h1>
+    <p>Premium games, apps and animated stories that teach values, manners, Quran and Arabic — through play kids love and parents trust.</p>
+    <div class="cta-row"><a class="btn btn-p" href="#notify">Get early access →</a><a class="btn btn-g" href="#what">See what we're building</a></div>
+    <div class="chars">
+      <div class="char" style="--r:-8deg;background:#ffe2b0">🦒</div>
+      <div class="char" style="--r:5deg;background:#cdeede">🕌</div>
+      <div class="char" style="--r:-4deg;background:#ffd6df">📖</div>
+      <div class="char" style="--r:7deg;background:#d6e8ff">🌙</div>
+      <div class="char" style="--r:-6deg;background:#fff0c2">⭐</div>
+    </div>
+  </div>
+</header>
+
+<section id="what"><div class="wrap">
+  <span class="eyebrow">What we make</span>
+  <h2 class="h2">Play that plants good roots.</h2>
+  <p class="sub">The name draws on <em>rayhan</em> — the fragrant herb of Paradise. Premium in craft, warm in feel, genuinely fun for children.</p>
+  <div class="feat">
+    <div class="fc"><div class="ic" style="background:#cdeede">🎮</div><h3>Interactive games</h3><p>Gentle, forgiving play that teaches manners, Quran basics and Arabic — big tap targets, audio-first, no scary bits.</p></div>
+    <div class="fc"><div class="ic" style="background:#ffe2b0">📱</div><h3>Kids apps</h3><p>Safe-by-design apps for tablets and phones — no ads to kids, no dark patterns, real parent controls.</p></div>
+    <div class="fc"><div class="ic" style="background:#ffd6df">🎬</div><h3>Animated series</h3><p>Characters with good character — stories of the prophets and everyday adab that teach through joy, not lecture.</p></div>
+  </div>
+</div></section>
+
+<section id="trust"><div class="wrap">
+  <span class="eyebrow">Built for parents' trust</span>
+  <h2 class="h2">Safe to hand over.</h2>
+  <div class="trust" style="margin-top:30px">
+    <div><div class="t">Safe by design</div><p>No stranger chat, no unsafe links, no inappropriate ads.</p></div>
+    <div><div class="t">Privacy first</div><p>COPPA & GDPR-K minded — minimal data, parent consent, no kid ad-targeting.</p></div>
+    <div><div class="t">No dark patterns</div><p>No pressure to spend, no addictive loops. Wellbeing over engagement.</p></div>
+    <div><div class="t">Islam done right</div><p>Accurate, gentle, scholar-reviewed — values, not fear.</p></div>
+  </div>
+</div></section>
+
+<section id="notify"><div class="wrap">
+  <div class="strip">
+    <h2>Be first to play.</h2>
+    <p>Rayhan Kids is in the workshop. Get early access and updates as our first games and stories ship.</p>
+    <div class="cta-row" style="justify-content:center"><a class="btn btn-p" href="index.html#contact">Notify me →</a><a class="btn btn-g" href="index.html">A venture by Ummah Collective</a></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>© 2026 Rayhan Kids — a venture by Ummah Collective.</span>
+  <span><a href="index.html">ummah-collective.com</a></span>
+</div></footer>
+</body>
+</html>
