@@ -135,11 +135,11 @@
       shifteyebrow:"(01) — 转变",shifth2:"如今人人都能<em>使用</em> AI，却几乎没人把它变成你真正<em>信赖</em>的系统。",whatwebuild:"我们构建什么",selwork:"精选作品",st_proj:"项目",st_cli:"客户",st_yrs:"年",st_lang:"语言"}
   };
   var _CTA={
-    en:{cta_results:'Want results<br>like <em>these?</em>',cta_first:'What should we<br>build <em>first?</em>',cta_studio:'Work with<br>the <em>studio.</em>',cta_noon:'Be first on<br><em>Noon OS.</em>',cta_launch:'Launch for<br><em>$1,000.</em>'},
-    de:{cta_results:'Wollen Sie<br>solche <em>Ergebnisse?</em>',cta_first:'Was bauen wir<br><em>zuerst?</em>',cta_studio:'Mit dem<br><em>Studio</em> arbeiten.',cta_noon:'Seien Sie zuerst auf<br><em>Noon OS.</em>',cta_launch:'Launch für<br><em>1.000 $.</em>'},
-    ms:{cta_results:'Mahukan hasil<br><em>seperti ini?</em>',cta_first:'Apa patut kami<br>bina <em>dahulu?</em>',cta_studio:'Bekerja dengan<br><em>studio.</em>',cta_noon:'Jadi yang pertama di<br><em>Noon OS.</em>',cta_launch:'Lancar dengan<br><em>$1,000.</em>'},
-    ar:{cta_results:'تريد نتائج<br><em>كهذه؟</em>',cta_first:'ماذا نبني<br><em>أولًا؟</em>',cta_studio:'اعمل مع<br><em>الاستوديو.</em>',cta_noon:'كن أول من يجرّب<br><em>Noon OS.</em>',cta_launch:'انطلق مقابل<br><em>1,000$.</em>'},
-    zh:{cta_results:'想要<br><em>这样的成果？</em>',cta_first:'我们先<br>构建<em>什么？</em>',cta_studio:'与<br><em>工作室</em>合作。',cta_noon:'抢先体验<br><em>Noon OS。</em>',cta_launch:'<em>$1,000</em><br>即可上线。'}
+    en:{cta_results:'Want results<br>like <em>these?</em>',cta_first:'What should we<br>build <em>first?</em>',cta_studio:'Work with<br>the <em>studio.</em>',cta_noon:'Be first on<br><em>Noon OS.</em>',cta_launch:'Launch for<br><em>$1,999.</em>'},
+    de:{cta_results:'Wollen Sie<br>solche <em>Ergebnisse?</em>',cta_first:'Was bauen wir<br><em>zuerst?</em>',cta_studio:'Mit dem<br><em>Studio</em> arbeiten.',cta_noon:'Seien Sie zuerst auf<br><em>Noon OS.</em>',cta_launch:'Launch für<br><em>1.999 $.</em>'},
+    ms:{cta_results:'Mahukan hasil<br><em>seperti ini?</em>',cta_first:'Apa patut kami<br>bina <em>dahulu?</em>',cta_studio:'Bekerja dengan<br><em>studio.</em>',cta_noon:'Jadi yang pertama di<br><em>Noon OS.</em>',cta_launch:'Lancar dengan<br><em>$1,999.</em>'},
+    ar:{cta_results:'تريد نتائج<br><em>كهذه؟</em>',cta_first:'ماذا نبني<br><em>أولًا؟</em>',cta_studio:'اعمل مع<br><em>الاستوديو.</em>',cta_noon:'كن أول من يجرّب<br><em>Noon OS.</em>',cta_launch:'انطلق مقابل<br><em>1,999$.</em>'},
+    zh:{cta_results:'想要<br><em>这样的成果？</em>',cta_first:'我们先<br>构建<em>什么？</em>',cta_studio:'与<br><em>工作室</em>合作。',cta_noon:'抢先体验<br><em>Noon OS。</em>',cta_launch:'<em>$1,999</em><br>即可上线。'}
   };
   for(var _l in _CTA){ if(I18N[_l]) for(var _k in _CTA[_l]) I18N[_l][_k]=_CTA[_l][_k]; }
   function setLang(l){
@@ -335,7 +335,7 @@
     var WA='https://wa.me/601133262709';
     var items=[
       ['Solutions','Home','index.html','⌂'],['Solutions','All Solutions','services.html','▦'],['Solutions','Work','work.html','◳'],
-      ['Products','Noon OS — CRM','noon-os.html','◆'],['Products','Launch Bundle — $1,000','launch-bundle.html','★'],
+      ['Products','Noon OS — CRM','noon-os.html','◆'],['Products','Launch Bundle — $1,999','launch-bundle.html','★'],
       ['Services','AI Agents','service-ai-agents.html','▸'],['Services','Automation','service-automation.html','▸'],['Services','App Development','service-app-development.html','▸'],['Services','Web Design','service-web-design.html','▸'],['Services','Branding','service-branding.html','▸'],['Services','Graphic Design','service-graphic-design.html','▸'],['Services','SEO & Content','service-seo-content.html','▸'],['Services','Marketing & Ads','service-marketing-ads.html','▸'],['Services','Lead Generation','service-lead-generation.html','▸'],['Services','Strategy & Market Entry','service-strategy.html','▸'],
       ['Company','About','about.html','◷'],['Company','Ventures','ventures.html','◷'],['Company','Insights','insights.html','◷'],['Company','How we work','process.html','◷'],
       ['Actions','Book a call','booking.html','→'],['Actions','Free AI audit','booking.html?service=ai-agents','→'],['Actions','Send a brief','contact.html','→'],['Actions','WhatsApp us',WA,'→']
