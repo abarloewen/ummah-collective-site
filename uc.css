@@ -813,3 +813,14 @@ nav .btn-fill{padding:11px 20px}
 @keyframes rd4{0%,61%{border-color:rgba(241,245,239,.22);background:rgba(7,16,12,.98)}67%,100%{border-color:var(--acc);background:var(--acc)}}
 @keyframes rd5{0%,79%{border-color:rgba(241,245,239,.22);background:rgba(7,16,12,.98)}85%,100%{border-color:var(--acc);background:var(--acc)}}
 @media(prefers-reduced-motion:reduce){.fnl,.rankbars .rb{animation:none}.fnl::after{display:none}.rankbars .rb{transform:scaleY(var(--h))}.srow.you{animation:none}.rstep{opacity:1;animation:none}.rstep .rdot{border-color:var(--acc);background:var(--acc);animation:none}.road::after{display:none}}
+
+/* ---- service depth / conversion section ---- */
+.depth .depth-h{font-family:var(--disp);font-size:clamp(27px,3.5vw,46px);line-height:1.05;max-width:20ch;margin:8px 0 16px;letter-spacing:-.01em}
+.depth-lead{font-size:clamp(15px,1.55vw,18px);color:var(--dim);max-width:64ch;line-height:1.62}
+.dpc{padding:24px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));border:1px solid var(--line2)}
+.dpc-k{font-family:var(--disp);font-size:23px;font-weight:600;color:var(--acc);margin-bottom:9px;line-height:1.12}
+.dpc-b{font-size:14px;color:var(--dim);line-height:1.55}
+.depth-cta{margin-top:30px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;padding:24px 28px;border-radius:18px;background:linear-gradient(120deg,rgba(22,209,150,.12),rgba(22,209,150,.02));border:1px solid rgba(22,209,150,.24)}
+.depth-cta p{margin:0;font-size:clamp(16px,1.8vw,21px);font-weight:500;flex:1 1 260px;line-height:1.4}
+.depth-cta .btn{flex:0 0 auto}
+@media(max-width:680px){.depth-cta{flex-direction:column;align-items:flex-start;gap:16px}}
