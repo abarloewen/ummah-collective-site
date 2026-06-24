@@ -724,3 +724,46 @@ nav .btn-fill{padding:11px 20px}
   .ex-cursor,.ex-scroll,.ex-bar,.ex-packet,.ex-draw,.ex-rise,.ex-spin,.ex-bub,.ex-dot,.abs::before{animation:none}
   .boot{display:none}
   ::view-transition-old(root),::view-transition-new(root){animation:none}}
+
+/* ---- automation flow cards ---- */
+.flowgrid{align-items:stretch}
+.flow{display:flex;flex-direction:column;padding:22px 22px 18px;border-radius:18px;background:linear-gradient(180deg,rgba(12,26,20,.55),rgba(6,13,10,.5));border:1px solid rgba(22,209,150,.18);min-height:362px}
+.flow-top{display:flex;align-items:center;gap:9px;margin-bottom:18px}
+.flow-top .fdot{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 10px var(--acc);animation:fblink 1.8s ease-in-out infinite;flex:0 0 auto}
+.flow-top .ftitle{font-weight:600;font-size:15px;flex:1;line-height:1.25}
+.flow-top .ftag{font:600 9.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--acc);border:1px solid rgba(22,209,150,.34);padding:5px 9px;border-radius:999px;flex:0 0 auto;white-space:nowrap}
+.flow-steps{position:relative;display:flex;flex-direction:column;gap:11px;flex:1 1 auto}
+.flow-steps::before{content:"";position:absolute;left:17px;top:16px;bottom:16px;width:2px;background:rgba(241,245,239,.10)}
+.flow-steps::after{content:"";position:absolute;left:14px;top:8px;width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px 2px var(--acc);animation:fpulse 5s linear infinite;z-index:2}
+@keyframes fpulse{0%{top:6px;opacity:0}6%{opacity:1}94%{opacity:1}100%{top:calc(100% - 14px);opacity:0}}
+@keyframes fblink{0%,100%{opacity:1}50%{opacity:.35}}
+.fstep{position:relative;display:flex;align-items:center;gap:12px;opacity:.4}
+.fstep .fic{position:relative;z-index:1;flex:0 0 36px;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:rgba(7,16,12,.95);border:1px solid rgba(241,245,239,.13);color:var(--bone)}
+.fstep .fic svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.fstep .ftx{display:flex;flex-direction:column;gap:1px;min-width:0}
+.fstep .ftx b{font-size:13px;font-weight:600;line-height:1.2}
+.fstep .ftx span{font-size:11.5px;color:var(--dim2)}
+.fstep .fchk{margin-left:auto;flex:0 0 auto;color:var(--acc);opacity:0;transform:scale(.5)}
+.fstep .fchk svg{width:15px;height:15px;display:block;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.fstep.s1{animation:fa1 5s linear infinite}.fstep.s2{animation:fa2 5s linear infinite}.fstep.s3{animation:fa3 5s linear infinite}.fstep.s4{animation:fa4 5s linear infinite}.fstep.s5{animation:fa5 5s linear infinite}
+.fstep.s1 .fchk{animation:fc1 5s linear infinite}.fstep.s2 .fchk{animation:fc2 5s linear infinite}.fstep.s3 .fchk{animation:fc3 5s linear infinite}.fstep.s4 .fchk{animation:fc4 5s linear infinite}.fstep.s5 .fchk{animation:fc5 5s linear infinite}
+.fstep.s1 .fic{animation:fi1 5s linear infinite}.fstep.s2 .fic{animation:fi2 5s linear infinite}.fstep.s3 .fic{animation:fi3 5s linear infinite}.fstep.s4 .fic{animation:fi4 5s linear infinite}.fstep.s5 .fic{animation:fi5 5s linear infinite}
+@keyframes fa1{0%,6%{opacity:.4}11%,100%{opacity:1}}
+@keyframes fa2{0%,20%{opacity:.4}25%,100%{opacity:1}}
+@keyframes fa3{0%,34%{opacity:.4}39%,100%{opacity:1}}
+@keyframes fa4{0%,48%{opacity:.4}53%,100%{opacity:1}}
+@keyframes fa5{0%,62%{opacity:.4}67%,100%{opacity:1}}
+@keyframes fc1{0%,9%{opacity:0;transform:scale(.5)}15%,100%{opacity:1;transform:scale(1)}}
+@keyframes fc2{0%,23%{opacity:0;transform:scale(.5)}29%,100%{opacity:1;transform:scale(1)}}
+@keyframes fc3{0%,37%{opacity:0;transform:scale(.5)}43%,100%{opacity:1;transform:scale(1)}}
+@keyframes fc4{0%,51%{opacity:0;transform:scale(.5)}57%,100%{opacity:1;transform:scale(1)}}
+@keyframes fc5{0%,65%{opacity:0;transform:scale(.5)}71%,100%{opacity:1;transform:scale(1)}}
+@keyframes fi1{0%,6%{border-color:rgba(241,245,239,.13);box-shadow:none}11%,100%{border-color:rgba(22,209,150,.55);box-shadow:0 0 13px rgba(22,209,150,.22)}}
+@keyframes fi2{0%,20%{border-color:rgba(241,245,239,.13);box-shadow:none}25%,100%{border-color:rgba(22,209,150,.55);box-shadow:0 0 13px rgba(22,209,150,.22)}}
+@keyframes fi3{0%,34%{border-color:rgba(241,245,239,.13);box-shadow:none}39%,100%{border-color:rgba(22,209,150,.55);box-shadow:0 0 13px rgba(22,209,150,.22)}}
+@keyframes fi4{0%,48%{border-color:rgba(241,245,239,.13);box-shadow:none}53%,100%{border-color:rgba(22,209,150,.55);box-shadow:0 0 13px rgba(22,209,150,.22)}}
+@keyframes fi5{0%,62%{border-color:rgba(241,245,239,.13);box-shadow:none}67%,100%{border-color:rgba(22,209,150,.55);box-shadow:0 0 13px rgba(22,209,150,.22)}}
+.flow .cap{margin-top:14px}
+@media(max-width:900px){.flowgrid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.flowgrid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.fstep{opacity:1;animation:none}.fstep .fchk{opacity:1;transform:none;animation:none}.fstep .fic{border-color:rgba(22,209,150,.5);animation:none}.flow-steps::after{animation:none;opacity:0}.flow-top .fdot{animation:none}}
