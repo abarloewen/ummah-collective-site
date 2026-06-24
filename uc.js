@@ -157,7 +157,7 @@
   }
   /* snapshot translatable body text once, so window.TR can swap it per language */
   function snapTR(){
-    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .cap, main .prodcard .pt span, main .pc-tags span, main .pc-meta, main .pc-go, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer h6, footer a, footer p, .overlay .ov-h, .overlay .ov-item b, .overlay .ov-tx>span, .overlay .ov-clink, .overlay .ov-cta-k, .overlay .ov-cta-h';
+    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .cap, main .prodcard .pt span, main .pc-tags span, main .pc-meta, main .pc-go, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer h6, footer a, footer p, .overlay .ov-h, .overlay .ov-item b, .overlay .ov-tx>span, .overlay .ov-clink, .overlay .ov-cta-k, .overlay .ov-cta-h, main .flow .ftitle, main .flow .ftag, main .fstep .ftx span';
     document.querySelectorAll(sel).forEach(function(el){
       if(el.hasAttribute('data-i18n')||el.hasAttribute('data-en')||el.children.length) return;
       var t=el.textContent.trim(); if(t&&t.length<=600) el.setAttribute('data-en',t);
