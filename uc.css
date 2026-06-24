@@ -772,7 +772,7 @@ nav .btn-fill{padding:11px 20px}
 .funnel{display:flex;flex-direction:column;gap:11px;padding:18px 6px;flex:1 1 auto;justify-content:center;min-height:250px}
 .fnl{position:relative;overflow:hidden;width:var(--w);margin:0 auto;min-height:56px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:linear-gradient(135deg,rgba(22,209,150,.92),rgba(79,224,189,.66));color:#04130d;font-weight:600;transform-origin:center;animation:fnlin .7s cubic-bezier(.2,.7,.3,1) both}
 .fnl.s1{animation-delay:.05s}.fnl.s2{animation-delay:.22s}.fnl.s3{animation-delay:.39s}.fnl.s4{animation-delay:.56s}
-.fnl .fl{font-size:13px}.fnl .fv{font-size:15px;font-variant-numeric:tabular-nums}
+.fnl{gap:10px}.fnl .fl{font-size:13px;white-space:nowrap}.fnl .fv{font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .fnl::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:translateX(-110%);animation:fnlshine 3.4s ease-in-out infinite}
 .fnl.s2::after{animation-delay:.3s}.fnl.s3::after{animation-delay:.6s}.fnl.s4::after{animation-delay:.9s}
 @keyframes fnlin{0%{opacity:0;transform:scaleX(.35)}100%{opacity:1;transform:scaleX(1)}}
