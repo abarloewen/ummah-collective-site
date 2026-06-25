@@ -860,3 +860,14 @@ nav .btn-fill{padding:11px 20px}
 .svc-b{font-size:13px;color:var(--dim);line-height:1.5}
 .svc-foot{font-size:13px;color:var(--dim2);margin-top:16px;font-style:italic}
 @media(max-width:820px){.crmprev{grid-template-columns:1fr}.svc-grid{grid-template-columns:1fr 1fr}}
+
+/* ---- launch bundle hero: compact, fits the viewport on all devices ---- */
+.bundle-hero{padding:116px 0 40px}
+.bundle-hero .bundle-solo{max-width:880px}
+.bundle-h1{font-family:var(--disp);font-weight:600;font-size:clamp(30px,4.5vw,60px);line-height:1.0;letter-spacing:-.02em;max-width:20ch;margin:2px 0 0}
+.bundle-h1 em{color:var(--acc2);font-style:normal}
+.bundle-hero .bundle-price{font-size:clamp(42px,6.6vw,88px);margin:16px 0 6px}
+.bundle-lead{max-width:54ch;font-size:clamp(15px,1.35vw,17px);line-height:1.55;color:var(--dim);margin-top:4px}
+.bundle-cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.bundle-hero{padding:100px 0 32px}}
+@media(max-width:560px){.bundle-hero{padding:92px 0 26px}.bundle-h1{font-size:clamp(27px,8vw,38px)}.bundle-hero .bundle-price{font-size:clamp(40px,15vw,62px)}}
