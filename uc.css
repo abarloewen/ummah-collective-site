@@ -118,9 +118,10 @@ body[dir=rtl] .fab{right:auto;left:20px}
 .hero .sub{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;margin-top:32px}
 .hero .sub p{max-width:42ch;color:rgba(241,245,239,.85)}
 .hero-cta{display:flex;gap:13px;margin-top:22px;flex-wrap:wrap}
-.hero-stats{display:flex;gap:34px;margin-top:54px;flex-wrap:wrap}
+.hero-stats{display:flex;gap:34px;margin-top:54px;flex-wrap:nowrap;align-items:flex-start}
 .hero-stats .s b{font-family:var(--disp);font-weight:500;font-size:36px;letter-spacing:-.03em;display:block;line-height:1}
-.hero-stats .s span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2);margin-top:6px;display:block}
+.hero-stats .s b .count{font-size:inherit;font-family:inherit;letter-spacing:inherit;color:inherit}
+.hero-stats .s>span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2);margin-top:6px;display:block}
 
 /* page hero */
 .phero{padding:160px 0 50px;position:relative}
@@ -669,7 +670,7 @@ nav .btn-fill{padding:11px 20px}
   :root{--gut:18px}
   .hero{min-height:auto;padding-top:116px;padding-bottom:56px}
   .hero h1{font-size:clamp(40px,12.5vw,66px)}
-  .hero-stats{gap:22px}.hero-stats .s b{font-size:30px}
+  .hero-stats{gap:22px;flex-wrap:wrap}.hero-stats .s b{font-size:30px}
   section{padding:60px 0}
   .sh{margin-bottom:30px}
   .fab a{width:50px;height:50px}.fab svg{width:22px;height:22px}
