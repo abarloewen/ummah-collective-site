@@ -444,6 +444,55 @@
     var bar=b.querySelector('.boot-bar i'); setTimeout(function(){ if(bar) bar.style.width='100%'; },80);
     setTimeout(function(){ b.classList.add('done'); document.body.style.overflow=''; try{sessionStorage.setItem('uc_booted','1');}catch(e){} setTimeout(function(){ if(b.parentNode) b.remove(); },900); },1600);
   }
-  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  /* ---------- booking popup (global, injected) ---------- */
+  var BOOKING={
+    w3f:'',  /* Web3Forms access key — paste between the quotes to enable email delivery */
+    ucp:'https://uc-command-center.vercel.app/api/intake'  /* UCpanel lead intake */
+  };
+  function initBooking(){
+    if(document.getElementById('ucbk')) return;
+    var L=(window.__ucbkL)||{};
+    var T={
+      k:L.k||'Book a call', h:L.h||'Tell us what you need.',
+      sub:L.sub||'A free 30-minute scoping call &mdash; no pitch, just the map. Share a few details and we&rsquo;ll come prepared.',
+      name:L.name||'Name', email:L.email||'Email', phone:L.phone||'Phone / WhatsApp', company:L.company||'Company',
+      website:L.website||'Website', service:L.service||'Service', budget:L.budget||'Budget', timeline:L.timeline||'Timeline',
+      msg:L.msg||'Anything we should know?', go:L.go||'Send request', wa:L.wa||'WhatsApp instead',
+      note:L.note||'By sending you agree to be contacted about your enquiry.',
+      dh:L.dh||'Request received.', dsub:L.dsub||'Thank you &mdash; we&rsquo;ll be in touch shortly. Want to lock a time now?', pick:L.pick||'Pick a time &rarr;'
+    };
+    var svc=[['','Select a service&hellip;'],['ai-agents','AI Agents'],['automation','Automation &amp; Workflows'],['app-development','App &amp; Software Development'],['custom-crm','Custom CRM'],['web-design','Web Design &amp; Platforms'],['branding','Branding &amp; Identity'],['graphic-design','Graphic Design'],['launch-bundle','Launch Bundle ($1,999)'],['lead-generation','Lead Generation'],['seo-content','SEO &amp; Content'],['marketing-ads','Marketing &amp; Ads'],['strategy','Strategy &amp; Market Entry'],['other','Something else']];
+    var bud=[['','&mdash;'],['<2k','Under $2,000'],['2-5k','$2,000&ndash;5,000'],['5-15k','$5,000&ndash;15,000'],['15k+','$15,000+'],['unsure','Not sure yet']];
+    var tl=[['','&mdash;'],['asap','ASAP'],['1-3m','1&ndash;3 months'],['3-6m','3&ndash;6 months'],['exploring','Just exploring']];
+    function opts(a){return a.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');}
+    var m=document.createElement('div'); m.id='ucbk'; m.className='ucbk'; m.setAttribute('aria-hidden','true');
+    m.innerHTML='<div class="ucbk-back"></div><div class="ucbk-card" role="dialog" aria-modal="true" aria-label="Book a call"><button class="ucbk-x" type="button" aria-label="Close">&#10005;</button><div class="ucbk-body"><div class="ucbk-k">'+T.k+'</div><h3 class="ucbk-h">'+T.h+'</h3><p class="ucbk-sub">'+T.sub+'</p><form class="ucbk-form form" novalidate><div class="ucbk-row"><label>'+T.name+'*<input name="name" required placeholder="&nbsp;"></label><label>'+T.email+'*<input name="email" type="email" required placeholder="you@company.com"></label></div><div class="ucbk-row"><label>'+T.phone+'<input name="phone" placeholder="+60&hellip;"></label><label>'+T.company+'<input name="company" placeholder="&nbsp;"></label></div><div class="ucbk-row"><label>'+T.website+'<input name="website" placeholder="https://&hellip;"></label><label>'+T.service+'<select name="service">'+opts(svc)+'</select></label></div><div class="ucbk-row"><label>'+T.budget+'<select name="budget">'+opts(bud)+'</select></label><label>'+T.timeline+'<select name="timeline">'+opts(tl)+'</select></label></div><label class="ucbk-full">'+T.msg+'<textarea name="message" placeholder="&nbsp;"></textarea></label><div class="ucbk-act"><button type="submit" class="btn btn-fill ucbk-go">'+T.go+'</button><a class="btn btn-ghost" href="https://wa.me/601133262709" target="_blank" rel="noopener">'+T.wa+'</a></div><div class="ucbk-note">'+T.note+'</div></form><div class="ucbk-done" hidden><div class="ucbk-tick">&#10003;</div><h3 class="ucbk-h">'+T.dh+'</h3><p class="ucbk-sub">'+T.dsub+'</p><a class="btn btn-fill" href="https://cal.com/ummah-collective" target="_blank" rel="noopener">'+T.pick+'</a></div></div></div>';
+    document.body.appendChild(m);
+    var form=m.querySelector('.ucbk-form'), done=m.querySelector('.ucbk-done'), go=m.querySelector('.ucbk-go');
+    function open(sv){ try{var s=form.querySelector('[name=service]'); if(sv&&s) s.value=sv;}catch(e){} form.hidden=false; done.hidden=true; m.classList.add('on'); m.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; setTimeout(function(){var f=form.querySelector('input'); if(f)f.focus();},140); }
+    function close(){ m.classList.remove('on'); m.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; }
+    window.ucOpenBooking=open;
+    m.querySelector('.ucbk-x').addEventListener('click',close);
+    m.querySelector('.ucbk-back').addEventListener('click',close);
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&m.classList.contains('on')) close(); });
+    document.addEventListener('click',function(e){
+      var a=e.target.closest?e.target.closest('a[href],button[data-book]'):null; if(!a) return;
+      var h=a.getAttribute('href')||a.getAttribute('data-book')||'';
+      if(/(^|\/)booking\.html/.test(h)||a.hasAttribute('data-book')){ e.preventDefault(); var sv=''; var mm=h.match(/service=([a-z-]+)/); if(mm) sv=mm[1]; open(sv); }
+    },true);
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      var d={}; ['name','email','phone','company','website','service','budget','timeline','message'].forEach(function(k){var el=form.querySelector('[name='+k+']'); d[k]=el?el.value.trim():'';});
+      if(!d.name||!d.email){ (d.name?form.querySelector('[name=email]'):form.querySelector('[name=name]')).focus(); return; }
+      go.disabled=true; go.textContent='&hellip;'; go.innerHTML='Sending&hellip;';
+      var subj='New booking request &mdash; '+d.name+(d.company?(' ('+d.company+')'):'');
+      var notes='Service: '+(d.service||'-')+' | Budget: '+(d.budget||'-')+' | Timeline: '+(d.timeline||'-')+' | Website: '+(d.website||'-')+(d.message?(' | '+d.message):'');
+      var jobs=[];
+      if(BOOKING.w3f){ jobs.push(fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:BOOKING.w3f,subject:subj,from_name:'UC Website',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,budget:d.budget,timeline:d.timeline,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
+      if(BOOKING.ucp){ jobs.push(fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:d.name,email:d.email,phone:d.phone,company:d.company,title:d.service,source:'website',status:'new',notes:notes})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
+      Promise.all(jobs).then(function(){ form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML=T.go; });
+    });
+  }
+  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
