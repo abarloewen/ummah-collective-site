@@ -452,25 +452,53 @@
   };
   function initBooking(){
     if(document.getElementById('ucbk')) return;
-    var L=(window.__ucbkL)||{};
-    var T={
-      k:L.k||'Book a call', h:L.h||'Tell us what you need.',
-      sub:L.sub||'A free 30-minute scoping call &mdash; no pitch, just the map. Share a few details and we&rsquo;ll come prepared.',
-      name:L.name||'Name', email:L.email||'Email', phone:L.phone||'Phone / WhatsApp', company:L.company||'Company',
-      website:L.website||'Website', service:L.service||'Service', budget:L.budget||'Budget', timeline:L.timeline||'Timeline',
-      msg:L.msg||'Anything we should know?', go:L.go||'Send request', wa:L.wa||'WhatsApp instead',
-      note:L.note||'By sending you agree to be contacted about your enquiry.',
-      dh:L.dh||'Request received.', dsub:L.dsub||'Thank you &mdash; we&rsquo;ll be in touch shortly. Want to lock a time now?', pick:L.pick||'Pick a time &rarr;'
-    };
-    var svc=[['','Select a service&hellip;'],['ai-agents','AI Agents'],['automation','Automation &amp; Workflows'],['app-development','App &amp; Software Development'],['custom-crm','Custom CRM'],['web-design','Web Design &amp; Platforms'],['branding','Branding &amp; Identity'],['graphic-design','Graphic Design'],['launch-bundle','Launch Bundle ($1,999)'],['lead-generation','Lead Generation'],['seo-content','SEO &amp; Content'],['marketing-ads','Marketing &amp; Ads'],['strategy','Strategy &amp; Market Entry'],['other','Something else']];
-    var bud=[['','&mdash;'],['<2k','Under $2,000'],['2-5k','$2,000&ndash;5,000'],['5-15k','$5,000&ndash;15,000'],['15k+','$15,000+'],['unsure','Not sure yet']];
+    var WA='https://wa.me/601133262709';
+    var svc=[['ai-agents','AI Agents','Agents that sell &amp; support 24/7'],['automation','Automation','Cut overhead, keep output'],['app-development','App &amp; Software','Custom apps, shipped fast'],['web-design','Web &amp; Platforms','Sites that convert'],['branding','Branding &amp; Identity','Perception is strategy'],['custom-crm','Custom CRM','The system your team runs on'],['lead-generation','Lead Generation','A pipeline that compounds'],['marketing-ads','Marketing &amp; Ads','Demand, engineered'],['strategy','Strategy &amp; Market Entry','The roadmap that aligns it'],['other','Something else','Tell us what you need']];
+    var ind=[['','&mdash;'],['halal-fnb','Halal / F&amp;B'],['beauty','Beauty &amp; skincare'],['fashion','Fashion &amp; modest wear'],['finance','Finance / fintech'],['education','Education'],['travel','Travel / hospitality'],['tech','Tech / SaaS'],['retail','Retail / e-commerce'],['services','Professional services'],['other','Other']];
     var tl=[['','&mdash;'],['asap','ASAP'],['1-3m','1&ndash;3 months'],['3-6m','3&ndash;6 months'],['exploring','Just exploring']];
+    var heard=[['','&mdash;'],['search','Google / search'],['referral','Referral'],['social','Social media'],['linkedin','LinkedIn'],['event','Event'],['other','Other']];
+    var contact=[['email','Email'],['whatsapp','WhatsApp'],['phone','Phone call'],['any','Any is fine']];
+    var AVAIL={1:[[840,1140]],2:[[690,810],[900,1020]],3:[[660,840]],4:[[630,900]]};
+    var DOWn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MONn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function fmtT(x){var h=Math.floor(x/60),mm=x%60,ap=h<12?'AM':'PM',h12=h%12||12;return h12+':'+(mm<10?'0'+mm:mm)+' '+ap;}
+    function slotStarts(w){var o=[];w.forEach(function(p){for(var t=p[0];t+30<=p[1];t+=30)o.push(t);});return o;}
     function opts(a){return a.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');}
+    function tiles(a){return a.map(function(o){return '<button type="button" class="ucbk-opt" data-val="'+o[0]+'"><b>'+o[1]+'</b><span>'+o[2]+'</span></button>';}).join('');}
+    var heads=[['What can we help with?','Pick the closest fit &mdash; you can add detail next.'],['About your business','So we come prepared.'],['Your project','A little context goes a long way.'],['Pick a time','Choose a slot &mdash; all times Malaysia time (MYT).'],['How to reach you','We&rsquo;ll confirm your meeting by email.']];
     var m=document.createElement('div'); m.id='ucbk'; m.className='ucbk'; m.setAttribute('aria-hidden','true');
-    m.innerHTML='<div class="ucbk-back"></div><div class="ucbk-card" role="dialog" aria-modal="true" aria-label="Book a call"><button class="ucbk-x" type="button" aria-label="Close">&#10005;</button><div class="ucbk-body"><div class="ucbk-k">'+T.k+'</div><h3 class="ucbk-h">'+T.h+'</h3><p class="ucbk-sub">'+T.sub+'</p><form class="ucbk-form form" novalidate><div class="ucbk-row"><label>'+T.name+'*<input name="name" required placeholder="&nbsp;"></label><label>'+T.email+'*<input name="email" type="email" required placeholder="you@company.com"></label></div><div class="ucbk-row"><label>'+T.phone+'<input name="phone" placeholder="+60&hellip;"></label><label>'+T.company+'<input name="company" placeholder="&nbsp;"></label></div><div class="ucbk-row"><label>'+T.website+'<input name="website" placeholder="https://&hellip;"></label><label>'+T.service+'<select name="service">'+opts(svc)+'</select></label></div><div class="ucbk-row"><label>'+T.budget+'<select name="budget">'+opts(bud)+'</select></label><label>'+T.timeline+'<select name="timeline">'+opts(tl)+'</select></label></div><label class="ucbk-full">'+T.msg+'<textarea name="message" placeholder="&nbsp;"></textarea></label><div class="ucbk-act"><button type="submit" class="btn btn-fill ucbk-go">'+T.go+'</button><a class="btn btn-ghost" href="https://wa.me/601133262709" target="_blank" rel="noopener">'+T.wa+'</a></div><div class="ucbk-note">'+T.note+'</div></form><div class="ucbk-done" hidden><div class="ucbk-tick">&#10003;</div><h3 class="ucbk-h">'+T.dh+'</h3><p class="ucbk-sub">'+T.dsub+'</p><a class="btn btn-fill" href="https://cal.com/ummah-collective" target="_blank" rel="noopener">'+T.pick+'</a></div></div></div>';
+    m.innerHTML='<div class="ucbk-back"></div><div class="ucbk-card" role="dialog" aria-modal="true" aria-label="Book a call"><button class="ucbk-x" type="button" aria-label="Close">&#10005;</button><div class="ucbk-body"><div class="ucbk-k">Book a call</div><h3 class="ucbk-h" id="ucbkH">'+heads[0][0]+'</h3><p class="ucbk-sub" id="ucbkS">'+heads[0][1]+'</p><div class="ucbk-prog"><i class="on"></i><i></i><i></i><i></i><i></i></div><form class="ucbk-form form" novalidate><div class="ucbk-step on" data-step="0"><div class="ucbk-opts">'+tiles(svc)+'</div></div><div class="ucbk-step" data-step="1"><div class="ucbk-row"><label>Company<input name="company" placeholder="&nbsp;"></label><label>Website<input name="website" placeholder="https://&hellip;"></label></div><label class="ucbk-full">Industry / type<select name="industry">'+opts(ind)+'</select></label></div><div class="ucbk-step" data-step="2"><label class="ucbk-full">When do you want to start?<select name="timeline">'+opts(tl)+'</select></label><label class="ucbk-full">What do you want to achieve?<textarea name="message" placeholder="Goals, the problem to solve, anything useful&hellip;"></textarea></label><label class="ucbk-full">How did you hear about us?<select name="heard">'+opts(heard)+'</select></label></div><div class="ucbk-step" data-step="3"><div class="ucbk-days" id="ucbkDays"></div><div class="ucbk-slots" id="ucbkSlots"><div class="ucbk-slothint">Select a day above to see times.</div></div></div><div class="ucbk-step" data-step="4"><div class="ucbk-row"><label>Name*<input name="name" required placeholder="&nbsp;"></label><label>Email*<input name="email" type="email" required placeholder="you@company.com"></label></div><div class="ucbk-row"><label>Phone / WhatsApp<input name="phone" placeholder="+60&hellip;"></label><label>Preferred contact<select name="contact">'+opts(contact)+'</select></label></div></div><div class="ucbk-nav"><button type="button" class="btn btn-ghost ucbk-prev" hidden>&larr; Back</button><span class="ucbk-spacer"></span><button type="button" class="btn btn-fill ucbk-next">Next &rarr;</button><button type="submit" class="btn btn-fill ucbk-go" hidden>Send request</button></div><div class="ucbk-note">By sending you agree to be contacted about your enquiry. &middot; <a href="'+WA+'" target="_blank" rel="noopener" class="ucbk-walink">WhatsApp us</a></div></form><div class="ucbk-done" hidden><div class="ucbk-tick">&#10003;</div><h3 class="ucbk-h">Request received.</h3><p class="ucbk-sub ucbk-dsub">Thank you &mdash; we&rsquo;ll be in touch shortly.</p></div></div></div>';
     document.body.appendChild(m);
     var form=m.querySelector('.ucbk-form'), done=m.querySelector('.ucbk-done'), go=m.querySelector('.ucbk-go');
-    function open(sv){ try{var s=form.querySelector('[name=service]'); if(sv&&s) s.value=sv;}catch(e){} form.hidden=false; done.hidden=true; m.classList.add('on'); m.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; setTimeout(function(){var f=form.querySelector('input'); if(f)f.focus();},140); }
+    var steps=[].slice.call(m.querySelectorAll('.ucbk-step')), dots=[].slice.call(m.querySelectorAll('.ucbk-prog i'));
+    var prevb=m.querySelector('.ucbk-prev'), nextb=m.querySelector('.ucbk-next'), H=m.querySelector('#ucbkH'), S=m.querySelector('#ucbkS');
+    var daysEl=m.querySelector('#ucbkDays'), slotsEl=m.querySelector('#ucbkSlots');
+    var step=0, picked='', DAYS=[], slot=null;
+    function renderSlots(d){
+      var starts=slotStarts(AVAIL[d.getDay()]);
+      slotsEl.innerHTML=starts.map(function(t){return '<button type="button" class="ucbk-slot" data-t="'+t+'">'+fmtT(t)+'</button>';}).join('');
+      slotsEl.querySelectorAll('.ucbk-slot').forEach(function(b){ b.addEventListener('click',function(){ slotsEl.querySelectorAll('.ucbk-slot').forEach(function(x){x.classList.remove('sel');}); b.classList.add('sel'); slot={d:d,t:+b.getAttribute('data-t')}; }); });
+    }
+    function buildDays(){
+      DAYS=[]; var base=new Date(); base.setHours(0,0,0,0);
+      for(var i=1;i<=24&&DAYS.length<8;i++){ var nd=new Date(base.getTime()+i*864e5); if(AVAIL[nd.getDay()]) DAYS.push(nd); }
+      daysEl.innerHTML=DAYS.map(function(d,i){ return '<button type="button" class="ucbk-day" data-i="'+i+'"><b>'+DOWn[d.getDay()]+'</b><span>'+MONn[d.getMonth()]+' '+d.getDate()+'</span></button>'; }).join('');
+      slotsEl.innerHTML='<div class="ucbk-slothint">Select a day above to see times.</div>';
+      daysEl.querySelectorAll('.ucbk-day').forEach(function(b){ b.addEventListener('click',function(){ daysEl.querySelectorAll('.ucbk-day').forEach(function(x){x.classList.remove('sel');}); b.classList.add('sel'); renderSlots(DAYS[+b.getAttribute('data-i')]); }); });
+    }
+    function slotLabel(){ if(!slot) return ''; return DOWn[slot.d.getDay()]+', '+MONn[slot.d.getMonth()]+' '+slot.d.getDate()+' &middot; '+fmtT(slot.t)+' MYT'; }
+    function render(){
+      steps.forEach(function(s,i){ s.classList.toggle('on',i===step); });
+      dots.forEach(function(d,i){ d.classList.toggle('on',i<=step); });
+      H.innerHTML=heads[step][0]; S.innerHTML=heads[step][1];
+      prevb.hidden=(step===0); nextb.hidden=(step===0||step===steps.length-1); go.hidden=(step!==steps.length-1);
+      var card=m.querySelector('.ucbk-card'); if(card) card.scrollTop=0;
+      setTimeout(function(){ if(step>0){ var f=steps[step].querySelector('input,select,textarea'); if(f) f.focus(); } },120);
+    }
+    function go2(n){ step=Math.max(0,Math.min(steps.length-1,n)); render(); }
+    m.querySelectorAll('.ucbk-opt').forEach(function(b){ b.addEventListener('click',function(){ m.querySelectorAll('.ucbk-opt').forEach(function(x){x.classList.remove('sel');}); b.classList.add('sel'); picked=b.getAttribute('data-val'); go2(1); }); });
+    nextb.addEventListener('click',function(){ go2(step+1); });
+    prevb.addEventListener('click',function(){ go2(step-1); });
+    function open(sv){ step=0; picked=sv||''; slot=null; try{form.reset();}catch(e){} m.querySelectorAll('.ucbk-opt').forEach(function(x){ x.classList.toggle('sel', !!sv&&x.getAttribute('data-val')===sv); }); buildDays(); form.hidden=false; done.hidden=true; render(); m.classList.add('on'); m.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; }
     function close(){ m.classList.remove('on'); m.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; }
     window.ucOpenBooking=open;
     m.querySelector('.ucbk-x').addEventListener('click',close);
@@ -483,18 +511,30 @@
     },true);
     form.addEventListener('submit',function(e){
       e.preventDefault();
-      var d={}; ['name','email','phone','company','website','service','budget','timeline','message'].forEach(function(k){var el=form.querySelector('[name='+k+']'); d[k]=el?el.value.trim():'';});
-      if(!d.name||!d.email){ (d.name?form.querySelector('[name=email]'):form.querySelector('[name=name]')).focus(); return; }
-      go.disabled=true; go.textContent='&hellip;'; go.innerHTML='Sending&hellip;';
+      var d={}; ['company','website','industry','timeline','message','heard','name','email','phone','contact'].forEach(function(k){var el=form.querySelector('[name='+k+']'); d[k]=el?el.value.trim():'';});
+      d.service=picked; var meeting=slotLabel();
+      if(!d.name||!d.email){ go2(4); setTimeout(function(){ (d.name?form.querySelector('[name=email]'):form.querySelector('[name=name]')).focus(); },140); return; }
+      go.disabled=true; go.innerHTML='Sending&hellip;';
       var subj='New booking request - '+d.name+(d.company?(' ('+d.company+')'):'');
-      var notes='Service: '+(d.service||'-')+' | Budget: '+(d.budget||'-')+' | Timeline: '+(d.timeline||'-')+' | Website: '+(d.website||'-')+(d.message?(' | '+d.message):'');
+      var mtxt=(meeting||'-').replace(/&middot;/g,'-');
+      var notes='Service: '+(d.service||'-')+' | Meeting: '+mtxt+' | Industry: '+(d.industry||'-')+' | Timeline: '+(d.timeline||'-')+' | Preferred: '+(d.contact||'-')+' | Heard: '+(d.heard||'-')+' | Website: '+(d.website||'-')+(d.message?(' | '+d.message):'');
       var jobs=[];
-      if(BOOKING.w3f){ jobs.push(fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:BOOKING.w3f,subject:subj,from_name:'UC Website',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,budget:d.budget,timeline:d.timeline,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
-      else if(BOOKING.email){ jobs.push(fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:subj,_captcha:'false',_template:'table',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,budget:d.budget,timeline:d.timeline,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
+      if(BOOKING.w3f){ jobs.push(fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:BOOKING.w3f,subject:subj,from_name:'UC Website',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,requested_meeting:mtxt,industry:d.industry,timeline:d.timeline,preferred_contact:d.contact,how_heard:d.heard,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
+      else if(BOOKING.email){ jobs.push(fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:subj,_captcha:'false',_template:'table',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,requested_meeting:mtxt,industry:d.industry,timeline:d.timeline,preferred_contact:d.contact,how_heard:d.heard,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
       if(BOOKING.ucp){ jobs.push(fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:d.name,email:d.email,phone:d.phone,company:d.company,title:d.service,source:'website',status:'new',notes:notes})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
-      Promise.all(jobs).then(function(){ form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML=T.go; });
+      var dsub=m.querySelector('.ucbk-dsub'); if(dsub) dsub.innerHTML = meeting ? ('Your requested time: <b>'+meeting+'</b>.<br>We&rsquo;ll confirm by email shortly.') : 'Thank you &mdash; we&rsquo;ll be in touch shortly to lock a time.';
+      Promise.all(jobs).then(function(){ form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML='Send request'; });
     });
   }
-  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  function initTop(){
+    if(document.getElementById('ucTop')) return;
+    var b=document.createElement('button'); b.id='ucTop'; b.className='uc-top'; b.type='button'; b.setAttribute('aria-label','Back to top');
+    b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+    document.body.appendChild(b);
+    b.addEventListener('click',function(){ var L=window.lenis||window.__lenis; if(L&&L.scrollTo){ try{L.scrollTo(0,{duration:0.9});return;}catch(e){} } try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);} });
+    function upd(){ if((window.scrollY||document.documentElement.scrollTop||0)>620) b.classList.add('on'); else b.classList.remove('on'); }
+    window.addEventListener('scroll',upd,{passive:true}); setInterval(upd,600); upd();
+  }
+  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initTop(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
