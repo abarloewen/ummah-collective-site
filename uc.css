@@ -903,6 +903,7 @@ nav .btn-fill{padding:11px 20px}
 /* ---- booking popup ---- */
 .ucbk{position:fixed;inset:0;z-index:6000;display:none}
 .ucbk.on{display:block}
+.ucbk [hidden]{display:none!important}
 .ucbk-back{position:absolute;inset:0;background:rgba(6,10,9,.74);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);animation:ucbkFade .3s ease}
 .ucbk-card{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 32px));max-height:calc(100vh - 44px);overflow:auto;background:linear-gradient(180deg,rgba(20,28,26,.97),rgba(11,17,16,.98));border:1px solid var(--line);border-radius:22px;box-shadow:0 40px 120px rgba(0,0,0,.62);animation:ucbkUp .36s cubic-bezier(.2,.7,.2,1)}
 @keyframes ucbkFade{from{opacity:0}to{opacity:1}}
