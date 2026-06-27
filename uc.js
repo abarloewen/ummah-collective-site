@@ -446,8 +446,9 @@
   }
   /* ---------- booking popup (global, injected) ---------- */
   var BOOKING={
-    w3f:'',  /* Web3Forms access key — paste between the quotes to enable email delivery */
-    ucp:'https://uc-command-center.vercel.app/api/intake'  /* UCpanel lead intake */
+    w3f:'',  /* optional Web3Forms access key — if set, used instead of Formsubmit */
+    email:'info@ummah-collective.com',  /* keyless Formsubmit delivery target (one-time activation) */
+    ucp:''  /* UCpanel lead-intake URL — set once the dynamic panel is deployed */
   };
   function initBooking(){
     if(document.getElementById('ucbk')) return;
@@ -485,10 +486,11 @@
       var d={}; ['name','email','phone','company','website','service','budget','timeline','message'].forEach(function(k){var el=form.querySelector('[name='+k+']'); d[k]=el?el.value.trim():'';});
       if(!d.name||!d.email){ (d.name?form.querySelector('[name=email]'):form.querySelector('[name=name]')).focus(); return; }
       go.disabled=true; go.textContent='&hellip;'; go.innerHTML='Sending&hellip;';
-      var subj='New booking request &mdash; '+d.name+(d.company?(' ('+d.company+')'):'');
+      var subj='New booking request - '+d.name+(d.company?(' ('+d.company+')'):'');
       var notes='Service: '+(d.service||'-')+' | Budget: '+(d.budget||'-')+' | Timeline: '+(d.timeline||'-')+' | Website: '+(d.website||'-')+(d.message?(' | '+d.message):'');
       var jobs=[];
       if(BOOKING.w3f){ jobs.push(fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:BOOKING.w3f,subject:subj,from_name:'UC Website',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,budget:d.budget,timeline:d.timeline,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
+      else if(BOOKING.email){ jobs.push(fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:subj,_captcha:'false',_template:'table',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,budget:d.budget,timeline:d.timeline,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
       if(BOOKING.ucp){ jobs.push(fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:d.name,email:d.email,phone:d.phone,company:d.company,title:d.service,source:'website',status:'new',notes:notes})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
       Promise.all(jobs).then(function(){ form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML=T.go; });
     });
