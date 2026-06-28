@@ -531,7 +531,7 @@
     var b=document.createElement('button'); b.id='ucTop'; b.className='uc-top'; b.type='button'; b.setAttribute('aria-label','Back to top');
     b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
     document.body.appendChild(b);
-    b.addEventListener('click',function(){ var L=window.lenis||window.__lenis; if(L&&L.scrollTo){ try{L.scrollTo(0,{duration:0.9});return;}catch(e){} } try{window.scrollTo({top:0,behavior:'smooth'});}catch(e){window.scrollTo(0,0);} });
+    b.addEventListener('click',function(){ var start=window.scrollY||document.documentElement.scrollTop||0; if(start<=0) return; var t0=null,dur=620; function ez(p){return 1-Math.pow(1-p,3);} function st(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/dur); window.scrollTo(0,Math.round(start*(1-ez(p)))); if(p<1){ requestAnimationFrame(st); } else { var L=window.__lenis; if(L&&L.scrollTo){ try{L.scrollTo(0,{immediate:true});}catch(e){} } } } requestAnimationFrame(st); });
     function upd(){ if((window.scrollY||document.documentElement.scrollTop||0)>620) b.classList.add('on'); else b.classList.remove('on'); }
     window.addEventListener('scroll',upd,{passive:true}); setInterval(upd,600); upd();
   }
