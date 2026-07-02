@@ -986,6 +986,15 @@ nav .btn-fill{padding:11px 20px}
 .sa-card{margin:0;background:#f7f6f4;text-align:center;padding:22px 12px 18px}
 .sa-card img{width:78%;height:auto;display:block;margin:0 auto;mix-blend-mode:multiply}
 .sa-card figcaption{font-family:var(--mono);font-size:11px;color:#444;margin-top:12px;letter-spacing:.03em}
+.sa-photos{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:#fff}
+.sa-photos figure{margin:0;position:relative}
+.sa-photos img{width:100%;height:230px;object-fit:cover;display:block}
+.sa-photos figcaption{position:absolute;left:10px;bottom:10px;color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:.02em;text-shadow:0 1px 5px rgba(0,0,0,.65)}
+.site-anim.mk .sa-cta{background:#5b7c3a;color:#fff}
+.site-anim.mk .sa-award{background:#f6f3ec;color:#36302a}
+.site-anim.mk .sa-ah{color:#36302a}
+.site-anim.mk .sa-asub{color:#6b6357}
+.site-anim.mk .sa-chips span{border-color:#ddd3c2;color:#5a5044}
 .sa-band{background:#fff;color:#0e0e0e;text-align:center;padding:46px 20px}
 .sa-h{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em}
 .sa-sub{color:#6a6a6a;margin-top:8px;font-size:14px}
