@@ -969,9 +969,23 @@ nav .btn-fill{padding:11px 20px}
 .site-url{margin-left:16px;font-family:var(--mono);font-size:12px;color:#9a9a9a;background:#1c1c1c;padding:6px 16px;border-radius:20px;letter-spacing:.02em}
 .site-view{height:clamp(320px,54vh,580px);overflow:hidden;background:#fff;position:relative}
 .site-view::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 24px 40px -24px rgba(0,0,0,.35),inset 0 -24px 40px -24px rgba(0,0,0,.35)}
-.site-track{display:flex;flex-direction:column;animation:saScroll 30s linear infinite;will-change:transform}
+.site-track{display:flex;flex-direction:column;animation:saScroll 46s linear infinite;will-change:transform}
 .site-anim:hover .site-track{animation-play-state:paused}
 .sa-img{display:block;width:100%;height:auto}
+.sa-hero{height:clamp(320px,54vh,580px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:13px;padding:0 26px;color:#fff;background-size:cover;background-position:center}
+.sa-eyebrow{font-family:var(--mono);letter-spacing:.34em;font-size:12px;opacity:.92}
+.sa-title{font-family:var(--disp);font-weight:300;font-size:clamp(30px,4.6vw,52px);line-height:1.04;letter-spacing:.01em}
+.sa-tag{font-family:var(--mono);font-size:11px;letter-spacing:.22em;opacity:.86}
+.sa-cta{margin-top:8px;background:#fff;color:#111;padding:12px 26px;border-radius:30px;font-size:12px;letter-spacing:.04em}
+.sa-award{background:#fff;color:#0e0e0e;text-align:center;padding:52px 24px}
+.sa-ah{font-family:var(--disp);font-weight:700;font-size:clamp(20px,3vw,32px);letter-spacing:.005em}
+.sa-asub{color:#6a6a6a;margin:10px auto 0;font-size:14px;max-width:52ch}
+.sa-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+.sa-chips span{border:1px solid #e6e6e6;border-radius:30px;padding:9px 17px;font-size:12px;color:#333;letter-spacing:.02em}
+.sa-grid{background:#fff;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;border-top:1px solid #f0f0f0}
+.sa-card{margin:0;background:#f7f6f4;text-align:center;padding:22px 12px 18px}
+.sa-card img{width:78%;height:auto;display:block;margin:0 auto;mix-blend-mode:multiply}
+.sa-card figcaption{font-family:var(--mono);font-size:11px;color:#444;margin-top:12px;letter-spacing:.03em}
 .sa-band{background:#fff;color:#0e0e0e;text-align:center;padding:46px 20px}
 .sa-h{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em}
 .sa-sub{color:#6a6a6a;margin-top:8px;font-size:14px}
