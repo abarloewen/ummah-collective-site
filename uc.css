@@ -961,6 +961,9 @@ nav .btn-fill{padding:11px 20px}
 .uc-top svg{width:20px;height:20px}
 @media(max-width:560px){.ucbk-body{padding:30px 20px 22px}.ucbk-row{grid-template-columns:1fr}.ucbk-h{font-size:25px}.ucbk-card{width:calc(100vw - 18px);max-height:calc(100vh - 20px)}.ucbk-opts{grid-template-columns:1fr}.ucbk-slots{grid-template-columns:repeat(3,1fr)}.uc-top{left:14px;bottom:14px;width:42px;height:42px}}
 
+/* ---- uncropped case-study images (show full image, no crop) ---- */
+.pimg{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--line);background:#0c1a14}
+
 /* ---- founders-club event + application form ---- */
 .ev-sec [hidden]{display:none!important}
 .ev-meta{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:0}
