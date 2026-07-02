@@ -961,6 +961,11 @@ nav .btn-fill{padding:11px 20px}
 .uc-top svg{width:20px;height:20px}
 @media(max-width:560px){.ucbk-body{padding:30px 20px 22px}.ucbk-row{grid-template-columns:1fr}.ucbk-h{font-size:25px}.ucbk-card{width:calc(100vw - 18px);max-height:calc(100vh - 20px)}.ucbk-opts{grid-template-columns:1fr}.ucbk-slots{grid-template-columns:repeat(3,1fr)}.uc-top{left:14px;bottom:14px;width:42px;height:42px}}
 
+/* ---- Instagram feed embed ---- */
+.ig-feed{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;align-items:flex-start}
+.ig-feed .instagram-media{margin:0!important;flex:0 1 340px;min-width:0!important;max-width:360px}
+@media(max-width:560px){.ig-feed .instagram-media{flex:1 1 100%;max-width:100%}}
+
 /* ---- uncropped case-study images (show full image, no crop) ---- */
 .pimg{display:block;width:100%;height:auto;border-radius:16px;border:1px solid var(--line);background:#0c1a14}
 
