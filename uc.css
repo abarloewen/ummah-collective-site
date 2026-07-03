@@ -1086,6 +1086,32 @@ nav .btn-fill{padding:11px 20px}
 .at-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
 .at-chips span{border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:7px 15px;font-size:11.5px;font-family:var(--mono)}
 @media(max-width:760px){.at-hero{grid-template-columns:1fr;padding:26px 20px}.at-photo img{min-height:220px}}
+/* Dig it! Company — Feldplan (paper grid + slab + survey red) */
+.site-anim.di .site-view{background:#e7e0d0}
+.di-hero{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;padding:40px 38px;color:#15130d;background:#e7e0d0;background-image:linear-gradient(rgba(21,19,13,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(21,19,13,.06) 1px,transparent 1px);background-size:34px 34px}
+.di-hl{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:14px}
+.di-eye{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:#3a352a}
+.di-eye i{width:26px;height:2px;background:#b4382b}
+.di-h1{font-family:Georgia,'Times New Roman',serif;font-weight:700;font-size:clamp(26px,3.4vw,44px);line-height:1.04;letter-spacing:-.01em}
+.di-h1 em{color:#b4382b;font-style:normal}
+.di-sub{color:#4d4638;font-size:13.5px;max-width:48ch;line-height:1.6}
+.di-ctas{display:flex;gap:0;margin-top:8px;flex-wrap:wrap}
+.di-cta{background:#15130d;color:#efe8d9;padding:13px 22px;font-size:11px;letter-spacing:.14em;font-family:var(--mono)}
+.di-cta.ghost{background:transparent;color:#15130d;border:2px solid #15130d;padding:11px 20px}
+.di-plan{background:#efe8d9;border:2px solid #15130d;padding:16px}
+.di-coord{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:#3a352a;margin-bottom:8px}
+.di-plan svg{width:100%;height:auto;display:block}
+.di-cap{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#3a352a;margin-top:8px}
+.site-anim.di .sa-award{background:#efe8d9;color:#15130d}
+.site-anim.di .sa-ah{color:#15130d;font-family:Georgia,serif;font-weight:700}
+.site-anim.di .sa-asub{color:#5c5546}
+.site-anim.di .sa-chips span{border-color:#c9c0aa;color:#4d4638;border-radius:0}
+.di-off{background:#15130d;color:#efe8d9;text-align:center;padding:48px 24px}
+.di-oh{font-family:Georgia,serif;font-weight:700;font-size:clamp(22px,3vw,30px)}
+.di-off p{color:#b8b0a0;font-size:13.5px;margin-top:8px}
+.di-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.di-chips span{border:1px solid rgba(239,232,217,.35);padding:7px 15px;font-size:11px;font-family:var(--mono);letter-spacing:.08em}
+@media(max-width:760px){.di-hero{grid-template-columns:1fr;padding:26px 20px}}
 .sa-band{background:#fff;color:#0e0e0e;text-align:center;padding:46px 20px}
 .sa-h{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em}
 .sa-sub{color:#6a6a6a;margin-top:8px;font-size:14px}
