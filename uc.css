@@ -1112,6 +1112,29 @@ nav .btn-fill{padding:11px 20px}
 .di-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
 .di-chips span{border:1px solid rgba(239,232,217,.35);padding:7px 15px;font-size:11px;font-family:var(--mono);letter-spacing:.08em}
 @media(max-width:760px){.di-hero{grid-template-columns:1fr;padding:26px 20px}}
+/* Shoraka — maroon fintech trust */
+.site-anim.sk .site-view{background:#f5f4f2}
+.sk-hero{position:relative;overflow:hidden;min-height:420px;display:flex;align-items:center;padding:44px 40px;color:#fff;background:linear-gradient(135deg,#6f0103,#8A0204 55%,#a61218)}
+.sk-hex{position:absolute;width:220px;height:190px;background:rgba(255,255,255,.05);clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%)}
+.sk-hex.h1x{right:6%;top:-40px}
+.sk-hex.h2x{right:22%;bottom:-60px;width:150px;height:130px;background:rgba(255,255,255,.04)}
+.sk-hl{position:relative;max-width:60ch}
+.sk-h1{font-family:var(--sans);font-weight:800;font-size:clamp(28px,3.8vw,48px);line-height:1.08;letter-spacing:-.01em}
+.sk-h1 em{font-style:italic;font-weight:800}
+.sk-sub{color:#f3d9d9;font-size:14px;margin-top:14px;max-width:52ch;line-height:1.65}
+.sk-ctas{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
+.sk-cta{background:#101010;color:#fff;padding:13px 26px;font-size:13px;font-weight:600;font-family:var(--sans)}
+.sk-cta.ghost{background:transparent;border:1px solid rgba(255,255,255,.55)}
+.site-anim.sk .sa-award{background:#fff;color:#1a1414}
+.site-anim.sk .sa-ah{color:#1a1414;font-family:var(--sans);font-weight:800;letter-spacing:-.01em}
+.site-anim.sk .sa-asub{color:#6b5c5c}
+.site-anim.sk .sa-chips span{border-color:#e5dcdc;color:#4a3c3c}
+.sk-plat{background:#1a1414;color:#fff;text-align:center;padding:48px 24px}
+.sk-ph2{font-family:var(--sans);font-weight:800;font-size:clamp(22px,3vw,30px);letter-spacing:-.01em}
+.sk-plat p{color:#b8a8a8;font-size:13.5px;margin-top:8px}
+.sk-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.sk-chips span{border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:7px 15px;font-size:11.5px;font-family:var(--mono)}
+@media(max-width:760px){.sk-hero{min-height:340px;padding:28px 20px}}
 .sa-band{background:#fff;color:#0e0e0e;text-align:center;padding:46px 20px}
 .sa-h{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em}
 .sa-sub{color:#6a6a6a;margin-top:8px;font-size:14px}
