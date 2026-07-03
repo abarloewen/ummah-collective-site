@@ -1,8 +1,7 @@
 /* ============================================================
    UMMAH COLLECTIVE — Aurora site system (themeable, conversion, RTL)
    ============================================================ */
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&f[]=general-sans@300,400,500,600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Arabic:wght@300;400;600&family=Noto+Sans+SC:wght@300;400;600&display=swap');
+/* fonts now loaded via <link> in the head with preconnect (2026-07-04 perf pass) — @imports removed */
 
 :root{
   --bg:#040605; --bone:#F1F5EF; --dim:rgba(241,245,239,.76); --dim2:rgba(241,245,239,.52);
