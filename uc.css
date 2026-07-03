@@ -1120,7 +1120,7 @@ nav .btn-fill{padding:11px 20px}
 .sk-hex.h2x{right:22%;bottom:-60px;width:150px;height:130px;background:rgba(255,255,255,.04)}
 .sk-hl{position:relative;max-width:60ch}
 .sk-h1{font-family:var(--sans);font-weight:800;font-size:clamp(28px,3.8vw,48px);line-height:1.08;letter-spacing:-.01em}
-.sk-h1 em{font-style:italic;font-weight:800}
+.sk-h1 em{font-style:italic;font-weight:800;color:#fff}
 .sk-sub{color:#f3d9d9;font-size:14px;margin-top:14px;max-width:52ch;line-height:1.65}
 .sk-ctas{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
 .sk-cta{background:#101010;color:#fff;padding:13px 26px;font-size:13px;font-weight:600;font-family:var(--sans)}
