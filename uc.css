@@ -1164,6 +1164,29 @@ nav .btn-fill{padding:11px 20px}
 .bp-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
 .bp-chips span{border:1px solid rgba(255,255,255,.5);border-radius:4px;padding:7px 15px;font-size:11.5px;font-family:var(--mono)}
 @media(max-width:760px){.bp-nav{flex-wrap:wrap}.bp-hero{padding:44px 20px}}
+/* JBA Brandenburg — playful red/blue on paper */
+.site-anim.jb .site-view{background:#f6f6f4}
+.jb-hero{position:relative;overflow:hidden;text-align:center;padding:64px 26px 52px;background:#f6f6f4;background-image:repeating-radial-gradient(circle at 50% 120%,transparent 0,transparent 26px,rgba(30,40,120,.045) 27px,transparent 28px)}
+.jb-blob{position:absolute;border-radius:50%}
+.jb-blob.b1{width:120px;height:120px;background:#dd4a33;right:10%;top:24px;opacity:.9}
+.jb-blob.b2{width:74px;height:74px;background:#2b3a9f;left:12%;bottom:40px;opacity:.85}
+.jb-dash{position:absolute;width:90px;height:16px;border-radius:8px;transform:rotate(-45deg)}
+.jb-dash.d1{background:#dd4a33;left:6%;top:36px}
+.jb-dash.d2{background:#2b3a9f;right:7%;bottom:30px}
+.jb-sign{position:relative;display:inline-block;background:#fff;border:2px solid #1d2430;border-radius:8px;padding:26px 34px;font-family:var(--sans);font-weight:800;font-size:clamp(22px,3vw,36px);line-height:1.2;color:#1d2430;box-shadow:6px 8px 0 rgba(29,36,48,.12)}
+.jb-sign em{color:#2b3a9f;font-style:normal}
+.jb-cards{position:relative;display:flex;gap:12px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+.jb-cards span{background:#fff;color:#2b3a9f;font-weight:700;font-size:13px;padding:12px 18px;box-shadow:0 6px 18px rgba(20,25,60,.12);font-family:var(--sans)}
+.site-anim.jb .sa-award{background:#fff;color:#1d2430}
+.site-anim.jb .sa-ah{color:#dd4a33;font-family:var(--sans);font-weight:800;letter-spacing:-.01em}
+.site-anim.jb .sa-asub{color:#5a6068}
+.site-anim.jb .sa-chips span{border-color:#dfe2ea;color:#39415a}
+.jb-ev{background:#dd4a33;color:#fff;text-align:center;padding:48px 24px}
+.jb-eh{font-family:var(--mono);font-weight:600;font-size:clamp(19px,2.6vw,26px);letter-spacing:.1em}
+.jb-ev p{color:#ffe3dc;font-size:13.5px;margin-top:9px;max-width:56ch;margin-left:auto;margin-right:auto}
+.jb-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.jb-chips span{border:1px solid rgba(255,255,255,.5);border-radius:20px;padding:7px 15px;font-size:11.5px;font-family:var(--mono)}
+@media(max-width:760px){.jb-hero{padding:40px 18px 36px}.jb-sign{padding:18px 20px}}
 .sa-band{background:#fff;color:#0e0e0e;text-align:center;padding:46px 20px}
 .sa-h{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em}
 .sa-sub{color:#6a6a6a;margin-top:8px;font-size:14px}
