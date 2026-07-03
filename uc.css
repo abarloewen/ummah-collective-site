@@ -1187,6 +1187,27 @@ nav .btn-fill{padding:11px 20px}
 .jb-chips{display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap}
 .jb-chips span{border:1px solid rgba(255,255,255,.5);border-radius:20px;padding:7px 15px;font-size:11.5px;font-family:var(--mono)}
 @media(max-width:760px){.jb-hero{padding:40px 18px 36px}.jb-sign{padding:18px 20px}}
+/* Optima — dark fintech violet */
+.site-anim.op .site-view{background:#0b0a10}
+.op-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;padding:54px 40px;background:#0b0a10;color:#fff}
+.op-glow{position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.4),transparent 65%);right:-120px;top:-80px;pointer-events:none}
+.op-h1{font-family:var(--sans);font-weight:800;font-size:clamp(30px,4vw,52px);line-height:1.05;letter-spacing:-.02em}
+.op-sub{color:#b9b4c9;font-size:13.5px;margin-top:14px;max-width:46ch;line-height:1.6}
+.op-cta{display:inline-block;margin-top:18px;background:#4f46e5;color:#fff;padding:12px 24px;border-radius:24px;font-size:12.5px;font-weight:700;font-family:var(--sans)}
+.op-cards{position:relative;display:flex;flex-direction:column;gap:14px;align-items:flex-end}
+.op-card{background:linear-gradient(135deg,#17141f,#221c31);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:16px 20px;min-width:200px;box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.op-card i{display:block;font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:#8f88a6;text-transform:uppercase}
+.op-card b{display:block;font-size:20px;margin-top:6px;color:#fff;font-family:var(--sans)}
+.op-card.c1 b{background:linear-gradient(90deg,#7c3aed,#4f46e5);-webkit-background-clip:text;background-clip:text;color:transparent}
+.op-card.c2 b{color:#34d399;letter-spacing:3px}
+.site-anim.op .sa-award{background:#f7f6fb;color:#17141f}
+.site-anim.op .sa-ah{color:#17141f;font-family:var(--sans);font-weight:800;letter-spacing:-.01em}
+.site-anim.op .sa-asub{color:#645e78}
+.site-anim.op .sa-chips span{border-color:#dfdbec;color:#453f5c}
+.op-flow{background:linear-gradient(120deg,#12101a,#1d1430);color:#fff;text-align:center;padding:52px 24px}
+.op-fh{font-family:var(--sans);font-weight:800;font-size:clamp(24px,3.2vw,34px);letter-spacing:-.01em}
+.op-flow p{color:#b9b4c9;font-size:13.5px;margin-top:10px;max-width:54ch;margin-left:auto;margin-right:auto}
+@media(max-width:760px){.op-hero{grid-template-columns:1fr;padding:34px 22px}.op-cards{align-items:flex-start}}
 .sa-band{background:#fff;color:#0e0e0e;text-align:center;padding:46px 20px}
 .sa-h{font-family:var(--disp);font-weight:600;font-size:clamp(20px,3vw,34px);letter-spacing:-.01em}
 .sa-sub{color:#6a6a6a;margin-top:8px;font-size:14px}
