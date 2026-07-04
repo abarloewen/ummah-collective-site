@@ -171,6 +171,35 @@
       var t=el.textContent.trim(); if(t&&t.length<=600) el.setAttribute('data-en',t);
     });
   }
+  /* ---------- newsletter signup (footer, Brevo; 2026-07-05) ---------- */
+  var UC_NL_ENDPOINT=window.UC_NL_ENDPOINT||'';  /* set to Brevo form action URL; empty = mailto-less fallback via Formsubmit */
+  function initNewsletter(){
+    var col=document.querySelector('footer .f-grid>div:first-child'); if(!col) return;
+    var L=(document.documentElement.getAttribute('lang')||'en').slice(0,2);
+    var T={
+      en:{h:'Newsletter',p:'Systems, AI and the trust economy — once a month, no noise.',ph:'you@company.com',b:'Subscribe',ok:'Subscribed — welcome.',err:'Something went wrong — try again.'},
+      de:{h:'Newsletter',p:'Systeme, KI und die Vertrauensökonomie — einmal im Monat, ohne Lärm.',ph:'sie@firma.de',b:'Abonnieren',ok:'Angemeldet — willkommen.',err:'Etwas ging schief — bitte erneut versuchen.'},
+      ms:{h:'Surat berita',p:'Sistem, AI dan ekonomi amanah — sebulan sekali, tanpa bising.',ph:'anda@syarikat.com',b:'Langgan',ok:'Berjaya melanggan — selamat datang.',err:'Ada masalah — cuba lagi.'},
+      ar:{h:'النشرة البريدية',p:'الأنظمة والذكاء الاصطناعي واقتصاد الثقة — مرة في الشهر، بلا ضجيج.',ph:'you@company.com',b:'اشترك',ok:'تم الاشتراك — أهلاً بك.',err:'حدث خطأ — حاول مجددًا.'},
+      zh:{h:'订阅通讯',p:'系统、AI 与信任经济 — 每月一期，无噪音。',ph:'you@company.com',b:'订阅',ok:'订阅成功 — 欢迎。',err:'出错了 — 请重试。'},
+      tr:{h:'Bülten',p:'Sistemler, AI ve güven ekonomisi — ayda bir, gürültüsüz.',ph:'siz@sirket.com',b:'Abone ol',ok:'Abone oldunuz — hoş geldiniz.',err:'Bir şeyler ters gitti — tekrar deneyin.'}
+    }[L]||{h:'Newsletter',p:'',ph:'you@company.com',b:'Subscribe',ok:'Subscribed.',err:'Error.'};
+    var w=document.createElement('div'); w.className='nlf';
+    w.innerHTML='<h6>'+T.h+'</h6><p class="nlf-p">'+T.p+'</p><form class="nlf-f" novalidate><input type="email" required placeholder="'+T.ph+'" aria-label="Email"><button type="submit" class="btn btn-fill">'+T.b+'</button></form><div class="nlf-msg" hidden></div>';
+    col.appendChild(w);
+    var f=w.querySelector('form'),msg=w.querySelector('.nlf-msg');
+    f.addEventListener('submit',function(e){e.preventDefault();
+      var em=f.querySelector('input').value.trim(); if(!em||em.indexOf('@')<0) return;
+      var done=function(ok){msg.hidden=false;msg.textContent=ok?T.ok:T.err;if(ok)f.hidden=true;};
+      if(UC_NL_ENDPOINT){
+        var fd=new FormData(); fd.append('EMAIL',em); fd.append('email',em); fd.append('locale',L);
+        fetch(UC_NL_ENDPOINT,{method:'POST',body:fd,mode:'no-cors'}).then(function(){done(true)}).catch(function(){done(false)});
+      }else{
+        fetch('https://formsubmit.co/ajax/info@ummah-collective.com',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({_subject:'Newsletter signup ('+L+')',email:em,source:'ummah-collective site footer'})}).then(function(r){done(r.ok)}).catch(function(){done(false)});
+      }
+    });
+  }
+
   function initLang(){
     /* Static language trees (2026-07-05): pages are pre-translated at /de/ /ms/ /ar/ /zh/ /tr/.
        The switcher now NAVIGATES between trees instead of swapping text client-side. */
@@ -564,6 +593,6 @@
     function upd(){ var L=window.__lenis; var y=(L&&typeof L.animatedScroll==='number')?L.animatedScroll:(window.scrollY||document.documentElement.scrollTop||0); if(y>620) b.classList.add('on'); else b.classList.remove('on'); }
     window.addEventListener('scroll',upd,{passive:true}); setInterval(upd,450); upd();
   }
-  function boot(){ initBoot(); initLang(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initTop(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  function boot(){ initBoot(); initLang();initNewsletter(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initTop(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
