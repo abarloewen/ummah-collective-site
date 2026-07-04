@@ -132,14 +132,22 @@
       ftag:"智能，兼具诚信。面向信任经济的应用型 AI 工作室——为现代企业打造软件、智能体与系统。",
       letsbuild:"一起打造",ctah2:"打造<br>值得<em>信赖</em>的产品。",ctalead:"告诉我们是什么拖慢了你的业务，我们会展示解决它的系统——以及多快见效。",lblphone:"电话",lblstudio:"工作室",
       abadge:"零风险的第一步",audith2:"为你的业务获取<em>免费 AI 审计</em>",auditp:"30 分钟拆解：AI 智能体、自动化与更好的网站在哪里最能为你省时省钱。不推销，只给路线图。",
-      shifteyebrow:"(01) — 转变",shifth2:"如今人人都能<em>使用</em> AI，却几乎没人把它变成你真正<em>信赖</em>的系统。",whatwebuild:"我们构建什么",selwork:"精选作品",st_proj:"项目",st_cli:"客户",st_yrs:"年",st_lang:"语言"}
+      shifteyebrow:"(01) — 转变",shifth2:"如今人人都能<em>使用</em> AI，却几乎没人把它变成你真正<em>信赖</em>的系统。",whatwebuild:"我们构建什么",selwork:"精选作品",st_proj:"项目",st_cli:"客户",st_yrs:"年",st_lang:"语言"},
+    tr:{work:"Projeler",services:"Hizmetler",solutions:"Çözümler",ventures:"Girişimler",about:"Hakkımızda",insights:"İçgörüler",contact:"İletişim",products:"Ürünler",company:"Şirket",club:"Founders Club",exploreclub:"Founders Club'ı keşfedin",clubeyebrow:"Topluluk · Founders Club",clubh:"Gerçekten <em>inanan</em> kurucularla birlikte inşa edin.",clubp:"Müslüman ve değer odaklı kurucuların ücretsiz topluluğu — Kuala Lumpur'da çevrim içi ve yüz yüze buluşuyoruz.",clubtag:"Katılım ücretsiz · KL & Online",clubwhatson:"Neler var",clubev1:"<span>01</span> KL buluşmaları & akşam yemekleri",clubev2:"<span>02</span> Ustalık sınıfları & atölyeler",clubev3:"<span>03</span> Online webinarlar & soru-cevaplar",clubev4:"<span>04</span> Demo & sunum geceleri",homequote:"“Tüm ekosistemimizi kurdular — marka, site, takip ve amiral mağaza. <em>Bir kampanya değil. Bir varlık.</em>”",homequoteby:"ANAAKA — Helal Cilt Bakımı · Amiral Mağaza @ TRX, Kuala Lumpur",connect:"Bağlantı",
+      start:"Proje başlat",book:"Görüşme planla",brief:"Brief gönderin",audit:"Ücretsiz AI denetimi",whatsapp:"WhatsApp",email:"E-posta",menu:"Menü",allsol:"Tüm çözümler &rarr;",imprint:"Künye &amp; Gizlilik",
+      tag1:"Zekâ,",tag2:"dürüstlükle.",herosub:"Modern şirketlerin üzerinde çalıştığı yazılımları, AI ajanlarını ve sistemleri inşa ediyoruz — hızla geliştirilmiş, on yıllık güvene dayalı.",
+      ftag:"Zekâ, dürüstlükle. Güven ekonomisi için uygulamalı yapay zekâ stüdyosu — modern şirketlerin üzerinde çalıştığı yazılımlar, ajanlar ve sistemler.",
+      letsbuild:"Birlikte inşa edelim",ctah2:"Güvenmeye<br><em>değer</em> bir şey inşa edin.",ctalead:"İşinizi neyin yavaşlattığını anlatın. Bunu çözen sistemi — ve ne kadar hızlı çözdüğünü — gösterelim.",lblphone:"Telefon",lblstudio:"Stüdyo",
+      abadge:"Risksiz başlangıç",audith2:"İşletmeniz için <em>ücretsiz AI denetimi</em> alın",auditp:"30 dakikalık analiz: AI ajanları, otomasyon ve daha iyi bir sitenin size en çok zaman ve para kazandıracağı yerler. Satış konuşması yok, sadece yol haritası.",
+      shifteyebrow:"(01) — Dönüşüm",shifth2:"Artık herkes AI <em>kullanabiliyor.</em> Ama neredeyse hiç kimse onu gerçekten <em>güvendiğiniz</em> sistemlere dönüştüremiyor.",whatwebuild:"Ne inşa ediyoruz",selwork:"Seçilmiş işler",st_proj:"Proje",st_cli:"Müşteri",st_yrs:"Yıl",st_lang:"Dil"},
   };
   var _CTA={
     en:{cta_results:'Want results<br>like <em>these?</em>',cta_first:'What should we<br>build <em>first?</em>',cta_studio:'Work with<br>the <em>studio.</em>',cta_noon:'Be first on<br><em>Noon OS.</em>',cta_launch:'Claim your<br><em>launch slot.</em>'},
     de:{cta_results:'Wollen Sie<br>solche <em>Ergebnisse?</em>',cta_first:'Was bauen wir<br><em>zuerst?</em>',cta_studio:'Mit dem<br><em>Studio</em> arbeiten.',cta_noon:'Seien Sie zuerst auf<br><em>Noon OS.</em>',cta_launch:'Sichern Sie sich<br>einen <em>Slot.</em>'},
     ms:{cta_results:'Mahukan hasil<br><em>seperti ini?</em>',cta_first:'Apa patut kami<br>bina <em>dahulu?</em>',cta_studio:'Bekerja dengan<br><em>studio.</em>',cta_noon:'Jadi yang pertama di<br><em>Noon OS.</em>',cta_launch:'Tempah<br><em>slot anda.</em>'},
     ar:{cta_results:'تريد نتائج<br><em>كهذه؟</em>',cta_first:'ماذا نبني<br><em>أولًا؟</em>',cta_studio:'اعمل مع<br><em>الاستوديو.</em>',cta_noon:'كن أول من يجرّب<br><em>Noon OS.</em>',cta_launch:'احجز<br><em>مكانك.</em>'},
-    zh:{cta_results:'想要<br><em>这样的成果？</em>',cta_first:'我们先<br>构建<em>什么？</em>',cta_studio:'与<br><em>工作室</em>合作。',cta_noon:'抢先体验<br><em>Noon OS。</em>',cta_launch:'<em>预约</em><br>名额。'}
+    zh:{cta_results:'想要<br><em>这样的成果？</em>',cta_first:'我们先<br>构建<em>什么？</em>',cta_studio:'与<br><em>工作室</em>合作。',cta_noon:'抢先体验<br><em>Noon OS。</em>',cta_launch:'<em>预约</em><br>名额。'},
+    tr:{cta_results:'Böyle sonuçlar<br>ister <em>misiniz?</em>',cta_first:'Önce ne<br>inşa <em>edelim?</em>',cta_studio:'Stüdyo ile<br><em>çalışın.</em>',cta_noon:"Noon OS'ta<br><em>ilk siz olun.</em>",cta_launch:'Lansman yerinizi<br><em>ayırtın.</em>'}
   };
   for(var _l in _CTA){ if(I18N[_l]) for(var _k in _CTA[_l]) I18N[_l][_k]=_CTA[_l][_k]; }
   function setLang(l){
@@ -164,13 +172,22 @@
     });
   }
   function initLang(){
-    var stored; try{stored=localStorage.getItem('uc_lang')}catch(e){}
-    snapTR();
-    setLang(stored||'en');
+    /* Static language trees (2026-07-05): pages are pre-translated at /de/ /ms/ /ar/ /zh/ /tr/.
+       The switcher now NAVIGATES between trees instead of swapping text client-side. */
+    var pageLang=(document.documentElement.getAttribute('lang')||'en').slice(0,2);
+    try{localStorage.setItem('uc_lang',pageLang)}catch(e){}
+    document.body.setAttribute('lang',pageLang);
+    var lc=document.getElementById('langCur'); if(lc) lc.textContent=pageLang.toUpperCase();
+    if(window.UC_heroAnchor) window.UC_heroAnchor(pageLang);
+    function target(code){
+      var p=location.pathname.replace(/^\/(de|ms|ar|zh|tr)(?=\/)/,'');
+      if(p==='')p='/';
+      return code==='en'? p : '/'+code+(p==='/'?'/':p);
+    }
     var box=document.getElementById('lang');
     if(box){var btn=box.querySelector('button');
       btn.onclick=function(e){e.stopPropagation();box.classList.toggle('open')};
-      box.querySelectorAll('.lang-menu button').forEach(function(b){b.onclick=function(){setLang(b.getAttribute('data-l'));box.classList.remove('open')}});
+      box.querySelectorAll('.lang-menu button').forEach(function(b){b.onclick=function(){location.href=target(b.getAttribute('data-l'));}});
       document.addEventListener('click',function(){box.classList.remove('open')});
     }
   }
@@ -179,7 +196,7 @@
   function initHeroCycle(){
     var h1=document.querySelector('header.hero h1.hero-cycle'); if(!h1) return;
     var t1=h1.querySelector('.ht1'), t2=h1.querySelector('.ht2'); if(!t1||!t2) return;
-    var order=['en','de','ms','ar','zh'];
+    var order=['en','de','ms','ar','zh','tr'];
     function apply(l){ var d=I18N[l]; if(!d) return; if(d.tag1!=null) t1.innerHTML=d.tag1; if(d.tag2!=null) t2.innerHTML=d.tag2; h1.setAttribute('dir', l==='ar'?'rtl':'ltr'); }
     var cur='en'; try{cur=localStorage.getItem('uc_lang')||'en'}catch(e){}
     var i=order.indexOf(cur); if(i<0) i=0;
