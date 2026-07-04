@@ -371,7 +371,7 @@
     var sc=new THREE.Scene(); sc.fog=new THREE.FogExp2(0x050706,0.055);
     var cam=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,100); cam.position.z=8.2;
     var rnd=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});
-    rnd.setSize(innerWidth,innerHeight); rnd.setPixelRatio(Math.min(devicePixelRatio,2));
+    rnd.setSize(innerWidth,innerHeight); rnd.setPixelRatio(Math.min(devicePixelRatio,innerWidth<768?1.5:2));
     var base=BASEHUE[document.body.getAttribute('data-aurora')]||150;
     var g=new THREE.Group(); sc.add(g);
     var S=2.3,T1=[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]],T2=[[-1,-1,-1],[-1,1,1],[1,-1,1],[1,1,-1]];
@@ -415,7 +415,7 @@
     ].join('\n');
     var tc=theme();
     var sc=new THREE.Scene(),cam=new THREE.Camera();
-    var rnd=new THREE.WebGLRenderer({canvas:canvas,antialias:true}); rnd.setSize(innerWidth,innerHeight); rnd.setPixelRatio(Math.min(devicePixelRatio,2));
+    var rnd=new THREE.WebGLRenderer({canvas:canvas,antialias:true}); rnd.setSize(innerWidth,innerHeight); rnd.setPixelRatio(Math.min(devicePixelRatio,innerWidth<768?1.5:2));
     var uni={uTime:{value:0},uMouse:{value:new THREE.Vector2(.5,.5)},uRes:{value:new THREE.Vector2(innerWidth,innerHeight)},
       uA:{value:new THREE.Vector3(0.09,0.84,0.55)},uB:{value:new THREE.Vector3().fromArray(tc[2])}};
     sc.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({uniforms:uni,vertexShader:VERT,fragmentShader:FR})));

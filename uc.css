@@ -1314,6 +1314,20 @@ nav .btn-fill{padding:11px 20px}
 @keyframes saScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
 @media(prefers-reduced-motion:reduce){.site-track{animation:none}}
 
+/* ---- Mobile / app-feel pass (2026-07-05) ---- */
+html{-webkit-text-size-adjust:100%}
+html,body{overflow-x:clip}
+body{overscroll-behavior-y:none;-webkit-tap-highlight-color:transparent}
+a,button,.btn,summary,input,select,textarea,.tile,.erow{touch-action:manipulation}
+.big2,.phero h1,.sh h2{overflow-wrap:break-word}
+@media(max-width:760px){
+  input,select,textarea{font-size:16px!important}  /* prevents iOS zoom-on-focus */
+  .btn{min-height:44px}                             /* comfortable tap targets */
+}
+@media(max-width:480px){
+  .big2{font-size:clamp(24px,7vw,32px)}
+}
+
 /* ---- Advisory band (Dr. Lawal — about + shariah-audit) ---- */
 .advband{display:grid;grid-template-columns:minmax(240px,340px) 1fr;gap:34px;align-items:start}
 .advphoto{width:100%;border-radius:16px;border:0.5px solid rgba(255,255,255,.14);display:block;box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
