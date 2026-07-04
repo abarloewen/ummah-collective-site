@@ -200,6 +200,8 @@
     var ov=document.getElementById('overlay'),ob=document.getElementById('menuOpen'),oc=document.getElementById('menuClose');
     if(ob&&ov) ob.onclick=function(){ov.classList.add('open')};
     function cl(){if(ov)ov.classList.remove('open')} if(oc)oc.onclick=cl; if(ov)ov.querySelectorAll('a').forEach(function(a){a.onclick=cl});
+    /* accordion: only one Solutions group open at a time (2026-07-05) */
+    if(ov)ov.querySelectorAll('.ov-acc').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ov.querySelectorAll('.ov-acc[open]').forEach(function(o){if(o!==d)o.open=false;})})});
     if(!matchMedia('(hover:none)').matches){
       var dot=document.createElement('div');dot.className='cursor';document.body.appendChild(dot);
       var ring=document.createElement('div');ring.className='cursor-ring';document.body.appendChild(ring);
@@ -244,7 +246,17 @@
 
   /* ---------- lenis + gsap reveals ---------- */
   function start(){
-    if(typeof Lenis!=='undefined'){var l=new Lenis({lerp:0.1});window.__lenis=l;
+    var isTouch=matchMedia('(hover: none), (pointer: coarse)').matches;
+    if(isTouch&&hasG){
+      /* phones: pure native momentum scrolling (Lenis can cut iOS momentum short);
+         ScrollTrigger listens to native scroll on its own — just keep heights fresh */
+      var rzT2;function rz2(){clearTimeout(rzT2);rzT2=setTimeout(function(){try{ScrollTrigger.refresh();}catch(e){}},120);}
+      window.addEventListener('load',rz2);window.addEventListener('resize',rz2);
+      if(document.fonts&&document.fonts.ready)document.fonts.ready.then(rz2);
+      setTimeout(rz2,600);setTimeout(rz2,1600);setTimeout(rz2,3000);
+      if(window.ResizeObserver){try{new ResizeObserver(rz2).observe(document.body);}catch(e){}}
+    }
+    if(typeof Lenis!=='undefined'&&!isTouch){var l=new Lenis({lerp:0.1});window.__lenis=l;
       if(hasG){l.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){l.raf(t*1000)});gsap.ticker.lagSmoothing(0);}
       else{function raf(t){l.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);}
       /* recompute scrollable height after fonts/lottie/images reflow so the footer is always reachable */
