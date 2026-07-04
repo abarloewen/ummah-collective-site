@@ -1328,7 +1328,7 @@ nav .btn-fill{padding:11px 20px}
 .ov-big{display:flex;align-items:center;justify-content:space-between;padding:16px;border:1px solid var(--line);border-radius:14px;margin:14px 0 0;font-family:var(--sans);font-size:16px;font-weight:600;color:var(--bone);background:rgba(255,255,255,.02)}
 .ov-big:active{border-color:var(--acc);color:var(--acc)}
 .ov-arrow{color:var(--acc2)}
-.ov-ctawrap{position:sticky;bottom:-40px;margin:18px -4px 0;padding:12px 4px 8px;background:linear-gradient(to top,#080b0a 62%,transparent)}
+.ov-ctawrap{margin:18px 0 0}  /* static — sticky version overlapped the Company grid (2026-07-05) */
 .ov-item{padding:8px}
 .ov-item .ic{width:36px;height:36px}
 .ov-item .ic svg{width:17px;height:17px}
@@ -1346,6 +1346,16 @@ a,button,.btn,summary,input,select,textarea,.tile,.erow{touch-action:manipulatio
 }
 @media(max-width:480px){
   .big2{font-size:clamp(24px,7vw,32px)}
+}
+@media(max-width:760px){
+  /* decorative pulse dot above Selected work = ~240px of near-empty space on phones */
+  .lottie-box[data-src="pulse-lottie.json"]{display:none}
+  /* compact footer: brand full-width, then link columns 2×2 instead of one long stack */
+  .f-grid{grid-template-columns:1fr 1fr!important;gap:22px 18px!important}
+  .f-grid>div:first-child{grid-column:1/-1}
+  .f-grid a{padding:4px 0;font-size:14px}
+  .f-grid h6{margin-bottom:10px}
+  footer{padding-bottom:18px}
 }
 
 /* ---- Advisory band (Dr. Lawal — about + shariah-audit) ---- */
