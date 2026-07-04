@@ -172,7 +172,7 @@
     });
   }
   /* ---------- newsletter signup (footer, Brevo; 2026-07-05) ---------- */
-  var UC_NL_ENDPOINT=window.UC_NL_ENDPOINT||'';  /* set to Brevo form action URL; empty = mailto-less fallback via Formsubmit */
+  var UC_NL_ENDPOINT=window.UC_NL_ENDPOINT||'https://214e3e8d.sibforms.com/serve/MUIFAHLZzGL3LT1x21yQlKM9GKWkHUEJ2vPga1uEIB2doKuBGr-jU48VVpkZIwYy5cGOgSFOLSQHQa8Tbtsijocq09mbXntKWSmYvhxnbuE1vYTNvUVJZDSv2rZuVUuNLjXjHJuXwk3wAkOlyNLYyfb-mrBklnYhWFJLdTeJpzkTCVeJWJwqgtL2S0WE9UWlXKB2VEw4I70kJUoHwA==';  /* Brevo: UC Newsletter list #7 */  /* set to Brevo form action URL; empty = mailto-less fallback via Formsubmit */
   function initNewsletter(){
     var col=document.querySelector('footer .f-grid>div:first-child'); if(!col) return;
     var L=(document.documentElement.getAttribute('lang')||'en').slice(0,2);
