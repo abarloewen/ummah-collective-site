@@ -221,6 +221,17 @@
     }
   }
 
+  /* ---------- GA4 (guarded: skips when head snippet present) ---------- */
+  (function(){
+    if(window.gtag) return;
+    window.dataLayer=window.dataLayer||[];
+    window.gtag=function(){dataLayer.push(arguments);};
+    gtag('js',new Date()); gtag('config','G-HWF39V3XM0');
+    var s=document.createElement('script'); s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-HWF39V3XM0';
+    document.head.appendChild(s);
+  })();
+
   /* ---------- hero title: cycle languages every 3s ---------- */
   function initHeroCycle(){
     var h1=document.querySelector('header.hero h1.hero-cycle'); if(!h1) return;
