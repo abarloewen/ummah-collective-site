@@ -271,11 +271,12 @@
     window.UC_heroAnchor=function(l){ var k=order.indexOf(l); if(k<0) return; i=k; apply(l); };  // re-anchor when the user switches language
     if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
     h1.style.transition='opacity .55s ease, filter .55s ease, transform .55s ease';
-    setInterval(function(){
+    var tick=function(){
       i=(i+1)%order.length;
       h1.style.opacity='0'; h1.style.filter='blur(7px)'; h1.style.transform='translateY(12px)';
       setTimeout(function(){ apply(order[i]); h1.style.opacity='1'; h1.style.filter='none'; h1.style.transform='none'; },560);
-    },3000);
+    };
+    setTimeout(function(){ tick(); setInterval(tick,3000); },6000); /* first swap late so LCP settles */
   }
 
   /* ---------- chrome: nav, menu, cursor, magnetic ---------- */
