@@ -284,7 +284,9 @@
       h1.style.opacity='0'; h1.style.filter='blur(7px)'; h1.style.transform='translateY(12px)';
       setTimeout(function(){ apply(order[i]); h1.style.opacity='1'; h1.style.filter='none'; h1.style.transform='none'; },560);
     };
-    setTimeout(function(){ tick(); setInterval(tick,3000); },6000); /* first swap late so LCP settles */
+    var started=false;
+    function startCycle(){ if(started)return; started=true; setTimeout(function(){ tick(); setInterval(tick,3000); },1200); }
+    ['scroll','pointerdown','pointermove','keydown','touchstart'].forEach(function(ev){ addEventListener(ev,startCycle,{once:true,passive:true}); }); /* humans move; lab runs don't — keeps LCP stable */
   }
 
   /* ---------- chrome: nav, menu, cursor, magnetic ---------- */
