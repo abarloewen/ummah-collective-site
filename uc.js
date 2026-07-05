@@ -542,6 +542,7 @@
   /* ---------- premium boot intro (first load of the session only) ---------- */
   function initBoot(){
     if(reduce) return;
+    if(softGL) return;
     try{ if(sessionStorage.getItem('uc_booted')) return; }catch(e){}
     var b=document.createElement('div'); b.className='boot';
     b.innerHTML='<div class="boot-in"><div class="boot-mk"></div><div class="boot-wm">Ummah&nbsp;Collective</div><div class="boot-sub">Intelligence, with integrity</div><div class="boot-bar"><i></i></div></div>';
