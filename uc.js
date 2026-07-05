@@ -6,6 +6,14 @@
   'use strict';
   var hasG=window.gsap&&window.ScrollTrigger; if(hasG) gsap.registerPlugin(ScrollTrigger);
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var softGL=(function(){ /* skip WebGL on software renderers (Lighthouse/SwiftShader, GPU-less devices) */
+    try{var c=document.createElement('canvas');var gl=c.getContext('webgl')||c.getContext('experimental-webgl');
+      if(!gl)return true;var x=gl.getExtension('WEBGL_debug_renderer_info');
+      var r=x?gl.getParameter(x.UNMASKED_RENDERER_WEBGL):'';
+      return /swiftshader|llvmpipe|software|basic render/i.test(String(r));
+    }catch(e){return true;}
+  })();
+  if(softGL){var _sg=document.getElementById('gl'); if(_sg)_sg.style.display='none'; document.querySelectorAll('.liquid-canvas,[data-gl]').forEach(function(e){e.style.display='none'});}
   var UC_SEC=0,UC_SECT=0,UC_BOOST=0,UC_LASTY=0;  // section hue + scroll-velocity (drive the aurora)
 
   /* ---------- per-page aurora colours ---------- */
@@ -57,7 +65,7 @@
   ].join('\n');
 
   function initGL(){
-    if(reduce||!window.THREE) return;
+    if(reduce||softGL||!window.THREE) return;
     var canvas=document.getElementById('gl'); if(!canvas) return;
     var THREE=window.THREE, sc=new THREE.Scene(), cam=new THREE.Camera();
     var rnd=new THREE.WebGLRenderer({canvas:canvas,antialias:true});
@@ -464,7 +472,7 @@
   /* ---------- unified 3D colour-shifting background ---------- */
   var BASEHUE={'default':150,'services':168,'work':276,'ventures':158,'insights':40,'contact':132,'about':236,'market':44};
   function initBG(){
-    if(reduce||!window.THREE) return;
+    if(reduce||softGL||!window.THREE) return;
     var canvas=document.getElementById('gl'); if(!canvas) return; var THREE=window.THREE;
     var sc=new THREE.Scene(); sc.fog=new THREE.FogExp2(0x050706,0.055);
     var cam=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,100); cam.position.z=8.2;
@@ -501,7 +509,7 @@
 
   /* ---------- liquid metaball background (variant, jade, mouse-reactive) ---------- */
   function initLiquid(){
-    if(reduce||!window.THREE) return; var canvas=document.getElementById('gl'); if(!canvas) return; var THREE=window.THREE;
+    if(reduce||softGL||!window.THREE) return; var canvas=document.getElementById('gl'); if(!canvas) return; var THREE=window.THREE;
     var FR=[
       'precision highp float; varying vec2 vUv; uniform float uTime; uniform vec2 uMouse; uniform vec2 uRes; uniform vec3 uA; uniform vec3 uB;',
       'void main(){ float asp=uRes.x/uRes.y; vec2 p=vec2(vUv.x*asp,vUv.y); float m=0.0; int i;',
