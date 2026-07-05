@@ -227,8 +227,7 @@
     var t1=h1.querySelector('.ht1'), t2=h1.querySelector('.ht2'); if(!t1||!t2) return;
     var order=['en','de','ms','ar','zh','tr'];
     function apply(l){ var d=I18N[l]; if(!d) return; if(d.tag1!=null) t1.innerHTML=d.tag1; if(d.tag2!=null) t2.innerHTML=d.tag2; h1.setAttribute('dir', l==='ar'?'rtl':'ltr'); }
-    var cur='en'; try{cur=localStorage.getItem('uc_lang')||'en'}catch(e){}
-    var i=order.indexOf(cur); if(i<0) i=0;
+    var i=0; /* always open on English, then cycle in menu order (Attila 2026-07-05) */
     apply(order[i]);                                   // begin on the language the user has selected
     window.UC_heroAnchor=function(l){ var k=order.indexOf(l); if(k<0) return; i=k; apply(l); };  // re-anchor when the user switches language
     if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
