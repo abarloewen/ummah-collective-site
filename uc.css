@@ -68,8 +68,8 @@ body[dir=rtl] .lang-menu{right:auto;left:0}
 .menu-btn{display:none;cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--bone)}
 @media(max-width:1024px){.nav-links{display:none}.menu-btn{display:block}}
 
-.overlay{position:fixed;inset:0;z-index:150;background:rgba(4,6,5,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transform:translateY(-100%);transition:transform .7s cubic-bezier(.76,0,.24,1);display:flex;flex-direction:column;padding:16px var(--gut) 0}
-.overlay.open{transform:none}
+.overlay{position:fixed;inset:0;z-index:150;background:rgba(4,6,5,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transform:translateY(-100%);visibility:hidden;transition:transform .7s cubic-bezier(.76,0,.24,1),visibility 0s linear .7s;display:flex;flex-direction:column;padding:16px var(--gut) 0}
+.overlay.open{transform:none;visibility:visible;transition:transform .7s cubic-bezier(.76,0,.24,1),visibility 0s}
 .ov-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;flex:0 0 auto}
 .ov-top .brand .logo{height:42px}
 .ov-close{cursor:pointer;width:42px;height:42px;border:1px solid var(--line2);border-radius:50%;display:grid;place-items:center;font-size:16px;color:var(--bone)}

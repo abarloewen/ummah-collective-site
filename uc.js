@@ -282,6 +282,7 @@
   function initChrome(){
     var nav=document.getElementById('nav'); if(nav) addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>40)});
     var ov=document.getElementById('overlay'),ob=document.getElementById('menuOpen'),oc=document.getElementById('menuClose');
+    addEventListener('pageshow',function(){if(ov)ov.classList.remove('open')});
     if(ob&&ov) ob.onclick=function(){ov.classList.add('open')};
     function cl(){if(ov)ov.classList.remove('open')} if(oc)oc.onclick=cl; if(ov)ov.querySelectorAll('a').forEach(function(a){a.onclick=cl});
     /* accordion: only one Solutions group open at a time (2026-07-05) */
