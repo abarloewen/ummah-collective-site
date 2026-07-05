@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /liquid-preview.html
 
-Sitemap: https://ummah-collective-site.vercel.app/sitemap.xml
+Sitemap: https://ummah-collective.com/sitemap.xml
