@@ -221,15 +221,43 @@
     }
   }
 
-  /* ---------- GA4 (guarded: skips when head snippet present) ---------- */
+  /* ---------- GA4 + Consent Mode v2 (guarded: loader skips when head snippet present) ---------- */
   (function(){
-    if(window.gtag) return;
-    window.dataLayer=window.dataLayer||[];
-    window.gtag=function(){dataLayer.push(arguments);};
-    gtag('js',new Date()); gtag('config','G-HWF39V3XM0');
-    var s=document.createElement('script'); s.async=true;
-    s.src='https://www.googletagmanager.com/gtag/js?id=G-HWF39V3XM0';
-    document.head.appendChild(s);
+    if(!window.gtag){
+      window.dataLayer=window.dataLayer||[];
+      window.gtag=function(){dataLayer.push(arguments);};
+      gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
+      try{if(localStorage.getItem('uc_consent')==='granted')gtag('consent','update',{analytics_storage:'granted'});}catch(e){}
+      gtag('js',new Date()); gtag('config','G-HWF39V3XM0');
+      var s=document.createElement('script'); s.async=true;
+      s.src='https://www.googletagmanager.com/gtag/js?id=G-HWF39V3XM0';
+      document.head.appendChild(s);
+    }
+    var C=null; try{C=localStorage.getItem('uc_consent');}catch(e){}
+    if(C) return;
+    var T={
+      en:{m:"We use minimal analytics to improve this site. No ads, no data resale.",a:"Accept",d:"Essentials only"},
+      de:{m:"Wir nutzen minimale Analyse-Cookies, um diese Seite zu verbessern. Keine Werbung, kein Datenverkauf.",a:"Akzeptieren",d:"Nur Essenzielles"},
+      ms:{m:"Kami menggunakan analitik minimum untuk menambah baik laman ini. Tiada iklan, tiada penjualan data.",a:"Terima",d:"Asas sahaja"},
+      ar:{m:"نستخدم تحليلات بسيطة لتحسين هذا الموقع. لا إعلانات ولا بيع للبيانات.",a:"موافق",d:"الأساسيات فقط"},
+      zh:{m:"我们使用最少的分析数据来改进本网站。无广告，不出售数据。",a:"接受",d:"仅必要项"},
+      tr:{m:"Bu siteyi geliştirmek için asgari analiz kullanıyoruz. Reklam yok, veri satışı yok.",a:"Kabul et",d:"Yalnızca gerekli"}
+    };
+    function show(){
+      var l=(document.documentElement.lang||'en').slice(0,2); var t=T[l]||T.en;
+      var b=document.createElement('div'); b.className='ccb'; b.setAttribute('role','dialog'); b.setAttribute('aria-label','Cookies');
+      b.innerHTML='<span class="ccb-dot"></span><p>'+t.m+'</p><div class="ccb-btns"><button class="ccb-ok">'+t.a+'</button><button class="ccb-no">'+t.d+'</button></div>';
+      document.body.appendChild(b);
+      requestAnimationFrame(function(){requestAnimationFrame(function(){b.classList.add('on');});});
+      function close(v){
+        try{localStorage.setItem('uc_consent',v);}catch(e){}
+        if(v==='granted')gtag('consent','update',{analytics_storage:'granted'});
+        b.classList.remove('on'); setTimeout(function(){b.remove();},450);
+      }
+      b.querySelector('.ccb-ok').onclick=function(){close('granted');};
+      b.querySelector('.ccb-no').onclick=function(){close('denied');};
+    }
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show);else show();
   })();
 
   /* ---------- hero title: cycle languages every 3s ---------- */
