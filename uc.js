@@ -296,6 +296,18 @@
     addEventListener('pageshow',function(){if(ov)ov.classList.remove('open')});
     if(ob&&ov) ob.onclick=function(){ov.classList.add('open')};
     function cl(){if(ov)ov.classList.remove('open')} if(oc)oc.onclick=cl; if(ov)ov.querySelectorAll('a').forEach(function(a){a.onclick=cl});
+    /* mega menu hover-intent: open only from the nav LINK text, small delay (2026-07-06) */
+    document.querySelectorAll('.has-mega').forEach(function(m){
+      var a=null; for(var i=0;i<m.children.length;i++){ if(m.children[i].tagName==='A'){a=m.children[i];break;} }
+      var panel=m.querySelector('.mega'); if(!a||!panel) return;
+      var ot,ct;
+      function doOpen(){ clearTimeout(ct); ot=setTimeout(function(){ m.classList.add('mega-open'); },140); }
+      function doClose(){ clearTimeout(ot); ct=setTimeout(function(){ m.classList.remove('mega-open'); },180); }
+      a.addEventListener('mouseenter',doOpen);
+      a.addEventListener('mouseleave',doClose);
+      panel.addEventListener('mouseenter',function(){ clearTimeout(ct); clearTimeout(ot); m.classList.add('mega-open'); });
+      panel.addEventListener('mouseleave',doClose);
+    });
     /* accordion: only one Solutions group open at a time (2026-07-05) */
     if(ov)ov.querySelectorAll('.ov-acc').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ov.querySelectorAll('.ov-acc[open]').forEach(function(o){if(o!==d)o.open=false;})})});
     if(!matchMedia('(hover:none)').matches){
