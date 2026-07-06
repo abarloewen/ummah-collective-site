@@ -657,6 +657,19 @@
     function upd(){ var L=window.__lenis; var y=(L&&typeof L.animatedScroll==='number')?L.animatedScroll:(window.scrollY||document.documentElement.scrollTop||0); if(y>620) b.classList.add('on'); else b.classList.remove('on'); }
     window.addEventListener('scroll',upd,{passive:true}); setInterval(upd,450); upd();
   }
-  function boot(){ initBoot(); initLang();initNewsletter(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initTop(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
+  /* real-user Core Web Vitals -> GA4 (what Google ACTUALLY ranks on; 2026-07-07) */
+  function initVitals(){
+    if(!('PerformanceObserver' in window)) return;
+    var sent={};
+    function send(n,v){ if(sent[n]||typeof gtag!=='function') return; sent[n]=1; try{ gtag('event','web_vitals',{metric_name:n,metric_value:Math.round(v*1000)/1000,page:location.pathname,non_interaction:true}); }catch(e){} }
+    try{
+      var lcp=null; new PerformanceObserver(function(l){ var e=l.getEntries(); if(e.length) lcp=e[e.length-1]; }).observe({type:'largest-contentful-paint',buffered:true});
+      var cls=0; new PerformanceObserver(function(l){ l.getEntries().forEach(function(e){ if(!e.hadRecentInput) cls+=e.value; }); }).observe({type:'layout-shift',buffered:true});
+      var flush=function(){ if(document.visibilityState!=='hidden') return; if(lcp) send('LCP',Math.round(lcp.startTime)); send('CLS',cls); };
+      addEventListener('visibilitychange',flush); addEventListener('pagehide',flush);
+    }catch(e){}
+  }
+
+  function boot(){ initVitals(); initBoot(); initLang();initNewsletter(); initHeroCycle(); initChrome(); initWizard(); initBooking(); initTop(); initImages(); initLottie(); initMegaPreview(); initWorkCar(); initCmdk(); initSectionFX(); initMicro(); start(); (document.body.getAttribute('data-bg')==='liquid'?initLiquid:initGL)(); }
   if(document.readyState!=='loading') boot(); else document.addEventListener('DOMContentLoaded',boot);
 })();
