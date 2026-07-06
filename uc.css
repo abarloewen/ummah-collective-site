@@ -284,7 +284,7 @@ select option,select optgroup{background-color:#0F1512;color:var(--bone)}
 .wiz-prog .p{flex:1;height:3px;border-radius:3px;background:var(--line)}
 .wiz-prog .p.on{background:var(--acc)}
 .wiz-step{display:none}.wiz-step.on{display:block;animation:fade .5s}
-@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:.001;transform:translateY(12px)}to{opacity:1;transform:none}}
 .wiz h3{font-size:clamp(22px,3vw,34px);margin-bottom:6px}
 .wiz .sub{color:var(--dim);font-size:15px;margin-bottom:24px}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -332,7 +332,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:60px
 .cursor-ring.big{width:64px;height:64px;background:color-mix(in srgb,var(--acc2) 12%,transparent);border-color:var(--acc)}
 .cursor-ring.down{width:24px;height:24px}
 @media(hover:none){.cursor,.cursor-ring{display:none}}
-.reveal{opacity:0;transform:translateY(26px)}
+.reveal{opacity:.001;transform:translateY(26px)} /* .001 not 0: opacity-0 first paint poisons Chrome LCP detection (lighthouse#10869) */
 @keyframes ucIn{to{opacity:1;transform:none}}
 .hero .reveal,.phero .reveal{animation:ucIn .9s cubic-bezier(.16,1,.3,1) .15s forwards}
 .hero h1.reveal,.phero h1.reveal{opacity:1;transform:none;animation:none}
@@ -364,7 +364,7 @@ body[dir=rtl] .hud{right:auto;left:var(--gut)}
 .has-mega{position:relative}
 .mega{position:fixed;left:0;right:0;top:80px;background:rgba(6,8,7,.72);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);box-shadow:0 32px 64px -24px rgba(0,0,0,.65);padding:34px var(--gut);opacity:0;visibility:hidden;transform:translateY(-14px) scale(.985);transform-origin:top center;transition:opacity .5s cubic-bezier(.16,1,.3,1),transform .5s cubic-bezier(.16,1,.3,1),visibility .5s;z-index:79}
 .has-mega.mega-open .mega,.has-mega:focus-within .mega{opacity:1;visibility:visible;transform:none}
-.mega-in>*{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .55s cubic-bezier(.16,1,.3,1)}
+.mega-in>*{opacity:.001;transform:translateY(16px);transition:opacity .5s ease,transform .55s cubic-bezier(.16,1,.3,1)}
 .has-mega.mega-open .mega-in>*,.has-mega:focus-within .mega-in>*{opacity:1;transform:none}
 .has-mega.mega-open .mega-in>*:nth-child(2){transition-delay:.06s}
 .has-mega.mega-open .mega-in>*:nth-child(3){transition-delay:.12s}
