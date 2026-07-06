@@ -272,6 +272,9 @@ body[dir=rtl] .idx-row::after{transform:translateX(101%)}body[dir=rtl] .idx-row:
 .form label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px;display:block}
 .form input,.form textarea,.form select{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:14px 16px;color:var(--bone);font-family:var(--sans);font-size:15px;transition:.3s}
 .form input:focus,.form textarea:focus,.form select:focus{outline:none;border-color:var(--acc)}
+/* Windows: native select popup renders white without color-scheme (2026-07-06) */
+input,select,textarea{color-scheme:dark}
+select option,select optgroup{background-color:#0F1512;color:var(--bone)}
 .form textarea{min-height:130px;resize:vertical}
 @media(max-width:560px){.form .row{grid-template-columns:1fr}}
 
