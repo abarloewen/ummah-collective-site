@@ -294,9 +294,11 @@
   function initChrome(){
     var nav=document.getElementById('nav'); if(nav) addEventListener('scroll',function(){nav.classList.toggle('scrolled',scrollY>40)});
     var ov=document.getElementById('overlay'),ob=document.getElementById('menuOpen'),oc=document.getElementById('menuClose');
-    addEventListener('pageshow',function(){if(ov)ov.classList.remove('open')});
-    if(ob&&ov) ob.onclick=function(){ov.classList.add('open')};
-    function cl(){if(ov)ov.classList.remove('open')} if(oc)oc.onclick=cl; if(ov)ov.querySelectorAll('a').forEach(function(a){a.onclick=cl});
+    addEventListener('pageshow',function(){ if(ov){ ov.classList.remove('open'); try{ if(window.__lenis) window.__lenis.start(); }catch(e){} document.documentElement.style.overflow=''; } });
+    function ovLock(on){ try{ if(window.__lenis){ on?window.__lenis.stop():window.__lenis.start(); } }catch(e){} document.documentElement.style.overflow=on?'hidden':''; }
+    if(ob&&ov) ob.onclick=function(e){ if(e)e.preventDefault(); ov.__t=Date.now(); ov.classList.add('open'); ovLock(true); };
+    function cl(){ if(!ov) return; if(Date.now()-(ov.__t||0)<450) return; /* ignore ghost taps right after opening */ ov.classList.remove('open'); ovLock(false); }
+    if(oc)oc.onclick=cl; if(ov)ov.querySelectorAll('a').forEach(function(a){a.onclick=cl});
     /* mega menu hover-intent: open only from the nav LINK text, small delay (2026-07-06) */
     document.querySelectorAll('.has-mega').forEach(function(m){
       var a=null; for(var i=0;i<m.children.length;i++){ if(m.children[i].tagName==='A'){a=m.children[i];break;} }
@@ -306,7 +308,7 @@
       function doClose(){ clearTimeout(ot); ct=setTimeout(function(){ m.classList.remove('mega-open'); },180); }
       a.addEventListener('mouseenter',doOpen);
       a.addEventListener('mouseleave',doClose);
-      panel.addEventListener('mouseenter',function(){ clearTimeout(ct); clearTimeout(ot); m.classList.add('mega-open'); });
+      panel.addEventListener('mouseenter',function(){ if(m.classList.contains('mega-open')){ clearTimeout(ct); clearTimeout(ot); } });
       panel.addEventListener('mouseleave',doClose);
     });
     /* accordion: only one Solutions group open at a time (2026-07-05) */
