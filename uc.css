@@ -400,7 +400,7 @@ nav.scrolled .brand .logo{height:44px;transition:height .35s ease}
 .mega-link.mega-word{align-items:center}
 .mega-link.mega-word .mw-txt{display:flex;align-items:center;min-height:30px}
 /* homepage product showcase */
-.prodshow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.prodshow{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 /* product showcase = brand-themed designed cards (one CI per product) */
 .prodcard{display:flex;flex-direction:column;align-items:stretch;gap:0;padding:26px;border:1px solid var(--line);border-radius:20px;overflow:hidden;min-height:322px;transition:transform .45s cubic-bezier(.16,1,.3,1),border-color .45s,box-shadow .45s}
 .prodcard:hover{transform:translateY(-6px)}
