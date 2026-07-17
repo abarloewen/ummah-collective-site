@@ -354,13 +354,55 @@
       o.classList.add('sel'); sel[grp]=o.getAttribute('data-val');}});
     w.querySelectorAll('.slot').forEach(function(s){s.onclick=function(){w.querySelectorAll('.slot').forEach(function(x){x.classList.remove('sel')});s.classList.add('sel');sel.slot=s.getAttribute('data-val');}});
     if(qs){var pre=w.querySelector('.opt[data-grp="service"][data-val="'+qs+'"]'); if(pre){pre.classList.add('sel');sel.service=qs;}}
+    /* --- step 4 -> review: validate, then summarise --- */
     var fin=w.querySelector('#wizFinish');
     if(fin) fin.onclick=function(){
-      var sum=w.querySelector('#wizSummary'); if(sum) sum.textContent=(sel.service||'Project')+' · '+(sel.pkg||'Scope TBD')+' · '+(sel.slot||'Time TBD');
+      var nm=w.querySelector('#wizName'), em=w.querySelector('#wizEmail'),
+          co=w.querySelector('#wizCompany'), nt=w.querySelector('#wizNotes'),
+          err=w.querySelector('#wizErr');
+      sel.name=nm?nm.value.trim():''; sel.email=em?em.value.trim():'';
+      sel.company=co?co.value.trim():''; sel.notes=nt?nt.value.trim():'';
+      /* messages sit in #wizMsgs as real text nodes so the i18n pass translates them */
+      function msg(id,fb){ var n=w.querySelector(id); return (n&&n.textContent.trim())||fb; }
+      function bad(id,fb){ if(err){err.textContent=msg(id,fb); err.style.display='block';} return false; }
+      if(err) err.style.display='none';
+      if(!sel.name){ return bad('#wizMsgName','Please add your name so we know who we’re replying to.'); }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(sel.email)){ return bad('#wizMsgMail','That email doesn’t look right — we need it to send your confirmation.'); }
+      var sum=w.querySelector('#wizSummary');
+      if(sum) sum.textContent=(sel.service||'Project')+' · '+(sel.pkg||'Scope TBD')+' · '+(sel.slot||'Time TBD');
       show(steps.length-1);
-      // handoff to scheduler (replace with real Cal.com/Calendly link)
-      var url='https://cal.com/ummah-collective?utm_source=site&service='+encodeURIComponent(sel.service||'');
-      var go=w.querySelector('#wizHandoff'); if(go) go.href=url;
+    };
+
+    /* --- step 5: actually send it (Formsubmit -> BOOKING.email) --- */
+    var send=w.querySelector('#wizSend');
+    if(send) send.onclick=function(){
+      var btn=send, nav=w.querySelector('#wizNav5'),
+          blurb=w.querySelector('#wizBlurb'),
+          done=w.querySelector('#wizDone'), fail=w.querySelector('#wizFail');
+      btn.disabled=true; var old=btn.textContent;
+      btn.textContent=btn.getAttribute('data-sending')||'Sending…';
+      var payload={
+        _subject:'Booking request — '+(sel.name||'Website')+(sel.company?' ('+sel.company+')':''),
+        name:sel.name, email:sel.email, company:sel.company||'—',
+        service:sel.service||'—', engagement:sel.pkg||'—',
+        preferred_time:sel.slot||'—', notes:sel.notes||'—',
+        page:location.href, submitted:new Date().toISOString()
+      };
+      function ok(){ if(blurb)blurb.style.display='none'; if(nav)nav.style.display='none';
+                     if(fail)fail.style.display='none'; if(done)done.style.display='block'; }
+      function no(){ btn.disabled=false; btn.textContent=old;
+                     if(blurb)blurb.style.display='none'; if(fail)fail.style.display='block'; }
+      /* fire-and-verify: Formsubmit needs one-time activation on BOOKING.email */
+      fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body:JSON.stringify(payload)
+      }).then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
+        .then(function(){ ok();
+          /* optional: mirror into UCpanel when it's wired */
+          if(BOOKING.ucp){ try{ fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }catch(e){} }
+        })
+        .catch(function(){ no(); });
     };
   }
 
