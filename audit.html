@@ -7,125 +7,168 @@
 <main class="page">
 <header class="phero"><div class="lottie-box pmark" data-src="orbit-lottie.json"></div><div class="wrap"><div class="crumb reveal"><a href="index.html">Home</a> / Audit</div>
   <div class="eyebrow reveal"><span class="t"></span><span class="mono">Free AI audit</span></div>
-  <h1 class="reveal">Your digital footprint,<br><em>scored.</em></h1><p class="reveal">Answer a few questions. We pull live data on your website&rsquo;s performance and SEO, grade your digital infrastructure, and show you exactly where growth is leaking &mdash; in about 60 seconds.</p></div></header>
+  <h1 class="reveal">Your digital footprint,<br><em>scored.</em></h1><p class="reveal">Answer a few quick questions. We pull live data on your website&rsquo;s performance and SEO, grade your digital infrastructure, and show you exactly where growth is leaking &mdash; in about 60 seconds.</p></div></header>
 <section style="padding-top:24px;padding-bottom:110px"><div class="wrap">
 <style>
-.adcard{max-width:920px;margin:0 auto;background:rgba(10,14,13,.62);border:1px solid rgba(246,243,236,.11);border-radius:20px;padding:clamp(22px,4vw,42px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.adk{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#C7A86A;margin:0 0 8px}
-.adh{font-family:'Clash Display','General Sans',sans-serif;font-weight:500;font-size:clamp(19px,2.4vw,25px);margin:0 0 18px;color:#F6F3EC}
-.adf label{display:block;font-size:12.5px;letter-spacing:.04em;color:rgba(246,243,236,.65);margin:0 0 14px}
-.adf input,.adf select{width:100%;box-sizing:border-box;margin-top:6px;background:rgba(246,243,236,.05);border:1px solid rgba(246,243,236,.18);border-radius:10px;padding:12px 14px;color:#F6F3EC;font-size:16px;font-family:'General Sans',sans-serif}
-.adf select option{background:#101614;color:#F6F3EC}
-.adf input:focus,.adf select:focus{outline:none;border-color:#2FD8A4}
-.adrow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media(max-width:640px){.adrow{grid-template-columns:1fr}}
-.adchips{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
-.adchip{background:rgba(246,243,236,.04);border:1px solid rgba(246,243,236,.18);border-radius:20px;padding:8px 15px;font-size:13.5px;color:#F6F3EC;cursor:pointer;transition:.2s;user-select:none}
-.adchip.sel{background:rgba(19,163,122,.16);border-color:#2FD8A4}
-.aderr{display:none;color:#ff8c7a;font-size:13.5px;margin:10px 0 0}
-.adwait{display:none;text-align:center;padding:40px 10px}
-.adspin{width:46px;height:46px;border-radius:50%;border:3px solid rgba(246,243,236,.15);border-top-color:#2FD8A4;margin:0 auto 18px;animation:adspin 1s linear infinite}
-@keyframes adspin{to{transform:rotate(360deg)}}
-.adwait p{color:rgba(246,243,236,.65);font-size:14.5px}
-#adReport{display:none}
-.adscores{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 20px}
-@media(max-width:720px){.adscores{grid-template-columns:repeat(2,1fr)}}
-.adring{background:rgba(246,243,236,.04);border:1px solid rgba(246,243,236,.14);border-radius:14px;padding:16px 10px;text-align:center}
-.adring .c{width:74px;height:74px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-family:'Clash Display',sans-serif;font-weight:600;font-size:21px}
-.adring span{font-size:12px;color:rgba(246,243,236,.6);letter-spacing:.04em}
-.adcwv{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 20px}
-.adcwv b{background:rgba(246,243,236,.05);border:1px solid rgba(246,243,236,.16);border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:500;color:rgba(246,243,236,.85)}
-.adlist{margin:0 0 6px}
-.adit{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(246,243,236,.12);border-radius:12px;padding:13px 15px;margin-bottom:9px;background:rgba(10,15,13,.5)}
-.adit .ic{font-size:15px;line-height:1.4;width:18px;text-align:center;flex:none}
-.adit .tx{font-size:13.5px;line-height:1.55;color:rgba(246,243,236,.82)}
-.adit .tx b{color:#F6F3EC}
-.adit .tx a{color:#2FD8A4;text-decoration:none}
-.adcta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-.adnote{font-size:12.5px;color:rgba(246,243,236,.45);margin-top:14px}
+.ux-card{max-width:920px;margin:0 auto;background:rgba(10,14,13,.62);border:1px solid rgba(246,243,236,.11);border-radius:20px;padding:clamp(22px,4vw,42px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.ux-k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#C7A86A;margin:0 0 8px}
+.ux-h{font-family:'Clash Display','General Sans',sans-serif;font-weight:500;font-size:clamp(19px,2.4vw,25px);margin:0 0 18px;color:#F6F3EC}
+.ux-dots{display:flex;gap:7px;margin:0 0 20px}
+.ux-dots i{width:26px;height:4px;border-radius:2px;background:rgba(246,243,236,.14)}
+.ux-dots i.on{background:#2FD8A4}
+.ux-f label{display:block;font-size:12.5px;letter-spacing:.04em;color:rgba(246,243,236,.65);margin:0 0 14px}
+.ux-f input,.ux-f select{width:100%;box-sizing:border-box;margin-top:6px;background:rgba(246,243,236,.05);border:1px solid rgba(246,243,236,.18);border-radius:10px;padding:12px 14px;color:#F6F3EC;font-size:16px;font-family:'General Sans',sans-serif}
+.ux-f select option{background:#101614;color:#F6F3EC}
+.ux-f input:focus,.ux-f select:focus{outline:none;border-color:#2FD8A4}
+.ux-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.ux-two{grid-template-columns:1fr}}
+.ux-opts{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
+.ux-opt{background:rgba(246,243,236,.04);border:1px solid rgba(246,243,236,.18);border-radius:20px;padding:8px 15px;font-size:13.5px;color:#F6F3EC;cursor:pointer;transition:.2s;user-select:none}
+.ux-opt.sel{background:rgba(19,163,122,.16);border-color:#2FD8A4}
+.ux-nav{display:flex;gap:10px;align-items:center;margin-top:8px}
+.ux-err{display:none;color:#ff8c7a;font-size:13.5px;margin:10px 0 0}
+.ux-wait{display:none;text-align:center;padding:40px 10px}
+.ux-spin{width:46px;height:46px;border-radius:50%;border:3px solid rgba(246,243,236,.15);border-top-color:#2FD8A4;margin:0 auto 18px;animation:uxspin 1s linear infinite}
+@keyframes uxspin{to{transform:rotate(360deg)}}
+.ux-wait p{color:rgba(246,243,236,.65);font-size:14.5px}
+#uxReport{display:none}
+.ux-scores{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 20px}
+@media(max-width:720px){.ux-scores{grid-template-columns:repeat(2,1fr)}}
+.ux-ring{background:rgba(246,243,236,.04);border:1px solid rgba(246,243,236,.14);border-radius:14px;padding:16px 10px;text-align:center}
+.ux-ring .c{width:74px;height:74px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-family:'Clash Display',sans-serif;font-weight:600;font-size:21px}
+.ux-ring span{font-size:12px;color:rgba(246,243,236,.6);letter-spacing:.04em}
+.ux-cwv{display:flex;flex-wrap:wrap;gap:9px;margin:0 0 20px}
+.ux-cwv b{background:rgba(246,243,236,.05);border:1px solid rgba(246,243,236,.16);border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:500;color:rgba(246,243,236,.85)}
+.ux-it{display:flex;gap:12px;align-items:flex-start;border:1px solid rgba(246,243,236,.12);border-radius:12px;padding:13px 15px;margin-bottom:9px;background:rgba(10,15,13,.5)}
+.ux-it .ic{font-size:15px;line-height:1.4;width:18px;text-align:center;flex:none}
+.ux-it .tx{font-size:13.5px;line-height:1.55;color:rgba(246,243,236,.82)}
+.ux-it .tx b{color:#F6F3EC}
+.ux-it .tx a{color:#2FD8A4;text-decoration:none}
+.ux-cta{margin-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ux-note{font-size:12.5px;color:rgba(246,243,236,.45);margin-top:14px}
+@media print{
+ nav,footer,.phero,#gl,.veil,.fab,.ux-cta,.ux-note,.menu-btn,.overlay{display:none!important}
+ body,html{background:#fff!important}
+ .ux-card{background:#fff!important;border:none!important;box-shadow:none!important;max-width:100%!important;color:#111!important}
+ .ux-h{color:#111!important}.ux-k{color:#8a6d2f!important}
+ .ux-ring{border-color:#ddd!important;background:#fff!important}.ux-ring span{color:#444!important}
+ .ux-cwv b{border-color:#ddd!important;color:#222!important;background:#fff!important}
+ .ux-it{border-color:#ddd!important;background:#fff!important}
+ .ux-it .tx,.ux-it .tx b{color:#111!important}.ux-it .tx a{color:#0a7a5c!important}
+ section{padding:0!important}
+}
 </style>
-<div class="adcard">
- <div id="adStep1">
-  <p class="adk">Step 1 &middot; Your company</p>
-  <h3 class="adh">Where should we look?</h3>
-  <form class="adf" id="adF1" novalidate>
-   <div class="adrow">
+<div class="ux-card" id="uxCard">
+ <div id="uxS1">
+  <p class="ux-k">Step 1 of 4 &middot; Your website</p>
+  <div class="ux-dots"><i class="on"></i><i></i><i></i><i></i></div>
+  <h3 class="ux-h">Where should we look?</h3>
+  <form class="ux-f" id="uxF1" novalidate>
+   <div class="ux-two">
     <label>Website*<input name="url" placeholder="yourcompany.com" inputmode="url"></label>
     <label>Company name*<input name="company" placeholder="Company Sdn. Bhd."></label>
    </div>
-   <div class="adrow">
-    <label>Your name*<input name="name" placeholder="Your name"></label>
-    <label>Email*<input name="email" type="email" placeholder="you@company.com"></label>
-   </div>
-   <div class="adrow">
+   <div class="ux-two">
     <label>Industry<select name="industry"><option value="">&mdash;</option><option>Food &amp; beverage</option><option>Beauty &amp; cosmetics</option><option>Finance / takaful</option><option>Retail / e-commerce</option><option>Professional services</option><option>Education</option><option>Manufacturing / export</option><option>Other</option></select></label>
     <label>Main market<select name="market"><option value="">&mdash;</option><option>Malaysia / SEA</option><option>Germany / Europe</option><option>GCC / MENA</option><option>Global</option></select></label>
    </div>
-   <button type="submit" class="btn btn-fill">Continue &rarr;</button>
-   <div class="aderr" id="adE1">Please add your website, company, name and a valid email.</div>
+   <div class="ux-nav"><button type="submit" class="btn btn-fill">Continue &rarr;</button></div>
+   <div class="ux-err" id="uxE1">Please add your website and company name.</div>
   </form>
  </div>
- <div id="adStep2" style="display:none">
-  <p class="adk">Step 2 &middot; Your setup today</p>
-  <h3 class="adh">Six quick questions</h3>
-  <form class="adf" id="adF2">
+ <div id="uxS2" style="display:none">
+  <p class="ux-k">Step 2 of 4 &middot; Your setup</p>
+  <div class="ux-dots"><i class="on"></i><i class="on"></i><i></i><i></i></div>
+  <h3 class="ux-h">How do you operate today?</h3>
+  <form class="ux-f" id="uxF2">
    <label>Which channels do you actively use? <span style="opacity:.5">(tap all that apply)</span>
-    <div class="adchips" data-multi="channels"><span class="adchip">WhatsApp</span><span class="adchip">Instagram</span><span class="adchip">LinkedIn</span><span class="adchip">Paid ads</span><span class="adchip">Email marketing</span><span class="adchip">None consistently</span></div></label>
+    <div class="ux-opts" data-multi="channels"><span class="ux-opt">WhatsApp</span><span class="ux-opt">Instagram</span><span class="ux-opt">LinkedIn</span><span class="ux-opt">Paid ads</span><span class="ux-opt">Email marketing</span><span class="ux-opt">None consistently</span></div></label>
    <label>Where do your leads live?
-    <div class="adchips" data-one="crm"><span class="adchip">A real CRM</span><span class="adchip">Spreadsheets</span><span class="adchip">Inbox / WhatsApp</span><span class="adchip">Nowhere really</span></div></label>
+    <div class="ux-opts" data-one="crm"><span class="ux-opt">A real CRM</span><span class="ux-opt">Spreadsheets</span><span class="ux-opt">Inbox / WhatsApp</span><span class="ux-opt">Nowhere really</span></div></label>
    <label>Who answers customer enquiries after hours?
-    <div class="adchips" data-one="afterhours"><span class="adchip">Nobody until morning</span><span class="adchip">Me, personally</span><span class="adchip">A team rota</span><span class="adchip">AI / automation</span></div></label>
-   <label>How do new customers mostly find you?
-    <div class="adchips" data-one="acq"><span class="adchip">Referrals</span><span class="adchip">Google search</span><span class="adchip">Social media</span><span class="adchip">Paid ads</span><span class="adchip">Marketplaces</span></div></label>
-   <label>In how many languages do you sell?
-    <div class="adchips" data-one="langs"><span class="adchip">1</span><span class="adchip">2</span><span class="adchip">3+</span></div></label>
-   <label>Your #1 goal for the next 12 months
-    <div class="adchips" data-one="goal"><span class="adchip">More leads</span><span class="adchip">Higher conversion</span><span class="adchip">New market entry</span><span class="adchip">Lower workload / automation</span></div></label>
-   <button type="submit" class="btn btn-fill" id="adGo">Run my audit &rarr;</button>
+    <div class="ux-opts" data-one="afterhours"><span class="ux-opt">Nobody until morning</span><span class="ux-opt">Me, personally</span><span class="ux-opt">A team rota</span><span class="ux-opt">AI / automation</span></div></label>
+   <div class="ux-nav"><button type="button" class="btn btn-ghost" data-back="uxS1">&larr; Back</button><button type="submit" class="btn btn-fill">Continue &rarr;</button></div>
   </form>
  </div>
- <div class="adwait" id="adWait"><div class="adspin"></div><h3 class="adh" style="margin-bottom:6px">Auditing your website&hellip;</h3><p id="adWaitMsg">Pulling live performance data from Google&hellip;</p></div>
- <div id="adReport">
-  <p class="adk">Your audit</p>
-  <h3 class="adh" id="adRTitle">Results</h3>
-  <div class="adscores" id="adScores"></div>
-  <div class="adcwv" id="adCwv"></div>
-  <p class="adk" style="margin-top:8px">Infrastructure &amp; growth findings</p>
-  <div class="adlist" id="adFinds"></div>
-  <div class="adcta">
-   <a class="btn btn-fill" href="booking.html">Walk through this with us &mdash; free</a>
+ <div id="uxS3" style="display:none">
+  <p class="ux-k">Step 3 of 4 &middot; Your growth</p>
+  <div class="ux-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+  <h3 class="ux-h">Where does growth come from?</h3>
+  <form class="ux-f" id="uxF3">
+   <label>How do new customers mostly find you?
+    <div class="ux-opts" data-one="acq"><span class="ux-opt">Referrals</span><span class="ux-opt">Google search</span><span class="ux-opt">Social media</span><span class="ux-opt">Paid ads</span><span class="ux-opt">Marketplaces</span></div></label>
+   <label>In how many languages do you sell?
+    <div class="ux-opts" data-one="langs"><span class="ux-opt">1</span><span class="ux-opt">2</span><span class="ux-opt">3+</span></div></label>
+   <label>Your #1 goal for the next 12 months
+    <div class="ux-opts" data-one="goal"><span class="ux-opt">More leads</span><span class="ux-opt">Higher conversion</span><span class="ux-opt">New market entry</span><span class="ux-opt">Lower workload / automation</span></div></label>
+   <div class="ux-nav"><button type="button" class="btn btn-ghost" data-back="uxS2">&larr; Back</button><button type="submit" class="btn btn-fill">Continue &rarr;</button></div>
+  </form>
+ </div>
+ <div id="uxS4" style="display:none">
+  <p class="ux-k">Step 4 of 4 &middot; Your audit</p>
+  <div class="ux-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+  <h3 class="ux-h">Where should we send it?</h3>
+  <form class="ux-f" id="uxF4" novalidate>
+   <div class="ux-two">
+    <label>Your name*<input name="name" placeholder="Your name"></label>
+    <label>Work email*<input name="email" type="email" placeholder="you@company.com"></label>
+   </div>
+   <label>Phone / WhatsApp <span style="opacity:.5">(optional)</span><input name="phone" placeholder="+60&hellip;"></label>
+   <div class="ux-nav"><button type="button" class="btn btn-ghost" data-back="uxS3">&larr; Back</button><button type="submit" class="btn btn-fill">Run my audit &rarr;</button></div>
+   <div class="ux-err" id="uxE4">Please add your name and a valid email.</div>
+   <p class="ux-note">You&rsquo;ll see your audit right here &mdash; and can download it as a PDF. We&rsquo;ll follow up with the deeper human analysis.</p>
+  </form>
+ </div>
+ <div class="ux-wait" id="uxWait"><div class="ux-spin"></div><h3 class="ux-h" style="margin-bottom:6px">Auditing your website&hellip;</h3><p id="uxWaitMsg">Pulling live performance data from Google&hellip;</p></div>
+ <div id="uxReport">
+  <p class="ux-k">Your audit</p>
+  <h3 class="ux-h" id="uxRTitle">Results</h3>
+  <div class="ux-scores" id="uxScores"></div>
+  <div class="ux-cwv" id="uxCwv"></div>
+  <p class="ux-k" style="margin-top:8px">Infrastructure &amp; growth findings</p>
+  <div id="uxFinds"></div>
+  <div class="ux-cta">
+   <button type="button" class="btn btn-fill" id="uxPrint">Download as PDF</button>
+   <a class="btn btn-ghost" href="booking.html">Walk through this with us &mdash; free</a>
    <a class="btn btn-ghost" href="https://wa.me/601133262709" target="_blank" rel="noopener">WhatsApp us</a>
   </div>
-  <p class="adnote" id="adSentNote">A copy of this audit has been sent to our team &mdash; we&rsquo;ll follow up with the deeper human analysis.</p>
+  <p class="ux-note">A copy has reached our team &mdash; we&rsquo;ll follow up with the deeper human analysis.</p>
  </div>
-</div>
-<script>
+</div><script>
 (function(){
 var D={};
-function chips(){document.querySelectorAll('.adchips').forEach(function(g){
+document.querySelectorAll('.ux-opts').forEach(function(g){
   var multi=g.hasAttribute('data-multi');
-  g.querySelectorAll('.adchip').forEach(function(c){c.addEventListener('click',function(){
+  g.querySelectorAll('.ux-opt').forEach(function(c){c.addEventListener('click',function(){
     if(multi){c.classList.toggle('sel');}
-    else{g.querySelectorAll('.adchip').forEach(function(x){x.classList.remove('sel')});c.classList.add('sel');}
-  });});});}
-chips();
+    else{g.querySelectorAll('.ux-opt').forEach(function(x){x.classList.remove('sel')});c.classList.add('sel');}
+  });});});
 function vals(key){var g=document.querySelector('[data-multi="'+key+'"],[data-one="'+key+'"]');if(!g)return '';
-  return [].map.call(g.querySelectorAll('.adchip.sel'),function(c){return c.textContent}).join(', ');}
-document.getElementById('adF1').addEventListener('submit',function(e){e.preventDefault();
-  var f=e.target;D.url=f.url.value.trim();D.company=f.company.value.trim();D.name=f.name.value.trim();D.email=f.email.value.trim();D.industry=f.industry.value;D.market=f.market.value;
-  if(!D.url||!D.company||!D.name||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(D.email)){document.getElementById('adE1').style.display='block';return;}
-  if(!/^https?:\/\//.test(D.url))D.url='https://'+D.url;
-  document.getElementById('adStep1').style.display='none';document.getElementById('adStep2').style.display='block';
-  window.scrollTo({top:document.querySelector('.adcard').offsetTop-90,behavior:'smooth'});});
+  return [].map.call(g.querySelectorAll('.ux-opt.sel'),function(c){return c.textContent}).join(', ');}
+function show(id){['uxS1','uxS2','uxS3','uxS4'].forEach(function(x){document.getElementById(x).style.display=(x===id?'block':'none')});
+  window.scrollTo({top:document.getElementById('uxCard').offsetTop-90,behavior:'smooth'});}
+document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-back'))});});
+document.getElementById('uxF1').addEventListener('submit',function(e){e.preventDefault();
+  var f=e.target;D.url=f.url.value.trim();D.company=f.company.value.trim();D.industry=f.industry.value;D.market=f.market.value;
+  if(!D.url||!D.company){document.getElementById('uxE1').style.display='block';return;}
+  document.getElementById('uxE1').style.display='none';
+  if(D.url.indexOf('http')!==0)D.url='https://'+D.url;
+  show('uxS2');});
+document.getElementById('uxF2').addEventListener('submit',function(e){e.preventDefault();
+  D.channels=vals('channels');D.crm=vals('crm');D.afterhours=vals('afterhours');show('uxS3');});
+document.getElementById('uxF3').addEventListener('submit',function(e){e.preventDefault();
+  D.acq=vals('acq');D.langs=vals('langs');D.goal=vals('goal');show('uxS4');});
 function col(s){return s>=90?'#2FD8A4':(s>=50?'#E4C077':'#ff8c7a')}
 function ring(label,s){var c=s==null?'rgba(246,243,236,.3)':col(s);var v=s==null?'&ndash;':s;
-  return '<div class="adring"><div class="c" style="border:3px solid '+c+';color:'+c+'">'+v+'</div><span>'+label+'</span></div>';}
-function find(ic,html){return '<div class="adit"><div class="ic">'+ic+'</div><div class="tx">'+html+'</div></div>';}
-document.getElementById('adF2').addEventListener('submit',async function(e){e.preventDefault();
-  D.channels=vals('channels');D.crm=vals('crm');D.afterhours=vals('afterhours');D.acq=vals('acq');D.langs=vals('langs');D.goal=vals('goal');
-  document.getElementById('adStep2').style.display='none';document.getElementById('adWait').style.display='block';
+  return '<div class="ux-ring"><div class="c" style="border:3px solid '+c+';color:'+c+'">'+v+'</div><span>'+label+'</span></div>';}
+function find(ic,html){return '<div class="ux-it"><div class="ic">'+ic+'</div><div class="tx">'+html+'</div></div>';}
+document.getElementById('uxPrint').addEventListener('click',function(){window.print();});
+document.getElementById('uxF4').addEventListener('submit',async function(e){e.preventDefault();
+  var f=e.target;D.name=f.name.value.trim();D.email=f.email.value.trim();D.phone=f.phone.value.trim();
+  if(!D.name||D.email.indexOf('@')<1||D.email.indexOf('.')<0){document.getElementById('uxE4').style.display='block';return;}
+  document.getElementById('uxS4').style.display='none';document.getElementById('uxWait').style.display='block';
   var msgs=['Pulling live performance data from Google\u2026','Scoring SEO signals\u2026','Grading your digital infrastructure\u2026','Writing your recommendations\u2026'];var mi=0;
-  var tick=setInterval(function(){mi=(mi+1)%msgs.length;document.getElementById('adWaitMsg').textContent=msgs[mi];},5000);
+  var tick=setInterval(function(){mi=(mi+1)%msgs.length;document.getElementById('uxWaitMsg').textContent=msgs[mi];},5000);
   var S={perf:null,seo:null,bp:null,a11y:null,cwv:[]};
   try{
     var api='https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+encodeURIComponent(D.url)+'&strategy=mobile&category=PERFORMANCE&category=SEO&category=BEST_PRACTICES&category=ACCESSIBILITY';
@@ -136,35 +179,33 @@ document.getElementById('adF2').addEventListener('submit',async function(e){e.pr
     var au=(j.lighthouseResult||{}).audits||{};
     ['largest-contentful-paint','cumulative-layout-shift','total-blocking-time'].forEach(function(k){
       if(au[k]&&au[k].displayValue)S.cwv.push((k==='largest-contentful-paint'?'LCP ':(k==='cumulative-layout-shift'?'CLS ':'TBT '))+au[k].displayValue);});
-  }catch(err){clearInterval(tick);}
+  }catch(err){}
   clearInterval(tick);
   D.scores='perf:'+S.perf+' seo:'+S.seo+' bp:'+S.bp+' a11y:'+S.a11y+' | '+S.cwv.join(' ');
-  // findings
   var F=[];
   if(S.perf!=null&&S.perf<50)F.push(find('\u26A0','<b>Your site is slow on mobile ('+S.perf+'/100).</b> Slow pages lose buyers before they see your offer \u2014 speed is the cheapest conversion win available. <a href="service-web-design.html">Web engineering &rarr;</a>'));
   else if(S.perf!=null&&S.perf<90)F.push(find('\u25CB','<b>Mobile performance is mid-range ('+S.perf+'/100).</b> Fixable \u2014 and worth it: performance compounds into rankings and conversion. <a href="service-web-design.html">Web engineering &rarr;</a>'));
   if(S.seo!=null&&S.seo<90)F.push(find('\u26A0','<b>SEO signals need work ('+S.seo+'/100).</b> Basics like titles, descriptions and structure decide whether Google shows you at all. <a href="service-seo-content.html">SEO &amp; Content &rarr;</a>'));
   else if(S.seo!=null)F.push(find('\u2713','<b>SEO basics look healthy ('+S.seo+'/100).</b> The next level is content authority: owning the questions your buyers search. <a href="service-seo-content.html">SEO &amp; Content &rarr;</a>'));
-  if(S.perf==null)F.push(find('\u26A0','<b>We could not fetch live data for this URL.</b> That itself is a finding \u2014 send us the link and we will run the deep audit manually.'));
+  if(S.perf==null)F.push(find('\u26A0','<b>Live performance data was not available for this URL right now.</b> We will include the full technical audit in our follow-up.'));
   if(D.afterhours.indexOf('Nobody')>-1||D.afterhours.indexOf('Me,')>-1)F.push(find('\u26A0','<b>After-hours enquiries go unanswered'+(D.afterhours.indexOf('Me,')>-1?' (or land on you personally)':'')+'.</b> Whoever answers first wins the deal \u2014 an AI agent answers in seconds, 24/7, in every language you sell in. <a href="service-ai-agents.html">AI Agents &rarr;</a>'));
   if(D.crm==='Spreadsheets'||D.crm==='Inbox / WhatsApp'||D.crm==='Nowhere really')F.push(find('\u26A0','<b>Your leads live in '+(D.crm||'no system').toLowerCase()+'.</b> Without one source of truth, deals slip silently. A CRM your team actually uses makes the pipeline real. <a href="service-custom-crm.html">Custom CRM &rarr;</a>'));
   if(D.acq==='Referrals')F.push(find('\u26A0','<b>Growth depends on referrals.</b> That is luck with a lag \u2014 predictable demand needs engineered outbound and search authority working together. <a href="service-lead-generation.html">Lead Generation &rarr;</a>'));
   if(D.langs==='1'&&(D.market==='Malaysia / SEA'||D.market==='GCC / MENA'||D.market==='Global'))F.push(find('\u25CB','<b>Selling in one language.</b> In your market, every added language is a new audience at a fraction of the cost of new products. <a href="service-web-design.html">Multilingual by design &rarr;</a>'));
   if((D.channels||'').indexOf('None')>-1||(D.channels||'')==='')F.push(find('\u25CB','<b>No consistent channel presence.</b> Consistency beats virality \u2014 an automated content system posts daily without costing founder-hours. <a href="service-social-media-automation.html">Social Automation &rarr;</a>'));
   if(F.length<3)F.push(find('\u2713','<b>Solid foundations.</b> The audit suggests your next wins are strategic, not reparative \u2014 exactly the conversation worth having live.'));
-  document.getElementById('adScores').innerHTML=ring('Performance',S.perf)+ring('SEO',S.seo)+ring('Best practices',S.bp)+ring('Accessibility',S.a11y);
-  document.getElementById('adCwv').innerHTML=S.cwv.map(function(x){return '<b>'+x+'</b>'}).join('');
-  document.getElementById('adRTitle').textContent=D.company+' \u2014 digital audit';
-  document.getElementById('adFinds').innerHTML=F.join('');
-  document.getElementById('adWait').style.display='none';document.getElementById('adReport').style.display='block';
+  document.getElementById('uxScores').innerHTML=ring('Performance',S.perf)+ring('SEO',S.seo)+ring('Best practices',S.bp)+ring('Accessibility',S.a11y);
+  document.getElementById('uxCwv').innerHTML=S.cwv.map(function(x){return '<b>'+x+'</b>'}).join('');
+  document.getElementById('uxRTitle').textContent=D.company+' \u2014 digital audit';
+  document.getElementById('uxFinds').innerHTML=F.join('');
+  document.getElementById('uxWait').style.display='none';document.getElementById('uxReport').style.display='block';
   try{if(window.gtag)gtag('event','audit_completed');}catch(x){}
   try{
-    await fetch('https://formsubmit.co/ajax/info@ummah-collective.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_subject:'AUDIT LEAD \u2014 '+D.company,_template:'table',name:D.name,email:D.email,company:D.company,website:D.url,industry:D.industry,market:D.market,channels:D.channels,leads_live_in:D.crm,after_hours:D.afterhours,acquisition:D.acq,languages:D.langs,goal:D.goal,live_scores:D.scores,source:'audit.html tool'})});
-  }catch(x){document.getElementById('adSentNote').textContent='';}
+    await fetch('https://formsubmit.co/ajax/info@ummah-collective.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_subject:'AUDIT LEAD \u2014 '+D.company,_template:'table',name:D.name,email:D.email,phone:D.phone,company:D.company,website:D.url,industry:D.industry,market:D.market,channels:D.channels,leads_live_in:D.crm,after_hours:D.afterhours,acquisition:D.acq,languages:D.langs,goal:D.goal,live_scores:D.scores,source:'audit.html tool'})});
+  }catch(x){}
 });
 })();
-</script>
-</div></section>
+</script></div></section>
 </main><footer><div class="wrap"><div class="f-grid">
     <div><a href="index.html" class="brand"><img class="logo" src="/assets/logo-white.png" alt="Ummah Collective"><span class="wmtext" style="display:none">Ummah Collective</span></a>
       <p style="margin-top:14px;max-width:32ch" data-i18n="ftag">Intelligence, with integrity. An applied-AI studio for the trust economy &mdash; the software, agents and systems modern companies run on.</p></div>
