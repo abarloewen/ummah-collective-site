@@ -28,5 +28,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/ummah-hub",
+      "destination": "/ummah-hub.html"
+    },
+    {
+      "source": "/de/ummah-hub",
+      "destination": "/de/ummah-hub.html"
+    }
   ]
 }
