@@ -171,7 +171,7 @@ document.getElementById('uxF4').addEventListener('submit',async function(e){e.pr
   var tick=setInterval(function(){mi=(mi+1)%msgs.length;document.getElementById('uxWaitMsg').textContent=msgs[mi];},5000);
   var S={perf:null,seo:null,bp:null,a11y:null,cwv:[]};
   try{
-    var api='https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+encodeURIComponent(D.url)+'&strategy=mobile&category=PERFORMANCE&category=SEO&category=BEST_PRACTICES&category=ACCESSIBILITY';
+    var PSI_KEY='';/* paste your PageSpeed API key between the quotes */ var api='https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+encodeURIComponent(D.url)+(PSI_KEY?'&key='+PSI_KEY:'')+'&strategy=mobile&category=PERFORMANCE&category=SEO&category=BEST_PRACTICES&category=ACCESSIBILITY';
     var r=await fetch(api);var j=await r.json();
     var cats=(j.lighthouseResult||{}).categories||{};
     function sc(c){return cats[c]&&cats[c].score!=null?Math.round(cats[c].score*100):null;}
