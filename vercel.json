@@ -45,6 +45,26 @@
     {
       "source": "/de/ummah-hub/",
       "destination": "/de/ummah-hub.html"
+    },
+    {
+      "source": "/de/service-custom-crm.html",
+      "destination": "/service-custom-crm.html"
+    },
+    {
+      "source": "/ms/service-custom-crm.html",
+      "destination": "/service-custom-crm.html"
+    },
+    {
+      "source": "/ar/service-custom-crm.html",
+      "destination": "/service-custom-crm.html"
+    },
+    {
+      "source": "/zh/service-custom-crm.html",
+      "destination": "/service-custom-crm.html"
+    },
+    {
+      "source": "/tr/service-custom-crm.html",
+      "destination": "/service-custom-crm.html"
     }
   ]
 }
