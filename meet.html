@@ -121,4 +121,56 @@
     <div><h6 data-i18n="products">Products</h6><a href="https://www.noon-os.com" target="_blank" rel="noopener">Noon OS</a><a href="https://www.deengen.com" target="_blank" rel="noopener">DeenGen.com</a><a href="https://www.rayhan-kids.com" target="_blank" rel="noopener">Rayhan Kids</a><a href="https://niyya.my" target="_blank" rel="noopener">niyya.</a><a href="launch-bundle.html">Launch Bundle</a><a href="ventures.html" data-i18n="ventures">Ventures</a></div>
     <div><h6 data-i18n="company">Company</h6><a href="work.html" data-i18n="work">Work</a><a href="about.html" data-i18n="about">About</a><a href="process.html">How we work</a><a href="founders-club.html" data-i18n="club">Founders Club</a><a href="insights.html" data-i18n="insights">Insights</a></div>
     <div><h6 data-i18n="connect">Connect</h6><a href="booking.html" data-i18n="book">Book a call</a><a href="mailto:info@ummah-collective.com" data-i18n="email">Email</a><a href="https://wa.me/601133262709" data-i18n="whatsapp">WhatsApp</a><a href="https://www.linkedin.com/company/ummah-collective/">LinkedIn</a><a href="imprint.html" data-i18n="imprint">Legal notice</a><a href="privacy.html" data-i18n="f_privacy">Privacy Policy</a><a href="terms.html" data-i18n="f_terms">Terms of Use</a></div>
-  </div><div class="f-bot"><span>&copy; 2026 Ummah Collective Sdn. Bhd.</span><span>Kuala Lumpur &middot; Berlin &middot; Borderless</span></div></div></footer><script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script><script defer src="uc.js"></script></body></html>
+  </div><div class="f-bot"><span>&copy; 2026 Ummah Collective Sdn. Bhd.</span><span>Kuala Lumpur &middot; Berlin &middot; Borderless</span></div></div></footer><script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script><script defer src="uc.js"></script>
+<!-- uc-meet-localtime: shows each slot in the visitor's own timezone. Additive, guarded, fails silent. -->
+<script>
+(function(){
+  var TZ; try{ TZ=Intl.DateTimeFormat().resolvedOptions().timeZone; }catch(e){ return; }
+  if(!TZ) return;
+  if(TZ==='Asia/Kuala_Lumpur'||TZ==='Asia/Singapore'||TZ==='Asia/Brunei'||TZ==='Asia/Makassar') return;
+  var MON={Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  var fmt; try{ fmt=new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',timeZone:TZ}); }catch(e){ return; }
+  function selDate(){
+    var d=document.querySelector('.mtday.sel'); if(!d) return null;
+    var t=(d.textContent||'').match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*(\d{1,2})/);
+    if(!t) return null;
+    var now=new Date(), mo=MON[t[1]], day=parseInt(t[2],10), yr=now.getFullYear();
+    if(mo<now.getMonth()) yr++;
+    return {y:yr,m:mo,d:day};
+  }
+  function decorate(){
+    var date=selDate();
+    if(date){
+      var slots=document.querySelectorAll('.mtslot');
+      for(var i=0;i<slots.length;i++){
+        var s=slots[i];
+        if(s.getAttribute('data-uctz')==='1') continue;
+        var mm=(s.textContent||'').trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+        if(!mm) continue;
+        var h=parseInt(mm[1],10), mi=parseInt(mm[2],10), ap=(mm[3]||'').toUpperCase();
+        if(ap==='PM'&&h<12) h+=12;
+        if(ap==='AM'&&h===12) h=0;
+        var loc; try{ loc=fmt.format(new Date(Date.UTC(date.y,date.m,date.d,h-8,mi))); }catch(e){ continue; }
+        var sp=document.createElement('span');
+        sp.className='uctz';
+        sp.style.cssText='display:block;font-size:11px;opacity:.62;margin-top:3px;letter-spacing:.02em;white-space:nowrap';
+        sp.textContent=loc+' your time';
+        s.appendChild(sp);
+        s.setAttribute('data-uctz','1');
+      }
+    }
+    var all=document.querySelectorAll('h2,h3,p,div,span,label');
+    for(var j=0;j<all.length;j++){
+      var el=all[j];
+      if(el.children.length===0 && el.getAttribute('data-uctz')!=='1' && (el.textContent||'').indexOf('Malaysia time (MYT)')>-1){
+        el.textContent=(el.textContent||'').replace('Malaysia time (MYT)','Malaysia time (MYT) \u2014 your local time is shown under each slot');
+        el.setAttribute('data-uctz','1');
+      }
+    }
+  }
+  var t=null; function q(){ if(t) clearTimeout(t); t=setTimeout(decorate,180); }
+  if(document.readyState!=='loading') q(); else document.addEventListener('DOMContentLoaded',q);
+  try{ new MutationObserver(q).observe(document.body,{childList:true,subtree:true}); }catch(e){}
+})();
+</script>
+</body></html>
