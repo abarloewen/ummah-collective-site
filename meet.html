@@ -73,7 +73,7 @@
 </div>
 <script>
 (function(){
-  var AVAIL={1:[[840,1140]],2:[[690,810],[900,1020]],3:[[660,840]],4:[[630,900]]};
+  var AVAIL={1:[[420,1380]],2:[[420,1380]],3:[[420,1380]],4:[[420,1380]],5:[[420,750],[870,1380]]};
   var DOWn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],MONn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function fmtT(x){var h=Math.floor(x/60),mm=x%60,ap=h<12?'AM':'PM',h12=h%12||12;return h12+':'+(mm<10?'0'+mm:mm)+' '+ap;}
   function slotStarts(w){var o=[];w.forEach(function(p){for(var t=p[0];t+30<=p[1];t+=30)o.push(t);});return o;}
