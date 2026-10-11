@@ -527,7 +527,43 @@ _ORDER=['anaaka','shoraka','noonos','eurogida','jugendberufsagentur','matchakoel
 PROJECTS=sorted(PROJECTS,key=lambda p:_ORDER.index(p[0]) if p[0] in _ORDER else 99)
 
 import urllib.parse as _up
-def _ms(u,w=1280): return 'https://s0.wp.com/mshots/v1/'+_up.quote(u,safe='')+'?w='+str(w)
+# 2026-10-11: thumbnails are now static JPGs in /assets/work/ (mShots was unreliable on mobile;
+# the Supabase uc-img project is paused). _ms() maps the old mShots URL to the local file.
+# To refresh a thumbnail: replace the JPG and bump the ?v= stamp (assets are cached immutable).
+_LOCAL_THUMBS={
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Falmaruf-maid.vercel.app%2F%3Fuc%3D1?w=1280": "/assets/work/almaruf-maid.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Falmaruf-maid.vercel.app%2Fcleaning.html%3Fuc%3D1?w=1280": "/assets/work/almaruf-maid-cleaning.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Falmaruf-maid.vercel.app%2Fservices.html%3Fuc%3D1?w=1280": "/assets/work/almaruf-maid-services.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fasyraf-takaful.vercel.app%2F%3Fuc%3D1?w=1280": "/assets/work/asyraf-takaful.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fasyraf-takaful.vercel.app%2Fbooking.html%3Fuc%3D2?w=1280": "/assets/work/asyraf-takaful-booking.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fasyraf-takaful.vercel.app%2Fcalculators.html%3Fuc%3D1?w=1280": "/assets/work/asyraf-takaful-calculators.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fb-plus-ag.de%2Fkarriere%2F%3Fuc%3D1?w=1280": "/assets/work/b-plus-ag-karriere.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fb-plus-ag.de%3Fuc%3D1?w=1280": "/assets/work/b-plus-ag.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdig-it-companyv2.vercel.app%2F%3Fuc%3D1?w=1280": "/assets/work/dig-it-companyv2.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdig-it-companyv2.vercel.app%2Fleistungen.html%3Fuc%3D1?w=1280": "/assets/work/dig-it-companyv2-leistungen.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdig-it-companyv2.vercel.app%2Freferenzen.html%3Fuc%3D1?w=1280": "/assets/work/dig-it-companyv2-referenzen.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdolezel-de.vercel.app%2F%3Fuc%3D1?w=1280": "/assets/work/dolezel-de.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdolezel-de.vercel.app%2Freferenzen.html%3Fuc%3D1?w=1280": "/assets/work/dolezel-de-referenzen.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdolezel-de.vercel.app%2Fshop.html%3Fuc%3D1?w=1280": "/assets/work/dolezel-de-shop.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Ffaircharity.de%3Fuc%3D1?w=1280": "/assets/work/faircharity.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fmatchakoeln.de?w=1280": "/assets/work/matchakoeln.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Foptima-limited.com%2Four-products%2F%3Fuc%3D1?w=1280": "/assets/work/optima-limited-our-products.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Foptima-limited.com%3Fuc%3D1?w=1280": "/assets/work/optima-limited.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fshorakagroup.com%2Fmedia%2F%3Fuc%3D1?w=1280": "/assets/work/shorakagroup-media.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fshorakagroup.com%2Fraya%2F%3Fuc%3D1?w=1280": "/assets/work/shorakagroup-raya.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fummah-collective-site.vercel.app%2Fanaaka-thumb.html%3Fuc%3D1?w=1280": "/assets/work/anaaka-thumb.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fummah-collective-site.vercel.app%2Farju-thumb.html%3Fuc%3D1?w=1280": "/assets/work/arju-thumb.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.arcitymedia.de?w=1280": "/assets/work/arcitymedia.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.eurogida.de%2Ffilialen%2F%3Fuc%3D1?w=1280": "/assets/work/eurogida-filialen.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.kamar-halal.de%2Fen%2F%3Fuc%3D1?w=1280": "/assets/work/kamar-halal-en.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.meinejbainbrandenburg.de%2Fpotsdam%2F%3Fuc%3D1?w=1280": "/assets/work/meinejbainbrandenburg-potsdam.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.meinejbainbrandenburg.de%3Fuc%3D1?w=1280": "/assets/work/meinejbainbrandenburg.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.noon-os.com%2Fpricing.html%3Fuc%3D1?w=1280": "/assets/work/noon-os-pricing.jpg?v=20261011",
+"https://s0.wp.com/mshots/v1/https%3A%2F%2Fwww.noon-os.com%3Fuc%3D1?w=1280": "/assets/work/noon-os.jpg?v=20261011"
+}
+def _ms(u,w=1280):
+    k='https://s0.wp.com/mshots/v1/'+_up.quote(u,safe='')+'?w='+str(w)
+    return _LOCAL_THUMBS.get(k,k)
 # Live-site screenshots via WordPress mShots for the publicly reachable client sites.
 # NOTE: dig-it-companyv2, webuildai, enrichment are behind Vercel deployment-protection
 # (login wall) so a public screenshot service can't reach them. Lift protection (or set a public
@@ -544,7 +580,7 @@ THUMB={
  'dig-it-company':_ms('https://dig-it-companyv2.vercel.app/?uc=1'),  # clean project domain is PUBLIC (deployment-specific URL was login-walled)
  'almaruf':_ms('https://almaruf-maid.vercel.app/?uc=1'),
  'asyraf-takaful':_ms('https://asyraf-takaful.vercel.app/?uc=1'),
- 'shoraka':'https://bcxwrqdfebdogglkypof.supabase.co/functions/v1/uc-img?id=shorakathumb&v=2',  # static capture 2026-07-06 — mShots hangs on shorakagroup.com
+ 'shoraka':'/assets/work/shorakagroup.jpg?v=20261011',  # static capture 2026-10-11 (Supabase uc-img project paused)
  'b-plus-ag':_ms('https://b-plus-ag.de?uc=1'),
  'jugendberufsagentur':_ms('https://www.meinejbainbrandenburg.de?uc=1'),
  'optima':_ms('https://optima-limited.com?uc=1'),
