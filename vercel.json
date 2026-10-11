@@ -66,5 +66,17 @@
       "source": "/tr/service-custom-crm.html",
       "destination": "/service-custom-crm.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/project-dolezel.html",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(ar|de|ms|tr|zh)/project-dolezel.html",
+      "destination": "/:lang/work.html",
+      "permanent": true
+    }
   ]
 }

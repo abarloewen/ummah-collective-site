@@ -430,10 +430,10 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
           '<p>Six real workflows our agents run end-to-end &mdash; triggered, decided and completed without you lifting a finger.</p></div>'
           '<div class="grid g3 flowgrid" style="gap:16px;margin-top:26px">'+fcards+'</div></div></section>')
     SCMAP={
-     'app-development':('Recent builds','Apps &amp; software we have shipped','Real platforms, tools and apps &mdash; built, deployed and in daily use.',['noonos','arju','shoraka','asyraf-takaful','matchakoeln','dolezel']),
-     'web-design':('Recent sites','Websites we have built','Premium, multilingual sites &mdash; shipped, deployed and live.',['dolezel','matchakoeln','anaaka','asyraf-takaful','dig-it-company','almaruf']),
+     'app-development':('Recent builds','Apps &amp; software we have shipped','Real platforms, tools and apps &mdash; built, deployed and in daily use.',['noonos','arju','shoraka','asyraf-takaful','matchakoeln']),
+     'web-design':('Recent sites','Websites we have built','Premium, multilingual sites &mdash; shipped, deployed and live.',['matchakoeln','anaaka','asyraf-takaful','dig-it-company','almaruf']),
      'branding':('Selected work','Identity &amp; brand systems','Brands built from zero to category leader.',['anaaka','jugendberufsagentur','shoraka','matchakoeln','arju','dig-it-company']),
-     'social-media-automation':('Selected work','Design that feeds the flow','The craft behind the automation &mdash; brands, layouts and visual systems that ship.',['jugendberufsagentur','anaaka','asyraf-takaful','matchakoeln','dolezel','arju']),
+     'social-media-automation':('Selected work','Design that feeds the flow','The craft behind the automation &mdash; brands, layouts and visual systems that ship.',['jugendberufsagentur','anaaka','asyraf-takaful','matchakoeln','arju']),
     }
     if slug in SCMAP:
         _eb,_hd,_in,_sl=SCMAP[slug]; exsec=showcase(_eb,_hd,_in,_sl)
@@ -505,7 +505,6 @@ PROJECTS=[
  ("anaaka","ANAAKA","Brand &middot; Commerce &middot; Market Entry","2023&ndash;24","Halal skincare built from zero Malaysian presence to category leader.",["Full ecosystem: brand, store, tracking","18.45% revenue from organic search","Flagship store @ TRX, Kuala Lumpur"],"https://anaaka.com.my","/assets/anaaka-portfolio.png"),
  ("matchakoeln","Matcha Köln","Web &middot; 7 Languages","2026","Premium multilingual redesign with a booking wizard.",["7 languages incl. AR-RTL","Booking wizard + commerce","Cinematic premium build"],None,U("1536256263959-770b48d82b0a")),
  ("arju","ARJU","Platform &middot; Learning","2026","A Netflix-style Islamic learning platform with strategy blueprint.",["10-page multilingual prototype","Course + creator architecture","Strategy blueprint"],None,U("1769428197774-2dfdffe4a723")),
- ("dolezel","Dolezel","Redesign &middot; Germany","2026","A 40-year Munich security Meisterbetrieb &mdash; rebuilt bold and modern, with an online shop.","8 pages + online shop,Bold Modern system,Live on Vercel".split(","),"https://dolezel-de.vercel.app",U("1487014679447-9f8336841d58")),
  ("almaruf","Almaruf Maid","Web &middot; CRM &middot; Malaysia","2026","Website rebuild in four languages + custom CRM for Kuala Lumpur's trusted maid agency.",["7 pages &middot; 4 languages","Custom CRM built for the business","Staged on Vercel"],"https://almaruf-maid.vercel.app",U("1581578731548-c64695cc6952")),
  ("asyraf-takaful","Asyraf Takaful","Web &middot; Finance","2026","A trilingual, BM-first home for a Zurich Takaful specialist &mdash; booking wizard and live calculators included.",["BM / EN / AR-RTL","Booking wizard + 4 calculators","Staged on Vercel"],"https://asyraf-takaful.vercel.app",U("1450101499163-c8848c66ca85")),
  ("dig-it-company","Dig it! Company","Web &middot; Trilingual","2026","A survey-blueprint redesign for a Bavarian field-archaeology firm &mdash; bold, angular, trilingual.",["DE / EN / AR-RTL","Feldplan design system","70-project archive"],"https://dig-it-companyv2.vercel.app",U("1599580546666-fd8b9b6f3f8f")),
@@ -522,7 +521,7 @@ PROJECTS=[
 # Work-grid display order (Attila 2026-07-04): most impressive first — verified results &
 # scale open, prototypes later, heritage closes. Edit THIS list to reorder; tuples stay put.
 _ORDER=['anaaka','shoraka','noonos','eurogida','jugendberufsagentur','matchakoeln','optima',
- 'kamar-halal','faircharity','b-plus-ag','dolezel','arju','asyraf-takaful','dig-it-company',
+ 'kamar-halal','faircharity','b-plus-ag','arju','asyraf-takaful','dig-it-company',
  'almaruf','ar-city-media']
 PROJECTS=sorted(PROJECTS,key=lambda p:_ORDER.index(p[0]) if p[0] in _ORDER else 99)
 
@@ -542,9 +541,6 @@ _LOCAL_THUMBS={
 "https://s0.wp.com/mshots/v1/https%3A%2F%2Fdig-it-companyv2.vercel.app%2F%3Fuc%3D1?w=1280": "/assets/work/dig-it-companyv2.jpg?v=20261011",
 "https://s0.wp.com/mshots/v1/https%3A%2F%2Fdig-it-companyv2.vercel.app%2Fleistungen.html%3Fuc%3D1?w=1280": "/assets/work/dig-it-companyv2-leistungen.jpg?v=20261011",
 "https://s0.wp.com/mshots/v1/https%3A%2F%2Fdig-it-companyv2.vercel.app%2Freferenzen.html%3Fuc%3D1?w=1280": "/assets/work/dig-it-companyv2-referenzen.jpg?v=20261011",
-"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdolezel-de.vercel.app%2F%3Fuc%3D1?w=1280": "/assets/work/dolezel-de.jpg?v=20261011",
-"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdolezel-de.vercel.app%2Freferenzen.html%3Fuc%3D1?w=1280": "/assets/work/dolezel-de-referenzen.jpg?v=20261011",
-"https://s0.wp.com/mshots/v1/https%3A%2F%2Fdolezel-de.vercel.app%2Fshop.html%3Fuc%3D1?w=1280": "/assets/work/dolezel-de-shop.jpg?v=20261011",
 "https://s0.wp.com/mshots/v1/https%3A%2F%2Ffaircharity.de%3Fuc%3D1?w=1280": "/assets/work/faircharity.jpg?v=20261011",
 "https://s0.wp.com/mshots/v1/https%3A%2F%2Fmatchakoeln.de?w=1280": "/assets/work/matchakoeln.jpg?v=20261011",
 "https://s0.wp.com/mshots/v1/https%3A%2F%2Foptima-limited.com%2Four-products%2F%3Fuc%3D1?w=1280": "/assets/work/optima-limited-our-products.jpg?v=20261011",
@@ -568,7 +564,6 @@ def _ms(u,w=1280):
 # NOTE: dig-it-companyv2, webuildai, enrichment are behind Vercel deployment-protection
 # (login wall) so a public screenshot service can't reach them. Lift protection (or set a public
 # alias) and add their production URLs here to get real live screenshots automatically.
-# dolezel-de.vercel.app is PUBLIC (verified 2026-07-03) — screenshots work directly.
 THUMB={
  # RULE (Attila 2026-07-03): tiles are ALWAYS website screenshots. Live client site → mShots direct.
  # No clean external capture (geo popups: anaaka) or no live site yet (arju) → static "thumb page"
@@ -576,7 +571,6 @@ THUMB={
  'anaaka':_ms('https://ummah-collective-site.vercel.app/anaaka-thumb.html?uc=1'),
  'matchakoeln':_ms('https://matchakoeln.de'),
  'arju':_ms('https://ummah-collective-site.vercel.app/arju-thumb.html?uc=1'),
- 'dolezel':_ms('https://dolezel-de.vercel.app/?uc=1'),  # OUR redesign, not the old dolezel.de
  'dig-it-company':_ms('https://dig-it-companyv2.vercel.app/?uc=1'),  # clean project domain is PUBLIC (deployment-specific URL was login-walled)
  'almaruf':_ms('https://almaruf-maid.vercel.app/?uc=1'),
  'asyraf-takaful':_ms('https://asyraf-takaful.vercel.app/?uc=1'),
@@ -790,7 +784,7 @@ def work_page():
         "Every project &mdash; client builds, legacy work and our own ventures. 100+ projects across Southeast Asia, Europe and MENA.")+f'''
 <section style="padding-top:24px"><div class="wrap"><div class="grid g3">{tiles}</div></div></section>
 '''+cta()
-    return page("work.html","Work — Ummah Collective","All projects: ANAAKA, Matcha Köln, ARJU, Dolezel, Almaruf, Shoraka and more.",body,aurora="work")
+    return page("work.html","Work — Ummah Collective","All projects: ANAAKA, Matcha Köln, ARJU, Almaruf, Shoraka and more.",body,aurora="work")
 
 def project_page(s,n,c,y,b,scope,url,im):
     crumb='<a href="index.html">Home</a> / <a href="work.html">Work</a> / '+n
@@ -1014,70 +1008,6 @@ def project_page(s,n,c,y,b,scope,url,im):
 {nextnav}
 '''+cta('Want a platform<br>like <em>this?</em>')
         return page("project-arju.html","ARJU — Islamic Learning Platform (Concept) | Ummah Collective","How Ummah Collective designed and prototyped ARJU, a premium Netflix-style Islamic learning platform powered by Imam Maged Al-Berlini — brand, product and strategy.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"ARJU — Islamic Learning Platform (Concept & Prototype)","about":"Brand, product design and prototype for ARJU, a premium Islamic learning platform","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-arju.html"}))
-    if s=='dolezel':
-        DPH='https://lh3.googleusercontent.com/gps-cs-s/APNQkAEU40B1kvrQcXY-OrWENl3e0urbvYqD5sBIirOYF5m-dtTvA98aEFoB2FujEYA9T0N_ybxKY04eOcvKMu3i0En6fGmGnWuc_efyL6h7_15lXMqosIAGwKX0WEw8sFundRA-_yoN=w1600-h1600-k-no'
-        DURL='https://dolezel-de.vercel.app'
-        _hero=('<div class="dz-hero"><div class="dz-hl">'
-          '<span class="dz-badge"><i></i>MEISTERBETRIEB &middot; M&Uuml;NCHEN-HAIDHAUSEN</span>'
-          '<div class="dz-h1">Sicherheit, die seit <em>1980</em> h&auml;lt.</div>'
-          '<div class="dz-sub">Schl&uuml;ssel, Tresore, Schlie&szlig;anlagen und Sicherheitstechnik &mdash; handwerklich gefertigt, pers&ouml;nlich beraten, dauerhaft installiert.</div>'
-          '<div class="dz-ctas"><span class="dz-cta">TERMIN VEREINBAREN &rarr;</span><span class="dz-cta ghost">LEISTUNGEN</span></div></div>'
-          '<div class="dz-hp"><img src="'+DPH+'" alt="Dolezel Werkstatt, Weissenburger Str. 28" loading="lazy"><span class="dz-tag">WERKSTATT &middot; WEISSENBURGER STR. 28</span></div></div>')
-        _dstats=('<div class="dz-stats"><div><b>40+</b><span>Jahre in Haidhausen</span></div><div><b>10K+</b><span>Zufriedene Kunden</span></div><div><b>16</b><span>Produktbereiche</span></div><div><b>24h</b><span>Notdienst M&uuml;nchen</span></div></div>')
-        _pillars=('<div class="sa-award"><div class="sa-ah">Drei S&auml;ulen. Eine Sicherheitsadresse.</div>'
-          '<div class="sa-asub">Vom Schl&uuml;ssel bis zur Alarmanlage &mdash; alles aus einer Werkstatt.</div>'
-          '<div class="sa-chips"><span>Schl&uuml;ssel, Schloss &amp; Einbruchschutz</span><span>Tresore, Briefk&auml;sten &amp; Schilder</span><span>Elektronische Systeme &amp; Alarmanlagen</span></div></div>')
-        _dshop=('<div class="dz-shop"><div class="dz-sh2">Bestellen. Abholen. Oder liefern lassen.</div><p>Der Dolezel-Shop &mdash; Sicherheit online bestellt, in Haidhausen abgeholt.</p><span class="dz-cta">ZUM SHOP &rarr;</span></div>')
-        _bands=_hero+_dstats+_pillars+_dshop
-        _showcase=('<section style="padding-top:10px"><div class="wrap"><div class="site-anim dz reveal"><div class="site-bar"><i></i><i></i><i></i><span class="site-url">dolezel.de</span></div><div class="site-view"><div class="site-track">'+_bands+_bands+'</div></div></div><div class="site-cap mono reveal">A scroll through the redesign we shipped &middot; <a href="'+DURL+'" target="_blank" rel="noopener">see it live &rarr;</a></div></div></section>')
-        built=[("Bold Modern design system","Inter-led typography, ink and petrol, hard grids &mdash; a 40-year Handwerk brand that finally looks as solid as it builds."),("8-page website","Start, Unternehmen, Leistungen, Produkte, Shop, Referenzen, Blog, Kontakt &mdash; one coherent system, fully navigable."),("Online shop","12 products with category filters, cart and click &amp; collect &mdash; ordered online, picked up in Haidhausen."),("Ratgeber blog","Nine practical articles &mdash; from burglary protection to choosing a safe &mdash; with filters and pagination."),("Reputation, front and centre","Real Google reviews with verified badges and the &#9733;4.9 rating built into the experience, not hidden on a third-party site."),("Social discount mechanic","A 5% follower discount tied to Instagram and TikTok &mdash; turning store visits into an audience.")]
-        bcards="".join('<div class="card reveal"><h3 style="font-size:19px">'+t+'</h3><p>'+d+'</p></div>' for t,d in built)
-        res=[("8","Pages, one design system"),("12","Shop products in the launch range"),("9","Ratgeber articles"),("3","S&auml;ulen &mdash; service pillars"),("40+","Years of Munich Handwerk"),("4.9","&#9733; Google rating, made visible")]
-        rcells="".join('<div class="stat"><b>'+v+'</b><div class="k">'+k+'</div></div>' for v,k in res)
-        steps=[("Schritt 1","Produkt w&auml;hlen &mdash; Launch-Sortiment, nach Kategorie gefiltert"),("Schritt 2","In den Warenkorb &mdash; mit laufendem Z&auml;hler"),("Schritt 3","Abholen in Haidhausen &mdash; oder liefern lassen"),("Schritt 4","5% Follower-Rabatt &mdash; via Instagram &amp; TikTok")]
-        stepli="".join('<li><span>'+a+'</span><b>'+b2+'</b></li>' for a,b2 in steps)
-        saeulen=["Schl&uuml;ssel, Schloss &amp; Einbruchschutz","Tresore, Briefk&auml;sten &amp; Schilder","Elektronische Systeme &amp; Alarmanlagen"]
-        trust=["Echte Google-Bewertungen mit Verified-Badge","&#9733;4.9 sichtbar ab der Startseite","Echtes Werkstatt-Foto statt Stock-Bildern","Google Maps &amp; direkte Anfahrt auf Kontakt","24h-Notdienst prominent erreichbar"]
-        s1li="".join('<li><span class="ck">&#10003;</span><div><b>'+x+'</b></div></li>' for x in saeulen)
-        s2li="".join('<li><span class="ck">&#10003;</span><div><b>'+x+'</b></div></li>' for x in trust)
-        _shopshot=_ms(DURL+'/shop.html?uc=1')
-        _refshot=_ms(DURL+'/referenzen.html?uc=1')
-        body=phero(crumb,f"Case / {c}",n,"A 40-year Munich security-technology Meisterbetrieb &mdash; redesigned bold and modern, with an online shop, a knowledge hub and its hard-earned reputation front and centre.")+f'''
-{_showcase}
-<section style="padding-top:0"><div class="wrap"><div class="grid g2" style="align-items:start;gap:26px">
-  <div class="reveal"><div class="eyebrow"><span class="t"></span><span class="mono">The brand</span></div>
-    <h2 style="margin-top:10px">Four decades<br>of Munich Handwerk.</h2>
-    <p style="color:var(--dim);margin-top:14px"><strong>Adolf Dolezel GmbH</strong> has secured Munich since <strong>1980</strong> &mdash; a family-run Meisterbetrieb on <strong>Weissenburger Stra&szlig;e in Haidhausen</strong>, trusted by over 10,000 customers for keys, locking systems, safes and alarm technology, with a &#9733;4.9 Google rating to show for it. The craft was never the problem. The web presence was &mdash; a dated site that sold a Munich institution short. Our brief: a digital storefront as solid as the workshop behind it.</p>
-  </div>
-  <img class="pimg reveal" src="{DPH}" alt="Dolezel workshop storefront &mdash; Weissenburger Str. 28, M&uuml;nchen-Haidhausen" loading="lazy">
-</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="grid g2" style="align-items:start;gap:26px">
-  <img class="pimg reveal" src="{_refshot}" alt="Referenzen &mdash; real Google reviews on the new site" loading="lazy">
-  <div class="reveal"><div class="eyebrow"><span class="t"></span><span class="mono">The build</span></div>
-    <h2 style="margin-top:10px">Bold, modern &mdash;<br>and built to sell.</h2>
-    <p style="color:var(--dim);margin-top:14px">We rebuilt <strong>dolezel.de</strong> as an eight-page <strong>Bold Modern</strong> system &mdash; Inter-led typography, ink and petrol, hard grids &mdash; around the three S&auml;ulen of the business. At its centre: an <strong>online shop</strong> with cart and click &amp; collect, a nine-article <strong>Ratgeber</strong> that answers real security questions, and the shop&rsquo;s <strong>Google reputation pulled into the site itself</strong> &mdash; verified reviews, &#9733;4.9, real workshop photography. Shipped and live on Vercel.</p>
-  </div>
-</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">What we built</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Redesign &middot; shop &middot; content</span></div></div><div class="grid g3">{bcards}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">The digital storefront</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Bestellen &middot; abholen &middot; sparen</span></div></div>
-  <div class="grid g2" style="align-items:center;gap:32px">
-    <div class="reveal"><p style="color:var(--dim)">A local locksmith doesn&rsquo;t need a webshop for its own sake &mdash; it needs one that <strong>brings people into the store</strong>. The Dolezel shop is built around <strong>click &amp; collect</strong>: order online, pick up at Weissenburger Stra&szlig;e, get advice face to face. The <strong>5% follower discount</strong> closes the loop, turning walk-in customers into an owned audience.</p>
-      <ul class="ev-meta" style="margin-top:22px">{stepli}</ul>
-    </div>
-    <img class="pimg reveal" src="{_shopshot}" alt="The Dolezel online shop &mdash; click &amp; collect" loading="lazy">
-  </div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="eyebrow reveal"><span class="t"></span><span class="mono">By the numbers</span></div>
-  <div class="stats reveal" style="margin-top:24px">{rcells}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">S&auml;ulen &amp; trust</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">What carries the site</span></div></div>
-  <div class="grid g2" style="gap:26px;align-items:start">
-    <div class="reveal"><div class="mono" style="color:var(--acc2);margin-bottom:12px">Die drei S&auml;ulen</div><ul class="incl">{s1li}</ul></div>
-    <div class="reveal"><div class="mono" style="color:var(--acc2);margin-bottom:12px">Trust, eingebaut</div><ul class="incl">{s2li}</ul></div>
-  </div></div></section>
-<section style="padding-top:0"><div class="wrap" style="text-align:center"><div class="quote reveal" style="margin:0 auto">Vierzig Jahre M&uuml;nchner Handwerk &mdash; <em>jetzt mit einem digitalen Zuhause, das genauso solide h&auml;lt.</em></div><div class="quote-by reveal">Adolf Dolezel GmbH &mdash; Sicherheitstechnik &middot; M&uuml;nchen-Haidhausen</div>
-  <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{DURL}" class="btn btn-fill" target="_blank" rel="noopener">See the redesign live &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
-{nextnav}
-'''+cta('Want a storefront<br>like <em>this?</em>')
-        return page("project-dolezel.html","Dolezel — Security-Tech Redesign & Online Shop | Ummah Collective","How Ummah Collective redesigned Adolf Dolezel GmbH — a 40-year Munich security Meisterbetrieb — into a bold, modern 8-page site with an online shop, Ratgeber blog and Google reviews built in.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Dolezel — Website Redesign & Online Shop","about":"Bold Modern redesign, online shop and content system for Adolf Dolezel GmbH, Sicherheitstechnik München","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-dolezel.html"}))
     if s=='almaruf':
         AMURL='https://almaruf-maid.vercel.app'
         AMW='https://almarufmaid.com/wp-content/uploads/2025/10/'
@@ -1856,7 +1786,7 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
 def home():
     pil=[("01","AI Agents","Agents that sell, support and run your back office, 24/7.","ai-agents"),("02","Noon OS","Our CRM built for the Halal economy &mdash; from &euro;19/mo.","noon-os"),("03","Web &amp; Apps","Premium sites, platforms and custom software.","web-design"),("04","Growth","Lead gen, SEO &amp; content, paid media and strategy.","lead-generation")]
     idx="".join(f'<a class="idx-row" href="{_href(s)}"><span class="no">{n}</span><span class="ti">{t}</span><span class="de">{d}</span><span class="go">&rarr;</span></a>' for n,t,d,s in pil)
-    _fsl=['anaaka','matchakoeln','dolezel','arju','almaruf','asyraf-takaful','dig-it-company','shoraka']
+    _fsl=['anaaka','matchakoeln','arju','almaruf','asyraf-takaful','dig-it-company','shoraka']
     _pm={p[0]:p for p in PROJECTS}
     feat=[_pm[s] for s in _fsl if s in _pm]
     tiles="".join(_tile(s,n,c,y,b,im) for s,n,c,y,b,sc,url,im in feat)
