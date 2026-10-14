@@ -437,8 +437,8 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
           '<div class="grid g3 flowgrid" style="gap:16px;margin-top:26px">'+fcards+'</div></div></section>')
     SCMAP={
      'app-development':('Recent builds','Apps &amp; software we have shipped','Real platforms, tools and apps &mdash; built, deployed and in daily use.',['noonos','arju','shoraka','asyraf-takaful','matchakoeln']),
-     'web-design':('Recent sites','Websites we have built','Premium, multilingual sites &mdash; shipped, deployed and live.',['matchakoeln','anaaka','asyraf-takaful','dig-it-company','almaruf']),
-     'branding':('Selected work','Identity &amp; brand systems','Brands built from zero to category leader.',['anaaka','jugendberufsagentur','shoraka','matchakoeln','arju','dig-it-company']),
+     'web-design':('Recent sites','Websites we have built','Premium, multilingual sites &mdash; shipped, deployed and live.',['matchakoeln','anaaka','asyraf-takaful','almaruf']),
+     'branding':('Selected work','Identity &amp; brand systems','Brands built from zero to category leader.',['anaaka','jugendberufsagentur','shoraka','matchakoeln','arju']),
      'social-media-automation':('Selected work','Design that feeds the flow','The craft behind the automation &mdash; brands, layouts and visual systems that ship.',['jugendberufsagentur','anaaka','asyraf-takaful','matchakoeln','arju']),
     }
     if slug in SCMAP:
@@ -513,7 +513,6 @@ PROJECTS=[
  ("arju","ARJU","Platform &middot; Learning","2026","A Netflix-style Islamic learning platform with strategy blueprint.",["10-page multilingual prototype","Course + creator architecture","Strategy blueprint"],None,U("1769428197774-2dfdffe4a723")),
  ("almaruf","Almaruf Maid","Web &middot; CRM &middot; Malaysia","2026","Website rebuild in four languages + custom CRM for Kuala Lumpur's trusted maid agency.",["7 pages &middot; 4 languages","Custom CRM built for the business","Staged on Vercel"],"https://almaruf-maid.vercel.app",U("1581578731548-c64695cc6952")),
  ("asyraf-takaful","Asyraf Takaful","Web &middot; Finance","2026","A trilingual, BM-first home for a Zurich Takaful specialist &mdash; booking wizard and live calculators included.",["BM / EN / AR-RTL","Booking wizard + 4 calculators","Staged on Vercel"],"https://asyraf-takaful.vercel.app",U("1450101499163-c8848c66ca85")),
- ("dig-it-company","Dig it! Company","Web &middot; Trilingual","2026","A survey-blueprint redesign for a Bavarian field-archaeology firm &mdash; bold, angular, trilingual.",["DE / EN / AR-RTL","Feldplan design system","70-project archive"],"https://dig-it-companyv2.vercel.app",U("1599580546666-fd8b9b6f3f8f")),
  ("b-plus-ag","B Plus AG","Web &middot; Engineering","2024","Website, recruiting hub and campaigns for a Berlin engineering firm.",["Corporate website","Recruiting hub + campaigns","Live at b-plus-ag.de"],"https://b-plus-ag.de",RU+"2024/04/handy-digital-4.png"),
  ("jugendberufsagentur","Jugendberufsagentur Brandenburg","Public Sector &middot; Brand &amp; Web","2022&ndash;now","One brand, one website and the ongoing operation for three Jugendberufsagenturen in Brandenburg.",["Branding &amp; CI + website","3 agencies, one home","Ongoing management &amp; comms"],"https://www.meinejbainbrandenburg.de",RU+"2024/04/Jugendberufsagentur-Brandenburg-3.png"),
  ("shoraka","Shoraka Group","Fintech &middot; Web &amp; UX","2023&ndash;26","The digital home of a Shariah-compliant fintech group &mdash; UX-documented, benchmarked to global fintechs, live at shorakagroup.com.",["Live at shorakagroup.com","6 platforms, one home","UX &middot; UI &middot; SEO &amp; analytics"],"https://shorakagroup.com",U("1611974789855-9c2a0a7236a3")),
@@ -527,7 +526,7 @@ PROJECTS=[
 # Work-grid display order (Attila 2026-07-04): most impressive first — verified results &
 # scale open, prototypes later, heritage closes. Edit THIS list to reorder; tuples stay put.
 _ORDER=['anaaka','shoraka','noonos','eurogida','jugendberufsagentur','matchakoeln','optima',
- 'kamar-halal','faircharity','b-plus-ag','arju','asyraf-takaful','dig-it-company',
+ 'kamar-halal','faircharity','b-plus-ag','arju','asyraf-takaful',
  'almaruf','ar-city-media']
 PROJECTS=sorted(PROJECTS,key=lambda p:_ORDER.index(p[0]) if p[0] in _ORDER else 99)
 
@@ -577,7 +576,6 @@ THUMB={
  'anaaka':_ms('https://ummah-collective-site.vercel.app/anaaka-thumb.html?uc=1'),
  'matchakoeln':_ms('https://matchakoeln.de'),
  'arju':_ms('https://ummah-collective-site.vercel.app/arju-thumb.html?uc=1'),
- 'dig-it-company':_ms('https://dig-it-companyv2.vercel.app/?uc=1'),  # clean project domain is PUBLIC (deployment-specific URL was login-walled)
  'almaruf':_ms('https://almaruf-maid.vercel.app/?uc=1'),
  'asyraf-takaful':_ms('https://asyraf-takaful.vercel.app/?uc=1'),
  'shoraka':'/assets/work/shorakagroup.jpg?v=20261011',  # static capture 2026-10-11 (Supabase uc-img project paused)

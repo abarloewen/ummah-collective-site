@@ -77,6 +77,36 @@
       "source": "/:lang(ar|de|ms|tr|zh)/project-dolezel.html",
       "destination": "/:lang/work.html",
       "permanent": true
+    },
+    {
+      "source": "/project-dig-it-company.html",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/de/project-dig-it-company.html",
+      "destination": "/de/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/ms/project-dig-it-company.html",
+      "destination": "/ms/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/ar/project-dig-it-company.html",
+      "destination": "/ar/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/zh/project-dig-it-company.html",
+      "destination": "/zh/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/tr/project-dig-it-company.html",
+      "destination": "/tr/work.html",
+      "permanent": true
     }
   ]
 }

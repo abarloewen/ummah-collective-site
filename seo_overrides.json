@@ -177,10 +177,6 @@
 "ar/project-b-plus-ag.html": {
 "description": "كيف بنينا b-plus-ag.de لشركة هندسية في برلين: موقع مؤسسي، ومركز توظيف يعرض الوظائف الشاغرة مباشرة، والحملات التي تستقطب المرشحين لشغلها."
 },
-"ar/project-dig-it-company.html": {
-"description": "كيف أعدنا تصميم موقع Dig it! Company، شركة آثار ميدانية بافارية: نظام تصميم مستوحى من مخططات المسح، ثلاث لغات DE/EN/AR مع RTL، وأرشيف 70 مشروعًا.",
-"title": "Dig it! شركة — إعادة تصميم Feldplan، ثلاثي اللغة"
-},
 "ar/project-eurogida.html": {
 "description": "How we built eurogida.de — website, تصميم and UX/UI for Berlin's 14-store Turkish-market grocer — and have managed it continuously for six years.",
 "title": "Eurogida — Website, تصميم, UX/UI & 6 Years of Management"
@@ -419,10 +415,6 @@
 },
 "de/project-b-plus-ag.html": {
 "description": "So entstand b-plus-ag.de für ein Berliner Ingenieurbüro: Unternehmenswebsite, Recruiting-Hub mit aktuellen Stellen und die Kampagnen, um sie zu besetzen."
-},
-"de/project-dig-it-company.html": {
-"description": "Neugestaltung für Dig it! Company, eine bayerische Feldarchäologie-Firma: Designsystem im Vermessungsplan-Stil, DE/EN/AR mit RTL, Archiv mit 70 Projekten.",
-"title": "Dig it! Unternehmen — Feldplan-Neugestaltung, Dreisprachig"
 },
 "de/project-eurogida.html": {
 "description": "How we built eurogida.de — website, Design and UX/UI for Berlin's 14-store Turkish-market grocer — and have managed it continuously for six years.",
@@ -678,10 +670,6 @@
 "ms/project-b-plus-ag.html": {
 "description": "Kami membina b-plus-ag.de untuk firma kejuruteraan Berlin: laman korporat, hab pengambilan dengan senarai jawatan langsung dan kempen untuk mengisinya."
 },
-"ms/project-dig-it-company.html": {
-"description": "Reka semula Dig it! Company, firma arkeologi lapangan Bavaria: sistem reka bentuk gaya pelan tinjauan, tiga bahasa DE/EN/AR dengan RTL, arkib 70 projek.",
-"title": "Dig it! Syarikat — Reka Bentuk Semula Feldplan, Trilingual"
-},
 "ms/project-eurogida.html": {
 "description": "How we built eurogida.de — website, reka bentuk and UX/UI for Berlin's 14-store Turkish-market grocer — and have managed it continuously for six years.",
 "title": "Eurogida — Website, Reka bentuk, UX/UI & 6 Years of Management"
@@ -919,10 +907,6 @@
 },
 "tr/project-b-plus-ag.html": {
 "description": "Berlinli bir mühendislik firması için b-plus-ag.de'yi nasıl kurduk: kurumsal site, canlı ilanlı bir işe alım merkezi ve ilanları dolduran kampanyalar."
-},
-"tr/project-dig-it-company.html": {
-"description": "Bavyeralı saha arkeolojisi firması Dig it! Company'yi nasıl yeniden tasarladık: ölçüm planı tasarım sistemi, RTL destekli DE/EN/AR, 70 projelik arşiv.",
-"title": "Dig it! Şirket — Feldplan Yeniden Tasarımı, Üç Dilli"
 },
 "tr/project-eurogida.html": {
 "description": "How we built eurogida.de — website, tasarım and UX/UI for Berlin's 14-store Turkish-market grocer — and have managed it continuously for six years.",
@@ -1207,10 +1191,6 @@
 },
 "zh/project-b-plus-ag.html": {
 "description": "How Ummah Collective built b-plus-ag.de for a Berlin engineering firm — corporate website, a Karriere recruiting hub with live job listings, and the 活动 to fill them."
-},
-"zh/project-dig-it-company.html": {
-"description": "How Ummah Collective re设计ed Dig it! 公司, a Bavarian field-archaeology firm — a survey-blueprint 设计 system, trilingual DE/EN/AR with RTL, and a 70-project archive.",
-"title": "Dig it! 公司 — Feldplan 重新设计，三语版 | Ummah Collective"
 },
 "zh/project-eurogida.html": {
 "description": "How we built eurogida.de — website, 设计 and UX/UI for Berlin's 14-store Turkish-market grocer — and have managed it continuously for six years.",
