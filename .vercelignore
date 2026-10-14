@@ -1,0 +1,6 @@
+# Source files for the generator; not part of the public site
+build.py
+i18n_data.py
+seo_overrides.json
+tools/
+__pycache__/
