@@ -378,6 +378,71 @@
       "source": "/:lang(ar|de|ms|tr|zh)/None",
       "destination": "/:lang/work.html",
       "permanent": true
+    },
+    {
+      "source": "/social-media-management/",
+      "destination": "/service-social-media-automation.html",
+      "permanent": true
+    },
+    {
+      "source": "/social-media/",
+      "destination": "/service-social-media-automation.html",
+      "permanent": true
+    },
+    {
+      "source": "/graphic-design/",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/web-design/",
+      "destination": "/service-web-design.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/planning/",
+      "destination": "/process.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio_group/:slug/",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/category/:slug/",
+      "destination": "/insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/tag/:slug/",
+      "destination": "/insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/ai-agents/",
+      "destination": "/service-ai-agents.html",
+      "permanent": true
+    },
+    {
+      "source": "/automation/",
+      "destination": "/service-automation.html",
+      "permanent": true
+    },
+    {
+      "source": "/seo-content/",
+      "destination": "/service-seo-content.html",
+      "permanent": true
+    },
+    {
+      "source": "/about/",
+      "destination": "/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/:slug/",
+      "destination": "/services.html",
+      "permanent": true
     }
   ]
 }
