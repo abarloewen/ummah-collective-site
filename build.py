@@ -299,6 +299,20 @@ def footer():
   </div><div class="f-bot"><span>&copy; 2026 Ummah Collective Sdn. Bhd.</span><span>Kuala Lumpur &middot; Berlin &middot; Borderless</span></div></div></footer>'''
 
 def absart(cls="art-hero"): return '<div class="abs '+cls+' reveal"></div>'
+def _meta_desc(t,limit=158):
+    """2026-10-14: meta description from a lede without cutting mid-word: whole sentences
+    when they fit, else the first sentence trimmed at a word boundary with an ellipsis."""
+    import re as _re, html as _h
+    t=_re.sub(r"\s+"," ",t.replace("&mdash;","-")).strip()
+    if len(_h.unescape(t))<=limit: return t
+    parts=_re.split(r"(?<=[.!?])\s+",t); out=""
+    for s in parts:
+        cand=(out+" "+s).strip()
+        if len(_h.unescape(cand))<=limit: out=cand
+        else: break
+    if len(_h.unescape(out))>=90: return out
+    cut=t[:limit-1]; cut=cut[:cut.rfind(" ")].rstrip(" ,;:-")
+    return cut+"\u2026"
 def _seo_title(t):
     """2026-10-14: drop the brand suffix when the title would be cut off in Google (>65 chars)."""
     import re as _re
@@ -503,7 +517,7 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
     _SEOT={'ai-agents':'AI Automation Agency — Done-for-You AI Agents & WhatsApp AI','web-design':'Web Design Agency Kuala Lumpur — Premium Multilingual Websites','lead-generation':'Lead Generation & Growth for Halal-Certified Brands','automation':'Business Process Automation — Cut Overhead, Keep Output','custom-crm':'Custom CRM Development Malaysia — Systems You Own','app-development':'App & Software Development — Shariah-Compliant by Design'}
     _SEOD={'ai-agents':'Done-for-you AI agents and WhatsApp automation that sell and support 24/7. An applied-AI automation agency serving Malaysia, Europe, the Gulf and the US.','web-design':'Premium web design from Kuala Lumpur: conversion-focused, multilingual (EN/BM/DE/AR) websites for modern and halal businesses. European standards, local fluency.','lead-generation':'Outbound, paid and CRO in one engine — including growth marketing for halal-certified brands entering Malaysia, Europe and the US.','custom-crm':'Custom CRM development in Malaysia: your workflow, WhatsApp-native, and you own the system. From audit to daily-driver.','app-development':'Custom apps, APIs and payment systems — including shariah-compliant software development for islamic fintech and halal-economy startups.'}
     sld=_ld({"@context":"https://schema.org","@type":"Service","name":_plain(title),"description":_plain(intro),"serviceType":_plain(title),"provider":{"@id":SITE+"/#org"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/service-"+slug+".html"})
-    return page(f"service-{slug}.html",_SEOT.get(slug,title)+" — Ummah Collective",_SEOD.get(slug,intro.replace('&mdash;','-')[:150]),body,aurora="services",ld=sld)
+    return page(f"service-{slug}.html",_SEOT.get(slug,title)+" — Ummah Collective",_SEOD.get(slug,_meta_desc(intro)),body,aurora="services",ld=sld)
 
 # ---------------- PROJECTS ----------------
 RU='https://ummah-collective.com/wp-content/uploads/'
@@ -1693,7 +1707,7 @@ def project_page(s,n,c,y,b,scope,url,im):
 </div></div></section>
 {stats}{nextnav}
 '''+cta('Want results<br>like <em>these?</em>')
-    return page(f"project-{s}.html",f"{n} — Ummah Collective",b.replace('&mdash;','-')[:150],body,aurora="work")
+    return page(f"project-{s}.html",f"{n} — Ummah Collective",_meta_desc(b),body,aurora="work")
 
 # ---------------- ARTICLES (reuse 8) ----------------
 ARTICLES=[
@@ -2089,7 +2103,7 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
         _q,_a=_li.split("&mdash;",1)
         if _q.strip() and _a.strip(): _faq.append((_q.strip(),_a.strip()))
     if _faq: ald+=faq_ld(_faq[:6])
-    return page(f"article-{slug}.html",f"{title} — Ummah Collective",lede.replace('&mdash;','-')[:150],body,aurora="insights",ld=ald,og="article")
+    return page(f"article-{slug}.html",f"{title} — Ummah Collective",_meta_desc(lede),body,aurora="insights",ld=ald,og="article")
 
 # ---------------- CORE PAGES ----------------
 def home():

@@ -45,29 +45,20 @@
     {
       "source": "/de/ummah-hub/",
       "destination": "/de/ummah-hub.html"
-    },
-    {
-      "source": "/de/service-custom-crm.html",
-      "destination": "/service-custom-crm.html"
-    },
-    {
-      "source": "/ms/service-custom-crm.html",
-      "destination": "/service-custom-crm.html"
-    },
-    {
-      "source": "/ar/service-custom-crm.html",
-      "destination": "/service-custom-crm.html"
-    },
-    {
-      "source": "/zh/service-custom-crm.html",
-      "destination": "/service-custom-crm.html"
-    },
-    {
-      "source": "/tr/service-custom-crm.html",
-      "destination": "/service-custom-crm.html"
     }
   ],
   "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "ummah-collective-site.vercel.app"
+        }
+      ],
+      "destination": "https://ummah-collective.com/:path*",
+      "permanent": true
+    },
     {
       "source": "/project-dolezel.html",
       "destination": "/work.html",
@@ -106,6 +97,286 @@
     {
       "source": "/tr/project-dig-it-company.html",
       "destination": "/tr/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/case-anaaka.html",
+      "destination": "/project-anaaka.html",
+      "permanent": true
+    },
+    {
+      "source": "/market-entry.html",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-content-marketing.html",
+      "destination": "/service-seo-content.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-custom-crm.html",
+      "destination": "/noon-os.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-digital-advertising.html",
+      "destination": "/service-lead-generation.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-digital-marketing.html",
+      "destination": "/service-lead-generation.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-digital-strategies.html",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-graphic-design.html",
+      "destination": "/service-social-media-automation.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-marketing-ads.html",
+      "destination": "/service-lead-generation.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-seo.html",
+      "destination": "/service-seo-content.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-social-media.html",
+      "destination": "/service-social-media-automation.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-strategy-market-entry.html",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/service-strategy.html",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(ar|de|ms|tr|zh)/service-custom-crm.html",
+      "destination": "/:lang/noon-os.html",
+      "permanent": true
+    },
+    {
+      "source": "/about-us/",
+      "destination": "/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/team/",
+      "destination": "/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/team/:slug/",
+      "destination": "/about.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/anaaka/",
+      "destination": "/project-anaaka.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/anaaka-malaysia/",
+      "destination": "/project-anaaka.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/b-plus-ag/",
+      "destination": "/project-b-plus-ag.html",
+      "permanent": true
+    },
+    {
+      "source": "/portfolio/:slug/",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/our-services/",
+      "destination": "/services.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/",
+      "destination": "/services.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/app-development/",
+      "destination": "/service-app-development.html",
+      "permanent": true
+    },
+    {
+      "source": "/app-development/",
+      "destination": "/service-app-development.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/development/",
+      "destination": "/service-app-development.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/content-marketing/",
+      "destination": "/service-seo-content.html",
+      "permanent": true
+    },
+    {
+      "source": "/content-marketing/",
+      "destination": "/service-seo-content.html",
+      "permanent": true
+    },
+    {
+      "source": "/seo/",
+      "destination": "/service-seo-content.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/social-media/",
+      "destination": "/service-social-media-automation.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/venture-by-ummah/",
+      "destination": "/ventures.html",
+      "permanent": true
+    },
+    {
+      "source": "/venture-by-ummah/",
+      "destination": "/ventures.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/delivery/",
+      "destination": "/process.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/discovery/",
+      "destination": "/process.html",
+      "permanent": true
+    },
+    {
+      "source": "/digital-strategies/",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/branding/",
+      "destination": "/service-branding.html",
+      "permanent": true
+    },
+    {
+      "source": "/digital-advertising/",
+      "destination": "/service-lead-generation.html",
+      "permanent": true
+    },
+    {
+      "source": "/digital-marketing/",
+      "destination": "/service-lead-generation.html",
+      "permanent": true
+    },
+    {
+      "source": "/layouts/web-design/",
+      "destination": "/service-web-design.html",
+      "permanent": true
+    },
+    {
+      "source": "/contact/",
+      "destination": "/contact.html",
+      "permanent": true
+    },
+    {
+      "source": "/articles/",
+      "destination": "/insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "/insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/imprint-privacy-policy/",
+      "destination": "/imprint.html",
+      "permanent": true
+    },
+    {
+      "source": "/10-mistakes-muslim-brands-make-online/",
+      "destination": "/article-10-mistakes-muslim-brands-make-online.html",
+      "permanent": true
+    },
+    {
+      "source": "/10-mistakes-muslim-brands-make-online/feed/",
+      "destination": "/article-10-mistakes-muslim-brands-make-online.html",
+      "permanent": true
+    },
+    {
+      "source": "/unveiling-halal-marketing-harnessing-cultural-sensitivity-for-business-growth/",
+      "destination": "/article-halal-marketing.html",
+      "permanent": true
+    },
+    {
+      "source": "/unveiling-halal-marketing-harnessing-cultural-sensitivity-for-business-growth/feed/",
+      "destination": "/article-halal-marketing.html",
+      "permanent": true
+    },
+    {
+      "source": "/why-it-is-important-for-muslim-businesses-to-collaborate-and-digitalize-their-online-presence/",
+      "destination": "/insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/blockchain-week-malaysia/",
+      "destination": "/insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/shop/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/shop/page/:n/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/None/",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(ar|de|ms|tr|zh)/None/",
+      "destination": "/:lang/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/None",
+      "destination": "/work.html",
+      "permanent": true
+    },
+    {
+      "source": "/:lang(ar|de|ms|tr|zh)/None",
+      "destination": "/:lang/work.html",
       "permanent": true
     }
   ]
