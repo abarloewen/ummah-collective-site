@@ -321,7 +321,7 @@ select option,select optgroup{background-color:#0F1512;color:var(--bone)}
 
 footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:60px 0 36px}
 .f-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:30px;margin-bottom:42px}
-.f-grid h6{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin-bottom:14px}
+.f-grid .h6{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin-bottom:14px}
 .f-grid a{display:block;color:var(--dim);font-size:14.5px;padding:5px 0}.f-grid a:hover{color:var(--bone)}
 .f-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;padding-top:24px;border-top:1px solid var(--line2);font-family:var(--mono);font-size:11px;color:var(--dim2)}
 @media(max-width:860px){.f-grid{grid-template-columns:1fr 1fr}}
@@ -373,7 +373,7 @@ body[dir=rtl] .hud{right:auto;left:var(--gut)}
 .mega-link{border-radius:10px;padding:9px 10px!important;margin:0 -10px}
 .mega-link:hover{background:rgba(255,255,255,.04)}
 .mega-in{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.mega h6{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);margin-bottom:12px}
+.mega .h6{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);margin-bottom:12px}
 .mega a{display:block;color:var(--dim);font-size:14px;padding:6px 0}
 .mega a:hover{color:var(--bone);padding-left:6px;transition:.25s}
 @media(max-width:1024px){.mega{display:none}}
@@ -646,7 +646,7 @@ nav .btn-fill{padding:11px 20px}
 .mega{top:84px;padding:30px var(--gut)}
 .mega-in{gap:26px!important}
 .mega-link .ic{width:30px;height:30px}
-.mega-col h6{font-size:10.5px;margin-bottom:10px}
+.mega-col .h6{font-size:10.5px;margin-bottom:10px}
 .lang>button{padding:7px 11px}
 
 /* ===== visible lottie marks ===== */
@@ -1361,7 +1361,7 @@ a,button,.btn,summary,input,select,textarea,.tile,.erow{touch-action:manipulatio
   .f-grid{grid-template-columns:1fr 1fr!important;gap:22px 18px!important}
   .f-grid>div:first-child{grid-column:1/-1}
   .f-grid a{padding:4px 0;font-size:14px}
-  .f-grid h6{margin-bottom:10px}
+  .f-grid .h6{margin-bottom:10px}
   footer{padding-bottom:18px}
 }
 
@@ -1403,7 +1403,7 @@ a,button,.btn,summary,input,select,textarea,.tile,.erow{touch-action:manipulatio
 
 /* ---- footer newsletter (2026-07-05) ---- */
 .nlf{margin-top:22px}
-.nlf h6{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
+.nlf .h6{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
 .nlf-p{font-size:13px;color:var(--dim);max-width:34ch;margin-bottom:10px}
 .nlf-f{display:flex;gap:8px;max-width:360px}
 .nlf-f input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--bone);font-family:var(--sans);font-size:16px;outline:none}
@@ -1430,3 +1430,6 @@ a,button,.btn,summary,input,select,textarea,.tile,.erow{touch-action:manipulatio
 .overlay{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(4,6,5,.988);transition:transform .45s cubic-bezier(.76,0,.24,1),visibility 0s linear .45s}
 .overlay.open{transition:transform .45s cubic-bezier(.76,0,.24,1),visibility 0s}
 }
+
+/* 2026-10-14: menu/footer labels are div.h6 (not h6) for a clean heading outline; keep the old bold weight */
+.h6{font-weight:700}

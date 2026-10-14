@@ -51,7 +51,7 @@ def _plain(s): return re.sub('<[^>]+>','',html.unescape(str(s))).strip()
 def _ld(obj): return '<script type="application/ld+json">'+json.dumps(obj,ensure_ascii=False)+'</script>'
 def faq_ld(faq): return _ld({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":_plain(q),"acceptedAnswer":{"@type":"Answer","text":_plain(a)}} for q,a in faq]})
 GLOBAL_LD=json.dumps({"@context":"https://schema.org","@graph":[
- {"@type":["Organization","ProfessionalService"],"@id":SITE+"/#org","name":"Ummah Collective","legalName":"Ummah Collective Sdn. Bhd.","url":SITE+"/","logo":LOGO,"image":LOGO,"email":"info@ummah-collective.com","telephone":"+60 11 3326 2709","foundingDate":"2022","founder":{"@type":"Person","name":"Attila von Barloewen"},"address":{"@type":"PostalAddress","addressLocality":"Kuala Lumpur","addressCountry":"MY"},"areaServed":["MY","DE","AE","SA","SG"],"description":"Applied-AI studio — the software, AI agents, CRMs and growth systems modern companies run on. Kuala Lumpur, Berlin, borderless.","sameAs":["https://www.linkedin.com/company/ummah-collective/"]},
+ {"@type":["Organization","ProfessionalService"],"@id":SITE+"/#org","name":"Ummah Collective","legalName":"Ummah Collective Sdn. Bhd.","url":SITE+"/","logo":SITE+"/assets/logo-square.png","image":SITE+"/assets/logo-square.png","email":"info@ummah-collective.com","telephone":"+60 11 3326 2709","foundingDate":"2022","founder":{"@type":"Person","name":"Attila von Barloewen"},"address":{"@type":"PostalAddress","addressLocality":"Kuala Lumpur","addressCountry":"MY"},"areaServed":["MY","DE","AE","SA","SG"],"description":"Applied-AI studio — the software, AI agents, CRMs and growth systems modern companies run on. Kuala Lumpur, Berlin, borderless.","sameAs":["https://www.linkedin.com/company/ummah-collective/","https://www.instagram.com/ummahcollective/"]},
  {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Ummah Collective","inLanguage":"en","publisher":{"@id":SITE+"/#org"}}
 ]},ensure_ascii=False)
 FXMAP={'default':'aurora','services':'mesh','work':'particles','ventures':'grid','insights':'grid','contact':'aurora','about':'particles','market':'mesh'}
@@ -237,7 +237,7 @@ def nav():
         txt=('<span class="mw-txt"><span>'+DESC.get(s,'')+'</span></span>') if isword else ('<span><b>'+label+'</b><span>'+DESC.get(s,'')+'</span></span>')
         tgt=' target="_blank" rel="noopener"' if _href(s).startswith('http') else ''
         return '<a class="mega-link'+(' mega-word' if isword else '')+'" href="'+_href(s)+'"'+tgt+' data-title="'+ti+'" data-desc="'+ds+'">'+icon+txt+'</a>'
-    def col(g,items): return '<div class="mega-col"><h6>'+g+'</h6>'+"".join(mlink(s,t) for s,t in items)+'</div>'
+    def col(g,items): return '<div class="mega-col"><div class="h6">'+g+'</div>'+"".join(mlink(s,t) for s,t in items)+'</div>'
     cols="".join(col(*g) for g in MEGA)
     prev=('<div class="mega-preview" id="megaPreview"><div class="mp-glow"></div>'
       '<div class="pv"><span class="pk">Start here</span>'
@@ -292,15 +292,21 @@ def footer():
     return f'''<footer><div class="wrap"><div class="f-grid">
     <div><a href="index.html" class="brand"><img class="logo" src="{LOGO}" alt="Ummah Collective"><span class="wmtext" style="display:none">Ummah Collective</span></a>
       <p style="margin-top:14px;max-width:32ch" data-i18n="ftag">Intelligence, with integrity. An applied-AI studio for the trust economy &mdash; the software, agents and systems modern companies run on.</p></div>
-    <div><h6 data-i18n="services">Services</h6>{svc}<a href="services.html" data-i18n="allsol">All solutions &rarr;</a></div>
-    <div><h6 data-i18n="products">Products</h6><a href="https://www.noon-os.com" target="_blank" rel="noopener">Noon OS</a><a href="https://www.deengen.com" target="_blank" rel="noopener">DeenGen.com</a><a href="https://www.rayhan-kids.com" target="_blank" rel="noopener">Rayhan Kids</a><a href="https://niyya.my" target="_blank" rel="noopener">niyya.</a><a href="launch-bundle.html">Launch Bundle</a><a href="ventures.html" data-i18n="ventures">Ventures</a></div>
-    <div><h6 data-i18n="company">Company</h6><a href="work.html" data-i18n="work">Work</a><a href="about.html" data-i18n="about">About</a><a href="process.html">How we work</a><a href="founders-club.html" data-i18n="club">Founders Club</a><a href="insights.html" data-i18n="insights">Insights</a></div>
-    <div><h6 data-i18n="connect">Connect</h6><a href="booking.html" data-i18n="book">Book a call</a><a href="mailto:info@ummah-collective.com" data-i18n="email">Email</a><a href="{WA}" data-i18n="whatsapp">WhatsApp</a><a href="https://www.linkedin.com/company/ummah-collective/">LinkedIn</a><a href="imprint.html" data-i18n="imprint">Legal notice</a><a href="privacy.html" data-i18n="f_privacy">Privacy Policy</a><a href="terms.html" data-i18n="f_terms">Terms of Use</a></div>
+    <div><div class="h6" data-i18n="services">Services</div>{svc}<a href="services.html" data-i18n="allsol">All solutions &rarr;</a></div>
+    <div><div class="h6" data-i18n="products">Products</div><a href="https://www.noon-os.com" target="_blank" rel="noopener">Noon OS</a><a href="https://www.deengen.com" target="_blank" rel="noopener">DeenGen.com</a><a href="https://www.rayhan-kids.com" target="_blank" rel="noopener">Rayhan Kids</a><a href="https://niyya.my" target="_blank" rel="noopener">niyya.</a><a href="launch-bundle.html">Launch Bundle</a><a href="ventures.html" data-i18n="ventures">Ventures</a></div>
+    <div><div class="h6" data-i18n="company">Company</div><a href="work.html" data-i18n="work">Work</a><a href="about.html" data-i18n="about">About</a><a href="process.html">How we work</a><a href="founders-club.html" data-i18n="club">Founders Club</a><a href="insights.html" data-i18n="insights">Insights</a></div>
+    <div><div class="h6" data-i18n="connect">Connect</div><a href="booking.html" data-i18n="book">Book a call</a><a href="mailto:info@ummah-collective.com" data-i18n="email">Email</a><a href="{WA}" data-i18n="whatsapp">WhatsApp</a><a href="https://www.linkedin.com/company/ummah-collective/">LinkedIn</a><a href="imprint.html" data-i18n="imprint">Legal notice</a><a href="privacy.html" data-i18n="f_privacy">Privacy Policy</a><a href="terms.html" data-i18n="f_terms">Terms of Use</a></div>
   </div><div class="f-bot"><span>&copy; 2026 Ummah Collective Sdn. Bhd.</span><span>Kuala Lumpur &middot; Berlin &middot; Borderless</span></div></div></footer>'''
 
 def absart(cls="art-hero"): return '<div class="abs '+cls+' reveal"></div>'
+def _seo_title(t):
+    """2026-10-14: drop the brand suffix when the title would be cut off in Google (>65 chars)."""
+    import re as _re
+    s=_re.sub(r' (?:—|\||-) Ummah Collective$','',t)
+    return s if len(t)>65 and len(s)>=20 else t
 def page(fname,title,desc,body,aurora="default",bg="",ld=""):
     canon=SITE+"/"+("" if fname=="index.html" else fname)
+    title=_seo_title(title)
     html=f'''<!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title><meta name="description" content="{desc}"><link rel="canonical" href="{canon}"><meta name="robots" content="index,follow"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:type" content="website"><meta property="og:url" content="{canon}"><meta property="og:image" content="{SITE}/og-image-2026.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="Ummah Collective"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{SITE}/og-image-2026.png">{PERF}<link rel="stylesheet" href="uc.css"><script type="application/ld+json">{GLOBAL_LD}</script>{ld}</head>
@@ -503,7 +509,7 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
 RU='https://ummah-collective.com/wp-content/uploads/'
 PROJECTS=[
  ("anaaka","ANAAKA","Brand &middot; Commerce &middot; Market Entry","2023&ndash;24","Halal skincare built from zero Malaysian presence to category leader.",["Full ecosystem: brand, store, tracking","18.45% revenue from organic search","Flagship store @ TRX, Kuala Lumpur"],"https://anaaka.com.my","/assets/anaaka-portfolio.png"),
- ("matchakoeln","Matcha Köln","Web &middot; 7 Languages","2026","Premium multilingual redesign with a booking wizard.",["7 languages incl. AR-RTL","Booking wizard + commerce","Cinematic premium build"],None,U("1536256263959-770b48d82b0a")),
+ ("matchakoeln","Matcha Köln","Web &middot; 7 Languages","2026","Premium multilingual redesign with a booking wizard.",["7 languages incl. AR-RTL","Booking wizard + commerce","Cinematic premium build"],"https://matchakoeln.de",U("1536256263959-770b48d82b0a")),
  ("arju","ARJU","Platform &middot; Learning","2026","A Netflix-style Islamic learning platform with strategy blueprint.",["10-page multilingual prototype","Course + creator architecture","Strategy blueprint"],None,U("1769428197774-2dfdffe4a723")),
  ("almaruf","Almaruf Maid","Web &middot; CRM &middot; Malaysia","2026","Website rebuild in four languages + custom CRM for Kuala Lumpur's trusted maid agency.",["7 pages &middot; 4 languages","Custom CRM built for the business","Staged on Vercel"],"https://almaruf-maid.vercel.app",U("1581578731548-c64695cc6952")),
  ("asyraf-takaful","Asyraf Takaful","Web &middot; Finance","2026","A trilingual, BM-first home for a Zurich Takaful specialist &mdash; booking wizard and live calculators included.",["BM / EN / AR-RTL","Booking wizard + 4 calculators","Staged on Vercel"],"https://asyraf-takaful.vercel.app",U("1450101499163-c8848c66ca85")),
@@ -784,7 +790,7 @@ def work_page():
         "Every project &mdash; client builds, legacy work and our own ventures. 100+ projects across Southeast Asia, Europe and MENA.")+f'''
 <section style="padding-top:24px"><div class="wrap"><div class="grid g3">{tiles}</div></div></section>
 '''+cta()
-    return page("work.html","Work — Ummah Collective","All projects: ANAAKA, Matcha Köln, ARJU, Almaruf, Shoraka and more.",body,aurora="work")
+    return page("work.html","Work — Ummah Collective","Selected work by Ummah Collective: brands, websites, CRMs and AI systems for ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU and more.",body,aurora="work")
 
 def project_page(s,n,c,y,b,scope,url,im):
     crumb='<a href="index.html">Home</a> / <a href="work.html">Work</a> / '+n
@@ -877,7 +883,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{url}" class="btn btn-fill" target="_blank" rel="noopener">Visit anaaka.com.my &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want results<br>like <em>these?</em>')
-        return page(f"project-{s}.html","ANAAKA — Halal Skincare Case Study | Ummah Collective","How Ummah Collective built ANAAKA, a European halal skincare & haircare brand, and took it into Malaysia from zero to a TRX flagship — brand, e-commerce, tracking and market entry.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"ANAAKA — Halal Skincare Case Study","about":"Brand, e-commerce and market entry for ANAAKA halal skincare","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-anaaka.html"}))
+        return page(f"project-{s}.html","ANAAKA — Halal Skincare Case Study | Ummah Collective","How Ummah Collective built ANAAKA, a European halal skincare and haircare brand, and took it from zero into Malaysia: brand, e-commerce and market entry.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"ANAAKA — Halal Skincare Case Study","about":"Brand, e-commerce and market entry for ANAAKA halal skincare","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-anaaka.html"}))
     if s=='matchakoeln':
         HB='https://images.unsplash.com/photo-1708573106073-e27e43ec7fda?w=1600&q=80'
         SQ='https://images.squarespace-cdn.com/content/v1/69ee6d3b517677487d633f31/'
@@ -1071,7 +1077,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{AMURL}" class="btn btn-fill" target="_blank" rel="noopener">See the rebuilt site &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a system<br>like <em>this?</em>')
-        return page("project-almaruf.html","Almaruf Maid — Website Rebuild & Custom CRM | Ummah Collective","How Ummah Collective rebuilt Almaruf Maid Agency's website in four languages with WhatsApp-first conversion, a cleaning sub-brand, and custom CRM software for placements, permits and renewals.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Almaruf Maid — Website Rebuild & Custom CRM","about":"Four-language website rebuild and custom CRM for Almaruf Maid Agency, Kuala Lumpur","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-almaruf.html"}))
+        return page("project-almaruf.html","Almaruf Maid — Website Rebuild & Custom CRM | Ummah Collective","How we rebuilt Almaruf Maid Agency's website in four languages with WhatsApp-first conversion, plus custom CRM software for placements, permits and renewals.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Almaruf Maid — Website Rebuild & Custom CRM","about":"Four-language website rebuild and custom CRM for Almaruf Maid Agency, Kuala Lumpur","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-almaruf.html"}))
     if s=='asyraf-takaful':
         ATURL='https://asyraf-takaful.vercel.app'
         _hero=('<div class="at-hero"><div>'
@@ -1135,7 +1141,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{ATURL}" class="btn btn-fill" target="_blank" rel="noopener">See the live build &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a site<br>like <em>this?</em>')
-        return page("project-asyraf-takaful.html","Asyraf Takaful — Trilingual Site, Booking Wizard & Calculators | Ummah Collective","How Ummah Collective built Hj. Asyraf Fauzi, an authorised Zurich Takaful specialist, a trilingual BM-first website with a 4-step booking wizard and four live takaful calculators.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Asyraf Takaful — Trilingual Website, Booking Wizard & Calculators","about":"Trilingual BM/EN/AR website with booking wizard and takaful calculators for a Zurich Takaful specialist","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-asyraf-takaful.html"}))
+        return page("project-asyraf-takaful.html","Asyraf Takaful — Trilingual Site, Booking Wizard & Calculators | Ummah Collective","A trilingual, BM-first website for a Zurich Takaful specialist, with a 4-step booking wizard and four live takaful calculators. Built by Ummah Collective.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Asyraf Takaful — Trilingual Website, Booking Wizard & Calculators","about":"Trilingual BM/EN/AR website with booking wizard and takaful calculators for a Zurich Takaful specialist","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-asyraf-takaful.html"}))
     if s=='dig-it-company':
         DIURL='https://dig-it-companyv2.vercel.app'
         _svg=('<svg viewBox="0 0 420 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
@@ -1212,7 +1218,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{DIURL}" class="btn btn-fill" target="_blank" rel="noopener">See the redesign live &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a system<br>like <em>this?</em>')
-        return page("project-dig-it-company.html","Dig it! Company — Feldplan Redesign, Trilingual | Ummah Collective","How Ummah Collective redesigned Dig it! Company, a Bavarian field-archaeology firm — a survey-blueprint design system, trilingual DE/EN/AR with RTL, and a 70-project archive.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Dig it! Company — Feldplan Website Redesign","about":"Survey-blueprint trilingual website redesign for a Bavarian field-archaeology firm","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-dig-it-company.html"}))
+        return page("project-dig-it-company.html","Dig it! Company — Feldplan Redesign, Trilingual | Ummah Collective","How we redesigned Dig it! Company, a Bavarian field-archaeology firm: a survey-blueprint design system, trilingual DE/EN/AR with RTL, 70-project archive.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Dig it! Company — Feldplan Website Redesign","about":"Survey-blueprint trilingual website redesign for a Bavarian field-archaeology firm","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-dig-it-company.html"}))
     if s=='shoraka':
         SKURL='https://shorakagroup.com'
         _hero=('<div class="sk-hero"><i class="sk-hex h1x"></i><i class="sk-hex h2x"></i><div class="sk-hl">'
@@ -1273,7 +1279,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{SKURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit shorakagroup.com &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a platform<br>like <em>this?</em>')
-        return page("project-shoraka.html","Shoraka Group — Shariah-Compliant Fintech Website | Ummah Collective","How Ummah Collective built shorakagroup.com — UX documentation, high-fidelity UI, SEO and analytics for a Shariah-compliant fintech group with six platforms, live and carrying real press coverage.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Shoraka Group — Fintech Website","about":"Website, UX documentation, UI system, SEO and analytics for Shoraka Group, Shariah-compliant digital finance","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-shoraka.html"}))
+        return page("project-shoraka.html","Shoraka Group — Shariah-Compliant Fintech Website | Ummah Collective","How we built shorakagroup.com for a Shariah-compliant fintech group: UX documentation, high-fidelity UI, SEO and analytics across six platforms.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Shoraka Group — Fintech Website","about":"Website, UX documentation, UI system, SEO and analytics for Shoraka Group, Shariah-compliant digital finance","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-shoraka.html"}))
     if s=='barmer':
         BLOGO='https://commons.wikimedia.org/wiki/Special:FilePath/BARMER_Logo.svg'
         _herob=('<section style="padding-top:10px"><div class="wrap"><div class="bm-hero reveal">'
@@ -1356,7 +1362,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{BPURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit b-plus-ag.de &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a site<br>that <em>recruits?</em>')
-        return page("project-b-plus-ag.html","B Plus AG — Website, Recruiting & Campaigns | Ummah Collective","How Ummah Collective built b-plus-ag.de for a Berlin engineering firm — corporate website, a Karriere recruiting hub with live job listings, and the campaigns to fill them.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"B Plus Planungs-AG — Website, Recruiting Hub & Campaigns","about":"Corporate website, recruiting hub and campaigns for B Plus Planungs-AG, Berlin engineering firm","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-b-plus-ag.html"}))
+        return page("project-b-plus-ag.html","B Plus AG — Website, Recruiting & Campaigns | Ummah Collective","How we built b-plus-ag.de for a Berlin engineering firm: corporate website, a recruiting hub with live job listings and the campaigns to fill them.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"B Plus Planungs-AG — Website, Recruiting Hub & Campaigns","about":"Corporate website, recruiting hub and campaigns for B Plus Planungs-AG, Berlin engineering firm","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-b-plus-ag.html"}))
     if s=='jugendberufsagentur':
         JBURL='https://www.meinejbainbrandenburg.de'
         _hero=('<div class="jb-hero"><span class="jb-blob b1"></span><span class="jb-blob b2"></span><span class="jb-dash d1"></span><span class="jb-dash d2"></span>'
@@ -1405,7 +1411,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{JBURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit meinejbainbrandenburg.de &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a partner<br>who <em>runs it?</em>')
-        return page("project-jugendberufsagentur.html","Jugendberufsagentur Brandenburg — Brand, Website & Operations | Ummah Collective","How Ummah Collective branded, built and runs meinejbainbrandenburg.de — one CI and website for three Jugendberufsagenturen in Brandenburg, with ongoing management and communication since 2022.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Jugendberufsagentur Brandenburg — Branding, Website & Operations","about":"Branding, website and ongoing operation for three Jugendberufsagenturen in Brandenburg","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-jugendberufsagentur.html"}))
+        return page("project-jugendberufsagentur.html","Jugendberufsagentur Brandenburg — Brand, Website & Operations | Ummah Collective","How Ummah Collective branded, built and runs meinejbainbrandenburg.de: one identity and website for three Jugendberufsagenturen in Brandenburg since 2022.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Jugendberufsagentur Brandenburg — Branding, Website & Operations","about":"Branding, website and ongoing operation for three Jugendberufsagenturen in Brandenburg","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-jugendberufsagentur.html"}))
     if s=='optima':
         OPURL='https://optima-limited.com'
         _hero=('<div class="op-hero"><span class="op-glow"></span><div class="op-hl">'
@@ -1494,7 +1500,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{ACURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit arcitymedia.de &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want this craft<br>on <em>your brand?</em>')
-        return page("project-ar-city-media.html","AR City Media — The Berlin Heritage | Ummah Collective","AR City Media, Berlin: the ethno-marketing and full-service agency where Ummah Collective's founder built brands from 2014 to 2022 — BARMER, IHK Dresden, Eurogida and the roots of UC's cultural fluency.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"AR City Media — Berlin Heritage","about":"The Berlin ethno-marketing agency years behind Ummah Collective, 2014-2022","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-ar-city-media.html"}))
+        return page("project-ar-city-media.html","AR City Media — The Berlin Heritage | Ummah Collective","AR City Media, Berlin: the ethno-marketing agency where Ummah Collective's founder built brands from 2014 to 2022, including BARMER, IHK Dresden and Eurogida.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"AR City Media — Berlin Heritage","about":"The Berlin ethno-marketing agency years behind Ummah Collective, 2014-2022","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-ar-city-media.html"}))
     if s=='noonos':
         NOURL='https://www.noon-os.com'
         _hero=('<div class="no-hero"><div class="no-hl">'
@@ -1548,7 +1554,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{NOURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit noon-os.com &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a product<br>like <em>this?</em>')
-        return page("project-noonos.html","Noon OS — Our Flagship Product | Ummah Collective","NoonOS: the operating system for Muslim founders & CEOs — CRM, finance, marketing and community, halal by design. Built, branded and shipped in-house by Ummah Collective.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"NoonOS — Flagship Product","about":"NoonOS, the business operating system for Muslim founders, built by Ummah Collective","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-noonos.html"}))
+        return page("project-noonos.html","Noon OS — Our Flagship Product | Ummah Collective","Noon OS, the operating system for Muslim founders and CEOs: CRM, finance, marketing and community, halal by design. Built in-house by Ummah Collective.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"NoonOS — Flagship Product","about":"NoonOS, the business operating system for Muslim founders, built by Ummah Collective","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-noonos.html"}))
     if s=='faircharity':
         FCURL='https://faircharity.de'
         _hero=('<div class="fc-hero"><div class="fc-nav"><b>FAIR<span>CHARITY</span></b><span class="fc-links">KURBAN &middot; PROJEKTE &middot; RELIGI&Ouml;SE SPENDEN &middot; &Uuml;BER UNS</span><span class="fc-cta">&#9829; Jetzt Spenden</span></div>'
@@ -1592,7 +1598,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{FCURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit faircharity.de &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want a platform<br>like <em>this?</em>')
-        return page("project-faircharity.html","Faircharity e.V. — Website, Donation Gateway & UX | Ummah Collective","How Ummah Collective built faircharity.de — website, donation payment gateway (incl. Kurban and religious giving), UX/UI and SEO for a German charity reforming how giving works.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Faircharity e.V. — Website & Donation Gateway","about":"Website, donation payment gateway, UX/UI and SEO for Faircharity e.V.","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-faircharity.html"}))
+        return page("project-faircharity.html","Faircharity e.V. — Website, Donation Gateway & UX | Ummah Collective","How we built faircharity.de: website, donation gateway including Kurban giving, UX/UI and SEO for a German charity reforming how giving works.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Faircharity e.V. — Website & Donation Gateway","about":"Website, donation payment gateway, UX/UI and SEO for Faircharity e.V.","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-faircharity.html"}))
     if s=='kamar-halal':
         KHURL='https://www.kamar-halal.de/en/'
         _hero=('<div class="kh-hero"><div class="kh-nav"><b class="kh-logo">KAMAR</b><span class="kh-links">HOME &middot; PRODUCTS &middot; ABOUT US &middot; FAQ &middot; CERTIFICATE &middot; CONTACT</span><span class="kh-lang">DE &middot; EN &middot; TR</span></div>'
@@ -1635,7 +1641,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{KHURL}" class="btn btn-fill" target="_blank" rel="noopener">Visit kamar-halal.de &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Building a brand<br>on <em>trust?</em>')
-        return page("project-kamar-halal.html","Kamar Halal — Website, UI/UX & Halal-Certificate Consulting | Ummah Collective","How we built kamar-halal.de — the full website, UI/UX and halal-certificate consulting for Kamar, the 'Halal made in Germany' family producer, in German, English and Turkish.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Kamar Halal — Website & Halal-Certificate Consulting","about":"Website, UI/UX and halal-certificate consulting for Kamar.","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-kamar-halal.html"}))
+        return page("project-kamar-halal.html","Kamar Halal — Website, UI/UX & Halal-Certificate Consulting | Ummah Collective","How we built kamar-halal.de: website, UI/UX and halal-certificate consulting for Kamar, the 'Halal made in Germany' family producer, in three languages.",body,aurora="work",ld=_ld({"@context":"https://schema.org","@type":"CreativeWork","name":"Kamar Halal — Website & Halal-Certificate Consulting","about":"Website, UI/UX and halal-certificate consulting for Kamar.","creator":{"@id":SITE+"/#org"},"url":SITE+"/project-kamar-halal.html"}))
     if s=='eurogida':
         EGURL='https://www.eurogida.de'
         _hero=('<div class="eg-hero"><div class="eg-nav"><b class="eg-logo">euro<span>gida</span><i class="eg-leaf"></i></b><span class="eg-links">HOME &middot; AKTUELLES &middot; REZEPTE &middot; KOCHMAGAZINE &middot; PRODUKTE &middot; FILIALEN &middot; UNTERNEHMEN &middot; BLOG &middot; KONTAKT</span></div>'
@@ -1863,7 +1869,7 @@ def home():
 
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Questions, answered</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">(04) &mdash; FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
 '''+cta()
-    return page("index.html","Ummah Collective — Applied-AI Studio · AI Agents, Automation, Web & CRM","Applied-AI studio in Kuala Lumpur: done-for-you AI agents, business automation, premium web design and custom CRM — built for modern and halal-economy businesses. KL · Berlin · borderless.",body,aurora="default")
+    return page("index.html","Ummah Collective — Applied-AI Studio: AI Agents, Web & CRM","Applied-AI studio in Kuala Lumpur: AI agents, business automation, premium websites and custom CRM for modern and halal-economy businesses.",body,aurora="default")
 
 def services_overview():
     rows="".join(f'<a class="idx-row" href="service-{s}.html"><span class="no">{n}</span><span class="ti">{t}</span><span class="de">{i}</span><span class="go">&rarr;</span></a>' for s,n,t,_,i,*_ in SERVICES)
@@ -1893,7 +1899,7 @@ def about_page():
   <div class="card reveal"><div class="no">02</div><h3>Speed is a feature</h3><p>Weeks, not quarters.</p></div>
   <div class="card reveal"><div class="no">03</div><h3>Integrity scales</h3><p>Ethical, halal-aligned, transparent.</p></div></div></div></section>
 '''+cta('Work with<br>the <em>studio.</em>')
-    return page("about.html","About — Ummah Collective","Founded 2022 by Attila von Barloewen. Team, principles and markets.",body,aurora="about")
+    return page("about.html","About — Ummah Collective","Ummah Collective was founded in 2022 by Attila von Barloewen. Meet the team, the principles we work by and the markets we serve, from Kuala Lumpur to Berlin.",body,aurora="about")
 
 def process_page():
     steps=[("Discovery","We audit the goal, the data and the overhead — and find where intelligence pays off fastest."),("Planning","Premium UX and an architecture built to scale: a roadmap, not a slide deck."),("Development","Fixed-scope sprints. You see working software in days and go live in weeks."),("Delivery","We launch, maintain, optimise and extend — systems that get smarter over time.")]
@@ -1902,7 +1908,7 @@ def process_page():
         "A four-step process, AI-assisted end to end, that turns ambiguity into shipped systems fast.")+f'''
 <section style="padding-top:24px"><div class="wrap">{rows}</div></section>
 '''+cta()
-    return page("process.html","How We Work — Ummah Collective","Discovery, Planning, Development, Delivery — our four-step method.",body,aurora="services")
+    return page("process.html","How We Work — Ummah Collective","How we work: discovery, planning, development and delivery. A clear four-step method for AI agents, automation, websites and custom CRM projects.",body,aurora="services")
 
 def ventures_page():
     body=phero('<a href="index.html">Home</a> / Ventures',"Own businesses &middot; own balance sheet","We build<br>ventures, <em>too.</em>",
@@ -1984,7 +1990,7 @@ def insights_page():
     rows="".join(f'<a class="erow reveal" href="article-{s}.html"><span class="x">{c} &middot; {d}</span><span class="nm">{t}</span><span class="de">{l}</span></a>' for s,c,d,t,l,im,_ in ARTICLES)
     body=phero('<a href="index.html">Home</a> / Insights',"Insights","Notes from<br>the <em>studio.</em>","Thinking on applied AI, premium positioning and building digital assets for the values economy.")+f'''
 <section style="padding-top:24px"><div class="wrap">{rows}</div></section>'''+cta()
-    return page("insights.html","Insights — Ummah Collective","Applied AI, positioning and digital assets for the values economy.",body,aurora="insights")
+    return page("insights.html","Insights — Ummah Collective","Insights from Ummah Collective on applied AI, automation, positioning and digital growth for the values economy and halal-industry businesses.",body,aurora="insights")
 
 def contact_page():
     opts="".join(f'<option>{t}</option>' for t in ["Start a project"]+[t for _,_,t,*_ in SERVICES]+["Free AI audit","Something else"])
@@ -2003,7 +2009,7 @@ def contact_page():
     <p style="margin-bottom:18px"><a class="alink" href="{WA}">WhatsApp +60 11 3326 2709 <span class="ar">&rarr;</span></a></p>
     <div class="eyebrow" style="margin-top:18px"><span class="t"></span><span class="mono">Studio</span></div><p>Kuala Lumpur &middot; Berlin &middot; Borderless</p></div>
 </div></div></section>'''
-    return page("contact.html","Contact — Ummah Collective","Book a call, send a brief, or WhatsApp us.",body,aurora="contact")
+    return page("contact.html","Contact — Ummah Collective","Contact Ummah Collective in Kuala Lumpur: book a free call, send a project brief or message us on WhatsApp about AI, automation, web or CRM.",body,aurora="contact")
 
 def booking_page():
     svc="".join(f'<div class="opt" data-grp="service" data-val="{s}"><b>{t}</b><span>{e}</span></div>' for s,_,t,e,*_ in SERVICES[:6])
@@ -2020,7 +2026,7 @@ def booking_page():
   <div class="wiz-step"><h3>Your details</h3><div class="sub">So we can prepare.</div><div class="form"><div class="row"><div><label for="wizName">Name</label><input id="wizName" name="name" autocomplete="name" placeholder="Your name" required></div><div><label for="wizEmail">Email</label><input id="wizEmail" name="email" type="email" autocomplete="email" placeholder="you@company.com" required></div></div><div><label for="wizCompany">Company</label><input id="wizCompany" name="company" autocomplete="organization" placeholder="Company name"></div><div><label for="wizNotes">Anything we should know?</label><textarea id="wizNotes" name="notes" placeholder="Context, goals, timeline..."></textarea></div></div><div id="wizErr" class="mono" style="display:none;color:#ff6b6b;margin-top:10px"></div><div id="wizMsgs" hidden><span id="wizMsgName">Please add your name so we know who we&rsquo;re replying to.</span><span id="wizMsgMail">That email doesn&rsquo;t look right &mdash; we need it to send your confirmation.</span></div><div class="wiz-nav"><button class="btn btn-ghost" data-prev>&larr; Back</button><button class="btn btn-fill" id="wizFinish">Review &rarr;</button></div></div>
   <div class="wiz-step"><h3>Confirm &amp; send</h3><div class="sub">Summary</div><div class="card" style="margin-bottom:20px"><div class="mono" style="color:var(--acc2)">Your request</div><div id="wizSummary" style="font-family:var(--disp);font-size:22px;margin-top:8px">Project</div></div><p style="margin-bottom:20px" id="wizBlurb">Send this over and we'll confirm your slot by email &mdash; usually within a few hours.</p><div id="wizDone" style="display:none"><div class="card" style="margin-bottom:20px;border-color:var(--acc2)"><div class="mono" style="color:var(--acc2)">Request received</div><div style="font-family:var(--disp);font-size:22px;margin-top:8px">Thank you &mdash; we'll confirm your slot by email shortly.</div><p style="margin-top:10px">If it's urgent, message us on <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a>.</p></div></div><div id="wizFail" style="display:none"><div class="card" style="margin-bottom:20px;border-color:#ff6b6b"><div class="mono" style="color:#ff6b6b">Couldn't send</div><p style="margin-top:8px">Something went wrong on our side. Please reach us directly &mdash; we'll come straight back to you:</p><p style="margin-top:10px"><a href="mailto:info@ummah-collective.com">info@ummah-collective.com</a> &nbsp;&middot;&nbsp; <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a></p></div></div><div class="wiz-nav" id="wizNav5"><button class="btn btn-ghost" data-prev>&larr; Back</button><button class="btn btn-fill" id="wizSend" data-sending="Sending&hellip;">Send request &rarr;</button></div></div>
 </div></div></section>'''
-    return page("booking.html","Book a call — Ummah Collective","Book a free scoping call with Ummah Collective.",body,aurora="contact")
+    return page("booking.html","Book a call — Ummah Collective","Book a free scoping call with Ummah Collective. Pick a time, tell us about your project and get a clear next step for AI, automation, web or CRM.",body,aurora="contact")
 
 def _legal_head(crumb,h1,intro):
     return phero('<a href="index.html">Home</a> / '+crumb,'Legal',h1,intro)
@@ -2169,7 +2175,7 @@ def noon_os_page():
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">How it works</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Idea to live in weeks</span></div></div><div class="grid g3" style="gap:14px">{stc}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Custom systems, answered</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
 '''+cta('Book a<br><em>CRM audit.</em>')
-    return page("noon-os.html","Noon OS — Halal CRM & Business Software for Muslim Founders","Noon OS is the halal CRM and business operating system for Muslim founders and halal-economy brands — sales, projects, finance and community in one panel. We also build bespoke CRMs you own.",body,aurora="services",ld=faq_ld(faq))
+    return page("noon-os.html","Noon OS — Halal CRM & Business Software for Muslim Founders","Noon OS is the halal CRM and business operating system for Muslim founders: sales, projects, finance and community in one panel.",body,aurora="services",ld=faq_ld(faq))
 
 def launch_bundle_page():
     incl=[("Premium website &mdash; new or redesign","A conversion-built, multilingual site, designed and developed by us &mdash; built fresh, or your existing one rebuilt and modernised. Fast, secure and structured to turn visitors into real enquiries, not just views."),
@@ -2208,7 +2214,7 @@ def launch_bundle_page():
 <section style="padding-top:0"><div class="wrap" style="text-align:center"><div class="quote reveal" style="margin:0 auto">&ldquo;They built our entire ecosystem &mdash; brand, site, tracking and a flagship store. <em>Not a campaign. An asset.</em>&rdquo;</div><div class="quote-by reveal">ANAAKA &mdash; Halal Skincare &middot; Flagship @ TRX, KL</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Questions</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
 '''+cta('Claim your<br><em>launch slot.</em>')
-    return page("launch-bundle.html","Launch Bundle — Exclusive Launch for Halal-Industry Businesses | Ummah Collective","An exclusive, done-for-you launch bundle for halal-industry businesses: premium website, content, social, brand guide and 6 months of Noon OS. By application — only 4 onboarding slots a month.",body,aurora="market",ld=faq_ld(faq))
+    return page("launch-bundle.html","Launch Bundle — Exclusive Launch for Halal-Industry Businesses | Ummah Collective","A done-for-you launch bundle for halal-industry businesses: premium website, content, social, brand guide and 6 months of Noon OS. By application only.",body,aurora="market",ld=faq_ld(faq))
 
 def liquid_preview():
     body=phero('<a href="index.html">Home</a> / Background variant','Prototype / Liquid background','Liquid &mdash; <em>metaball</em> background.',

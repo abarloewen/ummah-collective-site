@@ -4,6 +4,15 @@
    ============================================================ */
 (function(){
   'use strict';
+  /* GA4 conversion events (2026-10-14). Safe no-op when gtag is absent or consent denied (Consent Mode handles it). */
+  function ucEv(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
+  document.addEventListener('click',function(e){
+    var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a) return;
+    var h=a.getAttribute('href')||'';
+    if(/^https?:\/\/(wa\.me|api\.whatsapp\.com)\//i.test(h)) ucEv('whatsapp_click',{link_url:h,page:location.pathname});
+    else if(/^tel:/i.test(h)) ucEv('phone_click',{page:location.pathname});
+    else if(/^mailto:/i.test(h)) ucEv('email_click',{page:location.pathname});
+  },true);
   var hasG=window.gsap&&window.ScrollTrigger; if(hasG) gsap.registerPlugin(ScrollTrigger);
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var softGL=(function(){ /* skip WebGL on software renderers (Lighthouse/SwiftShader, GPU-less devices) */
@@ -174,7 +183,7 @@
   }
   /* snapshot translatable body text once, so window.TR can swap it per language */
   function snapTR(){
-    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .cap, main .prodcard .pt span, main .pc-tags span, main .pc-meta, main .pc-go, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer h6, footer a, footer p, .overlay .ov-h, .overlay .ov-item b, .overlay .ov-tx>span, .overlay .ov-clink, .overlay .ov-cta-k, .overlay .ov-cta-h, main .flow .ftitle, main .flow .ftag, main .fstep .ftx span, main .funnel .fl, main .road .rstep span, main .serp .stx span, main .dpc-k, main .dpc-b, main .svc .svc-l, main .svc .svc-b, main .svc-foot';
+    var sel='main p, main li, main b, main h2, main h3, main h4, main .nm, main .res, main .ti, main .de, main .cat, main summary, main .quote-by, main .cap, main .prodcard .pt span, main .pc-tags span, main .pc-meta, main .pc-go, main blockquote, main figcaption, main .badge, main .eyebrow .mono, .phero h1, .phero p, nav .mega-col .h6, nav .mega-link b, nav .mega-link span span, nav .mega-preview .pk, nav .mega-preview .lab, nav .mega-preview .dsc, nav .mega-btns a, nav .subnav a, footer .h6, footer a, footer p, .overlay .ov-h, .overlay .ov-item b, .overlay .ov-tx>span, .overlay .ov-clink, .overlay .ov-cta-k, .overlay .ov-cta-h, main .flow .ftitle, main .flow .ftag, main .fstep .ftx span, main .funnel .fl, main .road .rstep span, main .serp .stx span, main .dpc-k, main .dpc-b, main .svc .svc-l, main .svc .svc-b, main .svc-foot';
     document.querySelectorAll(sel).forEach(function(el){
       if(el.hasAttribute('data-i18n')||el.hasAttribute('data-en')||el.children.length) return;
       var t=el.textContent.trim(); if(t&&t.length<=600) el.setAttribute('data-en',t);
@@ -194,12 +203,12 @@
       tr:{h:'Bülten',p:'Sistemler, AI ve güven ekonomisi — ayda bir, gürültüsüz.',ph:'siz@sirket.com',b:'Abone ol',ok:'Abone oldunuz — hoş geldiniz.',err:'Bir şeyler ters gitti — tekrar deneyin.'}
     }[L]||{h:'Newsletter',p:'',ph:'you@company.com',b:'Subscribe',ok:'Subscribed.',err:'Error.'};
     var w=document.createElement('div'); w.className='nlf';
-    w.innerHTML='<h6>'+T.h+'</h6><p class="nlf-p">'+T.p+'</p><form class="nlf-f" novalidate><input type="email" required placeholder="'+T.ph+'" aria-label="Email"><button type="submit" class="btn btn-fill">'+T.b+'</button></form><div class="nlf-msg" hidden></div>';
+    w.innerHTML='<div class="h6">'+T.h+'</div><p class="nlf-p">'+T.p+'</p><form class="nlf-f" novalidate><input type="email" required placeholder="'+T.ph+'" aria-label="Email"><button type="submit" class="btn btn-fill">'+T.b+'</button></form><div class="nlf-msg" hidden></div>';
     col.appendChild(w);
     var f=w.querySelector('form'),msg=w.querySelector('.nlf-msg');
     f.addEventListener('submit',function(e){e.preventDefault();
       var em=f.querySelector('input').value.trim(); if(!em||em.indexOf('@')<0) return;
-      var done=function(ok){msg.hidden=false;msg.textContent=ok?T.ok:T.err;if(ok)f.hidden=true;};
+      var done=function(ok){msg.hidden=false;msg.textContent=ok?T.ok:T.err;if(ok){f.hidden=true;ucEv('sign_up',{method:'newsletter'});}};
       if(UC_NL_ENDPOINT){
         var fd=new FormData(); fd.append('EMAIL',em); fd.append('email',em); fd.append('locale',L);
         fetch(UC_NL_ENDPOINT,{method:'POST',body:fd,mode:'no-cors'}).then(function(){done(true)}).catch(function(){done(false)});
@@ -398,7 +407,7 @@
         headers:{'Content-Type':'application/json','Accept':'application/json'},
         body:JSON.stringify(payload)
       }).then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
-        .then(function(){ ok();
+        .then(function(){ ok(); ucEv('generate_lead',{lead_type:'booking_wizard',service:payload.service||'',page:location.pathname});
           /* optional: mirror into UCpanel when it's wired */
           if(BOOKING.ucp){ try{ fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }catch(e){} }
         })
@@ -698,7 +707,7 @@
       else if(BOOKING.email){ jobs.push(fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:subj,_captcha:'false',_template:'table',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,requested_meeting:mtxt,industry:d.industry,timeline:d.timeline,preferred_contact:d.contact,how_heard:d.heard,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
       if(BOOKING.ucp){ jobs.push(fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:d.name,email:d.email,phone:d.phone,company:d.company,title:d.service,source:'website',status:'new',notes:notes})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
       var dsub=m.querySelector('.ucbk-dsub'); if(dsub) dsub.innerHTML = meeting ? ('Your requested time: <b>'+meeting+'</b>.<br>We&rsquo;ll confirm by email shortly.') : 'Thank you &mdash; we&rsquo;ll be in touch shortly to lock a time.';
-      Promise.all(jobs).then(function(){ form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML='Send request'; });
+      Promise.all(jobs).then(function(res){ if(res.some(Boolean)) ucEv('generate_lead',{lead_type:'booking_popup',service:d.service||'',page:location.pathname}); form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML='Send request'; });
     });
   }
   function initTop(){
