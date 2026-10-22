@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>The Quran Hub · Client room · Ummah Collective</title>
+<meta name="description" content="Private client room for The Quran Hub: proposal, audit and website concepts.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&display=swap">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#040605;--bone:#F1F5EF;--dim:rgba(241,245,239,.78);--dim2:rgba(241,245,239,.56);
+  --acc:#16d196;--acc2:#4fe0bd;--line:rgba(241,245,239,.14);--line2:rgba(241,245,239,.07);--panel:rgba(241,245,239,.035);
+  --disp:'Clash Display',system-ui,sans-serif;--sans:'General Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;
+  --gut:clamp(16px,5vw,64px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:
+  radial-gradient(60% 50% at 88% 0%,rgba(22,209,150,.16),transparent 70%),
+  radial-gradient(50% 40% at 0% 40%,rgba(79,224,189,.07),transparent 70%),
+  var(--bg);
+  color:var(--bone);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+::selection{background:var(--acc);color:#04140a}
+:focus-visible{outline:2px solid var(--acc2);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-9999px;top:8px;background:var(--acc);color:#04140a;padding:8px 14px;border-radius:8px;z-index:10;font-weight:600}
+.skip:focus{left:8px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 var(--gut)}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2)}
+.eyebrow{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-bottom:18px}
+.eyebrow::before{content:"";width:36px;height:2px;background:var(--acc2);flex:none}
+h1,h2,h3{font-family:var(--disp);font-weight:500;letter-spacing:-.02em;line-height:1.04}
+h1 em,h2 em{font-style:normal;color:var(--acc2)}
+p{color:var(--dim)}
+
+/* header */
+header{position:sticky;top:0;z-index:5;background:rgba(4,6,5,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line2)}
+.hbar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:68px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none}
+.brand img{width:40px;height:auto}
+.brand span{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.hnav{display:flex;gap:6px;align-items:center}
+.hnav a{font-size:14px;text-decoration:none;color:var(--dim);padding:10px 12px;border-radius:999px;min-height:44px;display:inline-flex;align-items:center}
+.hnav a:hover{color:var(--bone);background:var(--panel)}
+.hnav .out{border:1px solid var(--line)}
+@media (max-width:720px){.hnav .sec{display:none}.brand span{display:none}}
+
+/* hero */
+.hero{padding:clamp(56px,9vw,112px) 0 clamp(36px,5vw,56px)}
+.hero h1{font-size:clamp(38px,6.4vw,76px);max-width:16ch}
+.hero .lede{font-size:clamp(16px,1.6vw,19px);max-width:62ch;margin-top:22px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+.chip{display:inline-flex;align-items:center;gap:10px;padding:10px 16px;min-height:44px;border:1px solid var(--line);border-radius:999px;text-decoration:none;font-size:14px;color:var(--bone);background:var(--panel)}
+.chip b{font-family:var(--mono);font-weight:400;font-size:11px;color:var(--acc);letter-spacing:.1em}
+.chip:hover{border-color:var(--acc)}
+.updated{margin-top:26px}
+
+/* sections */
+section.block{padding:clamp(36px,6vw,72px) 0;border-top:1px solid var(--line2)}
+.shead{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.shead h2{font-size:clamp(28px,4vw,46px)}
+.shead p{max-width:52ch}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.card.hi{border-color:rgba(22,209,150,.5);background:linear-gradient(160deg,rgba(22,209,150,.10),rgba(22,209,150,.015) 55%)}
+.doc{display:grid;grid-template-columns:1.1fr 1fr;align-items:stretch}
+.doc .thumb{position:relative;background:#070a09;border-right:1px solid var(--line2);display:flex;align-items:center;overflow:hidden}
+.doc .thumb img{width:100%;height:auto;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.doc .thumb:hover img{transform:scale(1.02)}
+.doc .body{padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;gap:14px}
+.doc h3{font-size:clamp(22px,2.4vw,30px)}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--line);border-radius:999px;color:var(--dim)}
+.tag.ok{border-color:rgba(22,209,150,.55);color:var(--acc)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.fact{border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.fact.hi{border-color:rgba(22,209,150,.55);background:rgba(22,209,150,.06)}
+.fact .n{font-family:var(--disp);font-size:28px;letter-spacing:-.02em;line-height:1;color:var(--bone)}
+.fact .n small{font-family:var(--sans);font-size:13px;color:var(--dim);letter-spacing:0;margin-left:4px}
+.fact .l{font-size:13px;color:var(--dim);margin-top:6px}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto;padding-top:6px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:46px;padding:12px 22px;border-radius:999px;font-weight:600;font-size:13px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;border:1px solid var(--line);color:var(--bone);transition:border-color .3s,background .3s,filter .3s}
+.btn:hover{border-color:var(--bone)}
+.btn.fill{background:var(--acc);border-color:var(--acc);color:#04140a}
+.btn.fill:hover{filter:brightness(1.08)}
+.btn svg{width:16px;height:16px;flex:none}
+.note{font-size:14px;color:var(--dim2);border-left:2px solid var(--acc2);padding:2px 0 2px 14px;margin-top:4px}
+
+/* designs */
+.designs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.design .shot{position:relative;display:block;aspect-ratio:16/10;overflow:hidden;background:#0a0e0c;border-bottom:1px solid var(--line2)}
+.design .shot .d{width:100%;height:100%;object-fit:cover;object-position:top}
+.design .shot .m{position:absolute;right:12px;bottom:-34px;width:24%;border-radius:12px;border:2px solid rgba(241,245,239,.85);box-shadow:0 16px 40px rgba(0,0,0,.55);transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.design .shot:hover .m{transform:translateY(-10px)}
+.design .body{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;height:calc(100% - 0px)}
+.design h3{font-size:24px}
+.design p{font-size:15px}
+.design .actions .btn{flex:1 1 auto;padding:12px 16px}
+.design{display:flex;flex-direction:column}
+.design .body{flex:1}
+
+@media (max-width:980px){.doc{grid-template-columns:1fr}.doc .thumb{border-right:0;border-bottom:1px solid var(--line2)}.designs{grid-template-columns:1fr}}
+@media (min-width:640px) and (max-width:980px){.designs{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.facts{grid-template-columns:1fr}.actions .btn{flex:1 1 100%}}
+
+/* contact */
+.contact{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;align-items:center}
+.contact .card{padding:28px}
+.who{font-family:var(--disp);font-size:24px}
+.lines{margin-top:14px;display:grid;gap:8px}
+.lines a{display:inline-flex;gap:10px;align-items:center;text-decoration:none;color:var(--bone);min-height:44px}
+.lines a span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);width:86px}
+@media (max-width:800px){.contact{grid-template-columns:1fr}}
+
+footer{border-top:1px solid var(--line2);padding:26px 0 40px;margin-top:20px}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header>
+  <div class="wrap hbar">
+    <a class="brand" href="/tqh/" aria-label="Ummah Collective, client room home"><img src="/assets/logo-white.png" alt="Ummah Collective" width="40" height="38"><span>Client room · The Quran Hub</span></a>
+    <nav class="hnav" aria-label="Sections">
+      <a class="sec" href="#proposal">Proposal</a>
+      <a class="sec" href="#audit">Audit</a>
+      <a class="sec" href="#designs">Website concepts</a>
+      <a class="out" href="/tqh/logout/">Sign out</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="wrap hero">
+    <div class="eyebrow">The Quran Hub × Ummah Collective</div>
+    <h1>Everything we've prepared, <em>in one place.</em></h1>
+    <p class="lede">Assalāmu ʿalaykum. Here you'll find our proposal, the enrolment measurement audit and the three website concepts. View them in your browser, or download them to share with your management team.</p>
+    <div class="chips">
+      <a class="chip" href="#proposal"><b>01</b> Proposal</a>
+      <a class="chip" href="#audit"><b>02</b> Audit</a>
+      <a class="chip" href="#designs"><b>03</b> Website concepts</a>
+    </div>
+    <p class="mono updated">Last updated 22 October 2026</p>
+  </div>
+
+  <!-- 01 PROPOSAL -->
+  <section class="block" id="proposal" aria-labelledby="h-proposal">
+    <div class="wrap">
+      <div class="shead">
+        <div><div class="eyebrow">01 — Proposal</div><h2 id="h-proposal">Website optimisation, <em>SEO &amp; tracking</em></h2></div>
+        <p>Our current, priced offer, written for your management team: what we found, an itemised scope, timeline and two options to choose from.</p>
+      </div>
+      <article class="card hi doc">
+        <a class="thumb" href="files/TQH-Proposal-Ummah-Collective.pdf" target="_blank" rel="noopener" aria-label="Open the proposal PDF in a new tab"><img src="img/proposal.jpg" alt="Cover of the proposal: A faster, easier-to-find Quran Hub. Two ways to get there." width="1053" height="744" loading="lazy" decoding="async"></a>
+        <div class="body">
+          <div class="meta"><span class="tag ok">Current offer</span><span class="tag">PDF · 11 pages</span><span class="tag">22 Oct 2026</span></div>
+          <h3>Proposal: two ways to a faster, easier-to-find Quran Hub</h3>
+          <div class="facts">
+            <div class="fact"><div class="n">£1,590</div><div class="l">Option 1 · one-time fix: issues, tracking and SEO set-up</div></div>
+            <div class="fact hi"><div class="n">£350<small>/ month</small></div><div class="l">Option 2 · recommended: everything in Option 1, plus rebuild, hosting and monthly care</div></div>
+          </div>
+          <div class="actions">
+            <a class="btn fill" href="files/TQH-Proposal-Ummah-Collective.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>View proposal</a>
+            <a class="btn" href="files/TQH-Proposal-Ummah-Collective.pdf" download="TQH-Proposal-Ummah-Collective.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>Download PDF</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 02 AUDIT -->
+  <section class="block" id="audit" aria-labelledby="h-audit">
+    <div class="wrap">
+      <div class="shead">
+        <div><div class="eyebrow">02 — Audit</div><h2 id="h-audit">Measuring enrolled families, <em>not page views</em></h2></div>
+        <p>Our audit of your tracking and enrolment funnel: the nine tags running today, a six-event map from assessment to enrolment, consent, attribution and page speed.</p>
+      </div>
+      <article class="card doc">
+        <a class="thumb" href="files/TQH-Enrolment-Measurement-Audit.html" target="_blank" rel="noopener" aria-label="Open the audit slides in a new tab"><img src="img/audit.jpg" alt="Cover slide of the audit: Measuring enrolled families, not page views." width="1024" height="576" loading="lazy" decoding="async"></a>
+        <div class="body">
+          <div class="meta"><span class="tag">Slides · 17</span><span class="tag">Opens in your browser</span><span class="tag">6 Oct 2026</span></div>
+          <h3>Enrolment measurement audit</h3>
+          <p>What runs today, where the funnel goes dark at the payment step, how the source of each family can travel with them to enrolment, and a Lighthouse speed baseline for your home and application pages.</p>
+          <p class="note">The proposal above is our current, priced offer. Items in the audit marked “On request” can be added to it later if they're useful to you.</p>
+          <div class="actions">
+            <a class="btn fill" href="files/TQH-Enrolment-Measurement-Audit.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>View audit</a>
+            <a class="btn" href="files/TQH-Enrolment-Measurement-Audit.html" download="TQH-Enrolment-Measurement-Audit.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>Download</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 03 DESIGNS -->
+  <section class="block" id="designs" aria-labelledby="h-designs">
+    <div class="wrap">
+      <div class="shead">
+        <div><div class="eyebrow">03 — Website concepts</div><h2 id="h-designs">Three directions, <em>your content.</em></h2></div>
+        <p>Each concept is a complete, clickable website built from the content on thequranhub.co.uk, with all 14 pages, menus and forms. Try it on your phone too.</p>
+      </div>
+      <div class="designs">
+        <article class="card design">
+          <a class="shot" href="designs/TQH-concept-v1-serene.html" target="_blank" rel="noopener" aria-label="Open concept 1, Serene, in a new tab">
+            <img class="d" src="img/v1-serene.jpg" alt="Concept 1, Serene: light homepage with the hero photo in an arch frame" width="1080" height="675" loading="lazy" decoding="async">
+            <img class="m" src="img/v1-serene-mobile.jpg" alt="" width="390" height="844" loading="lazy" decoding="async">
+          </a>
+          <div class="body">
+            <div class="meta"><span class="tag">Concept 1</span><span class="tag">Light</span></div>
+            <h3>Serene</h3>
+            <p>Light, airy and closest to your current brand: calm white space, an arch-framed hero and testimonials that scroll sideways.</p>
+            <div class="actions">
+              <a class="btn fill" href="designs/TQH-concept-v1-serene.html" target="_blank" rel="noopener">View</a>
+              <a class="btn" href="designs/TQH-concept-v1-serene.html" download="TQH-concept-v1-serene.html">Download</a>
+            </div>
+          </div>
+        </article>
+        <article class="card design">
+          <a class="shot" href="designs/TQH-concept-v2-midnight.html" target="_blank" rel="noopener" aria-label="Open concept 2, Midnight, in a new tab">
+            <img class="d" src="img/v2-midnight.jpg" alt="Concept 2, Midnight: dark navy homepage with a full-width photo of a Qur'an on a wooden stand" width="1080" height="675" loading="lazy" decoding="async">
+            <img class="m" src="img/v2-midnight-mobile.jpg" alt="" width="390" height="844" loading="lazy" decoding="async">
+          </a>
+          <div class="body">
+            <div class="meta"><span class="tag">Concept 2</span><span class="tag">Dark</span></div>
+            <h3>Midnight</h3>
+            <p>Deep navy and cinematic: full-width photography, large confident headings and arch-shaped frames, in your brand blues.</p>
+            <div class="actions">
+              <a class="btn fill" href="designs/TQH-concept-v2-midnight.html" target="_blank" rel="noopener">View</a>
+              <a class="btn" href="designs/TQH-concept-v2-midnight.html" download="TQH-concept-v2-midnight.html">Download</a>
+            </div>
+          </div>
+        </article>
+        <article class="card design">
+          <a class="shot" href="designs/TQH-concept-v3-bento.html" target="_blank" rel="noopener" aria-label="Open concept 3, Bento, in a new tab">
+            <img class="d" src="img/v3-bento.jpg" alt="Concept 3, Bento: tiled homepage with enrol, Trustpilot and taster-session tiles" width="1080" height="675" loading="lazy" decoding="async">
+            <img class="m" src="img/v3-bento-mobile.jpg" alt="" width="390" height="844" loading="lazy" decoding="async">
+          </a>
+          <div class="body">
+            <div class="meta"><span class="tag">Concept 3</span><span class="tag">Tiled</span></div>
+            <h3>Bento</h3>
+            <p>Friendly and app-like: tiled layouts, a searchable tutor directory and a step-by-step application with a review before submitting.</p>
+            <div class="actions">
+              <a class="btn fill" href="designs/TQH-concept-v3-bento.html" target="_blank" rel="noopener">View</a>
+              <a class="btn" href="designs/TQH-concept-v3-bento.html" download="TQH-concept-v3-bento.html">Download</a>
+            </div>
+          </div>
+        </article>
+      </div>
+      <p class="note" style="margin-top:22px">These are design concepts, not your live website: forms are not connected and nothing is tracked. A downloaded file opens in any browser while you're online; videos then open on YouTube.</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="block" aria-labelledby="h-contact">
+    <div class="wrap contact">
+      <div>
+        <div class="eyebrow">Questions</div>
+        <h2 id="h-contact" style="font-size:clamp(28px,4vw,44px)">Happy to walk your team <em>through any of it.</em></h2>
+        <p style="margin-top:14px;max-width:52ch">Take the time you need. If it helps, we can join a short call with your management team to answer questions.</p>
+      </div>
+      <div class="card">
+        <div class="who">Attila von Barloewen</div>
+        <div class="mono" style="margin-top:6px">Founder · Ummah Collective</div>
+        <div class="lines">
+          <a href="https://wa.me/601133262709" target="_blank" rel="noopener"><span>WhatsApp</span>+60 11 3326 2709</a>
+          <a href="mailto:info@ummah-collective.com"><span>Email</span>info@ummah-collective.com</a>
+          <a href="https://ummah-collective.com/" target="_blank" rel="noopener"><span>Web</span>ummah-collective.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="mono">Ummah Collective Sdn. Bhd. · Kuala Lumpur</span>
+    <span class="mono">Private · prepared for The Quran Hub</span>
+  </div>
+</footer>
+</body>
+</html>

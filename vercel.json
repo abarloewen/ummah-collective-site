@@ -27,6 +27,32 @@
           "value": "public, max-age=300"
         }
       ]
+    },
+    {
+      "source": "/tqh/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
+      "source": "/tqh/files/TQH-Proposal-Ummah-Collective.pdf",
+      "headers": [
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"TQH-Proposal-Ummah-Collective.pdf\""
+        }
+      ]
     }
   ],
   "rewrites": [
