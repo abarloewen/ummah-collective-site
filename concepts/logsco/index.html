@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Logsco Website Concepts</title>
+<title>Logsco Website Drafts</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,6 +50,14 @@ header p{margin:0;color:var(--fg-2);max-width:62ch}
 .notes h3{font-family:var(--display);font-size:17px;margin:0}
 .notes ul{margin:0;padding-left:20px;color:var(--fg-2);display:grid;gap:6px;font-size:15px}
 footer{color:var(--fg-2);font-size:13px}
+.round{display:grid;gap:6px;margin-top:16px;padding-top:28px;border-top:1px solid var(--line);scroll-margin-top:24px}
+.round h2{font-family:var(--display);font-weight:800;font-size:clamp(24px,3vw,32px);letter-spacing:-.02em;line-height:1.15;margin:0}
+.round p{margin:0;color:var(--fg-2);max-width:68ch}
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.jump a{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--fg);text-decoration:none;font-weight:600;font-size:14px}
+.jump a b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--chip);color:var(--brand);font-size:12px}
+.jump a:hover{border-color:var(--brand)}
+.who{font-size:13.5px;font-weight:600;color:var(--fg)}
 @media (max-width:820px){.row{grid-template-columns:1fr}.info{padding:24px}.notes{padding:24px}}
 @media (prefers-reduced-motion:reduce){.open{transition:none}}
 </style>
@@ -58,28 +66,62 @@ footer{color:var(--fg-2);font-size:13px}
 
 <div class="wrap">
   <header>
-    <span class="k">Logsco Agri Technology · Website redesign</span>
-    <h1>Proposal and three design directions</h1>
-    <p>Start with the proposal deck: how Logsco gets found on Google and turns visitors into enquiries. Then click through the three website concepts, each built from Logsco’s existing content, logo, brand greens and partner logos.</p>
+    <span class="k">Logsco Agri Technology · Website drafts</span>
+    <h1>All Logsco drafts in one place</h1>
+    <p>Everything we’ve prepared for Logsco, newest first. Each section has a one-line summary; click any preview to open the draft.</p>
+    <nav class="jump" aria-label="Sections"><a href="#websites"><b>1</b>The two websites</a><a href="#proposal"><b>2</b>Proposal deck</a><a href="#concepts"><b>3</b>First design concepts</a></nav>
   </header>
 
+  <div class="round" id="websites"><span class="k">1 · Latest, after our call</span><h2>The two websites</h2><p>Logsco gets two separate sites so the audiences don’t mix: one for business buyers, one for people who drink Pina Boosta.</p></div>
   <div class="list">
     <article class="row">
-      <a class="shot" href="/concepts/logsco/deck/" aria-label="Open the proposal deck"><img src="/concepts/logsco/previews/deck.jpg" alt="Proposal deck cover slide" style="object-position:left center"><img class="m" src="/concepts/logsco/previews/deck-offer.jpg" alt="" style="width:34%"></a>
+      <a class="shot" href="/concepts/logsco/group/" aria-label="Open the corporate site"><img src="/concepts/logsco/previews/group.jpg" alt="Corporate site home page, desktop"><img class="m" src="/concepts/logsco/previews/group-mobile.jpg" alt=""></a>
+      <div class="info">
+        <span class="tag">Website 1</span>
+        <h2>Corporate site · Logsco Agri Technology</h2>
+        <p class="who">For: procurement teams, estates, agencies and partners</p>
+        <p>Machinery, the Pontian estate and the group story, with the Kulim case study, registrations and an enquiry form. 6 pages.</p>
+        <ul class="chips"><li>Home</li><li>AgriTech</li><li>Estates</li><li>Projects</li><li>About</li><li>Contact</li></ul>
+        <a class="open" href="/concepts/logsco/group/">Open the corporate site →</a>
+      </div>
+    </article>
+    <article class="row">
+      <a class="shot" href="/concepts/logsco/pina-boosta/" aria-label="Open the Pina Boosta site"><img src="/concepts/logsco/previews/pina-boosta.jpg" alt="Pina Boosta home page, desktop"><img class="m" src="/concepts/logsco/previews/pina-boosta-mobile.jpg" alt=""></a>
+      <div class="info">
+        <span class="tag">Website 2</span>
+        <h2>Brand site · Pina Boosta</h2>
+        <p class="who">For: drinkers, fans and shops that want to stock it</p>
+        <p>A bold consumer site for the pineapple energy drink, with its own look. Batch 001 waitlist, estate café and stockist enquiries. 3 pages.</p>
+        <ul class="chips"><li>The drink</li><li>Our story</li><li>Find it</li></ul>
+        <a class="open" href="/concepts/logsco/pina-boosta/">Open the Pina Boosta site →</a>
+      </div>
+    </article>
+  </div>
+
+  <div class="round" id="proposal"><span class="k">2 · The plan</span><h2>Proposal deck</h2><p>How Logsco gets found on Google and turns visitors into enquiries, and what it costs to run.</p></div>
+  <div class="list">
+    <article class="row">
+      <a class="shot" href="/concepts/logsco/deck/" aria-label="Open the deck"><img src="/concepts/logsco/previews/deck.jpg" alt="Proposal deck cover slide" style="object-position:left center"><img class="m" src="/concepts/logsco/previews/deck-offer.jpg" alt="" style="width:34%"></a>
       <div class="info">
         <span class="tag">Proposal</span>
         <h2>Logsco Digital Growth Plan</h2>
-        <p>Fifteen slides: where Logsco stands today, the website, digital infrastructure, Google visibility and automation, and the Growth &amp; Care Plan that keeps it all working every month.</p>
+        <p class="who">For: the decision on scope and budget</p>
+        <p>Where Logsco stands today, the website, Google visibility, automation and the monthly Growth &amp; Care Plan. 15 slides, also as PDF.</p>
         <ul class="chips"><li>15 slides</li><li>SEO and maintenance</li><li>PDF download</li></ul>
         <a class="open" href="/concepts/logsco/deck/">Open the deck →</a>
       </div>
     </article>
+  </div>
+
+  <div class="round" id="concepts"><span class="k">3 · Earlier, before our call</span><h2>First design concepts</h2><p>Three style directions built from the old website content. Concept A was chosen and became the corporate site above.</p></div>
+  <div class="list">
     <article class="row">
       <a class="shot" href="/concepts/logsco/a-app.html" aria-label="Open concept A"><img src="/concepts/logsco/previews/a-app.jpg" alt="Concept A desktop view"><img class="m" src="/concepts/logsco/previews/a-app-mobile.jpg" alt=""></a>
       <div class="info">
-        <span class="tag">Concept A</span>
+        <span class="tag">Concept A · chosen</span>
         <h2>Modern, app-style</h2>
-        <p>Feels like a product. A floating pill menu, a grid of tiles for the company story, status cards over the hero photo, swipeable values and a bottom tab bar on phones.</p>
+        <p class="who">The direction we built on</p>
+        <p>Floating pill menu, tile layout, status cards over the photo and a tab bar on phones.</p>
         <ul class="chips"><li>Light and dark mode</li><li>Tile layout</li><li>Phone tab bar</li></ul>
         <a class="open" href="/concepts/logsco/a-app.html">Open concept A →</a>
       </div>
@@ -89,7 +131,8 @@ footer{color:var(--fg-2);font-size:13px}
       <div class="info">
         <span class="tag">Concept B</span>
         <h2>Corporate</h2>
-        <p>Established and trustworthy. A full-width photo hero, a key-facts bar, a “company at a glance” panel, a structured solutions grid and a full enquiry form.</p>
+        <p class="who">Alternative direction</p>
+        <p>Classic B2B structure: full-width photo hero, key-facts bar and a full enquiry form.</p>
         <ul class="chips"><li>Classic structure</li><li>B2B tone</li><li>Enquiry form</li></ul>
         <a class="open" href="/concepts/logsco/b-corporate.html">Open concept B →</a>
       </div>
@@ -99,24 +142,27 @@ footer{color:var(--fg-2);font-size:13px}
       <div class="info">
         <span class="tag">Concept C</span>
         <h2>Creative, editorial</h2>
-        <p>Earthy and memorable. Large serif headlines, arch-shaped photography, a ticker of the seven values, photo reveals on hover and a full-screen menu.</p>
-        <ul class="chips"><li>Soil and leaf palette</li><li>Serif display type</li><li>Motion</li></ul>
+        <p class="who">Alternative direction</p>
+        <p>Large serif headlines, arch-shaped photos and a ticker of the seven values.</p>
+        <ul class="chips"><li>Serif display type</li><li>Soil and leaf palette</li><li>Motion</li></ul>
         <a class="open" href="/concepts/logsco/c-creative.html">Open concept C →</a>
       </div>
     </article>
   </div>
 
   <section class="notes">
-    <h3>Open points before we build</h3>
+    <h3>Still to confirm with Logsco</h3>
     <ul>
-      <li>Contact details: the current site shows template placeholders, so email, phone and address are marked “to be confirmed”.</li>
-      <li>Services: the current Services page holds template text. These concepts describe solutions using Logsco’s own About and Mission wording. Please confirm them or send the real product range.</li>
-      <li>Photography is stock for now and will be replaced with Logsco’s own machinery and field photos.</li>
+      <li>Email: the profile lists shafi@logs-agri.com but the website as logsco-agri.com. Please confirm which domain is correct.</li>
+      <li>Kulim line: the profile says “delivered late 2024”, before Logsco Agri Technology was incorporated in August 2025. Should the project be credited to the Logsco group or to the team?</li>
+      <li>Estate: address, opening hours, tour times and prices are needed for the estate pages.</li>
+      <li>Pina Boosta: ingredients, nutrition panel, halal status, price, launch date and social handles are marked “to be confirmed”.</li>
+      <li>Photography: the sites use images from the company profile. Real photos of the machinery, estate, café and bottle will make both sites stronger.</li>
       <li>Forms are visual only and not connected yet.</li>
     </ul>
   </section>
 
-  <footer>Design concepts prepared for Logsco Agri Technology Sdn. Bhd. These pages are drafts, not the official website.</footer>
+  <footer>Website drafts prepared for Logsco Agri Technology Sdn. Bhd. These pages are drafts, not the official websites.</footer>
 </div>
 </body>
 </html>
