@@ -38,6 +38,10 @@
     return `M${x},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h - r}Q${x + w},${y + h} ${x + w - r},${y + h}H${x}Z`;
   }
 
+  /* text alternative: every chart also renders a visually hidden data table */
+  function srTable(caption, head, rows) {
+    return `<div class="sr-only"><table><caption>${esc(caption)}</caption><thead><tr>${head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${esc(r[0])}</th>${r.slice(1).map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  }
   const registry = new WeakMap();
   const ro = "ResizeObserver" in window ? new ResizeObserver((entries) => {
     entries.forEach((e) => {
@@ -63,7 +67,7 @@
       const { max, step } = niceMax(peak * 1.05, 4);
       const band = iw / n; const bw = Math.min(o.stacked ? 34 : 22, band * (o.stacked ? 0.56 : 0.7 / series.length));
       const y = (v) => padT + ih - (v / max) * ih;
-      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(o.label || "Bar chart")}">`;
+      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc((o.label || "Bar chart") + ". Values are listed in the table that follows.")}">`;
       for (let v = 0; v <= max + 1e-9; v += step) {
         s += `<line class="grid" x1="${padL}" x2="${W - padR}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${padL - 8}" y="${y(v) + 4}" text-anchor="end">${esc(o.axis ? o.axis(v) : v)}</text>`;
       }
@@ -87,6 +91,8 @@
         s += `<rect class="hit" x="${padL + band * i}" y="${padT}" width="${band}" height="${ih}" data-i="${i}" tabindex="-1"/>`;
       });
       s += `<line class="base" x1="${padL}" x2="${W - padR}" y1="${y(0)}" y2="${y(0)}"/></svg>`;
+      const showTot = o.stacked && series.length > 1;
+      s += srTable(o.label || "Chart data", [o.rowHead || "Period"].concat(series.map((se) => se.name), showTot ? ["Total"] : []), o.labels.map((lab, i) => [o.tipTitle ? o.tipTitle(i) : lab].concat(series.map((se) => o.format(se.values[i] || 0)), showTot ? [o.format(totals[i])] : [])));
       el.innerHTML = s;
       el.querySelectorAll(".hit").forEach((r) => {
         const i = +r.dataset.i;
@@ -103,7 +109,7 @@
       const rowH = o.rowH || 30, labW = Math.min(o.labelWidth || 120, W * 0.4), valW = o.valueWidth || 64;
       const H = o.items.length * rowH; const iw = W - labW - valW - 8;
       const max = Math.max(...o.items.map((d) => d.value), 1);
-      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(o.label || "Bar chart")}">`;
+      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" aria-hidden="true">`;
       o.items.forEach((d, i) => {
         const y = i * rowH, bh = Math.min(14, rowH - 12), w = Math.max(d.value > 0 ? 3 : 0, (d.value / max) * iw);
         s += `<text class="lab" x="0" y="${y + rowH / 2 + 4}">${esc(d.label)}</text>`;
@@ -112,7 +118,7 @@
         s += `<text class="val" x="${W}" y="${y + rowH / 2 + 4}" text-anchor="end">${esc(o.format(d.value))}</text>`;
         s += `<rect class="hit" x="0" y="${y}" width="${W}" height="${rowH}" data-i="${i}"/>`;
       });
-      s += "</svg>"; el.innerHTML = s;
+      s += "</svg>" + srTable(o.label || "Chart data", [o.rowHead || "Category", o.unit || "Value"], o.items.map((d) => [d.label, o.format(d.value)])); el.innerHTML = s;
       el.querySelectorAll(".hit").forEach((r) => {
         const d = o.items[+r.dataset.i];
         r.addEventListener("pointermove", (e) => showTip(`<b>${esc(d.label)}</b><div class="tr"><span>${esc(o.unit || "Value")}</span><em>${esc(o.format(d.value))}</em></div>${d.note ? `<div class="tr"><span>${esc(d.note)}</span></div>` : ""}`, e.clientX, e.clientY));
@@ -130,7 +136,7 @@
       const { max, step } = niceMax(peak * 1.08, 4);
       const x = (i) => padL + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
       const y = (v) => padT + ih - (v / max) * ih;
-      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(o.label || "Line chart")}" tabindex="0">`;
+      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc((o.label || "Line chart") + ". Use the left and right arrow keys to read values; all values are in the table that follows.")}" tabindex="0">`;
       s += `<defs>${o.series.map((se, k) => `<linearGradient id="${el.id || "g"}-a${k}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:${se.color};stop-opacity:.22"/><stop offset="1" style="stop-color:${se.color};stop-opacity:0"/></linearGradient>`).join("")}</defs>`;
       for (let v = 0; v <= max + 1e-9; v += step) s += `<line class="grid" x1="${padL}" x2="${W - padR}" y1="${y(v)}" y2="${y(v)}"/><text class="ax" x="${padL - 8}" y="${y(v) + 4}" text-anchor="end">${esc(o.axis ? o.axis(v) : v)}</text>`;
       const every = Math.ceil(n / Math.max(2, Math.floor(iw / 70)));
@@ -143,6 +149,7 @@
       s += `<line class="base" x1="${padL}" x2="${W - padR}" y1="${y(0)}" y2="${y(0)}"/>`;
       s += `<g class="xh" style="display:none"><line class="xl" y1="${padT}" y2="${padT + ih}"/>${o.series.map((se) => `<circle r="4.5" style="fill:${se.color}"/>`).join("")}</g>`;
       s += `<rect class="hit" x="${padL}" y="${padT}" width="${iw}" height="${ih}"/></svg>`;
+      s += srTable(o.label || "Chart data", ["Date"].concat(o.series.map((se) => se.name)), o.labels.map((lab, i) => [o.tipTitle ? o.tipTitle(lab) : lab].concat(o.series.map((se) => o.format(se.values[i])))));
       el.innerHTML = s;
       const svg = el.querySelector("svg"), g = svg.querySelector(".xh"), xl = g.querySelector("line"), dots = g.querySelectorAll("circle");
       let cur = -1;

@@ -79,10 +79,12 @@
   /* ---------------- format ---------------- */
   const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const rm = (n) => "RM " + Number(n || 0).toLocaleString("en-MY", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const rm0 = (n) => "RM " + Math.round(n || 0).toLocaleString("en-MY");
+  const rm0 = rm; /* one currency style everywhere: RM 12,500.00 (abbreviated RM 5.56M only in KPI tiles and chart axes) */
   const rmc = (n) => n >= 1e6 ? "RM " + (n / 1e6).toFixed(2).replace(/\.?0+$/, "") + "M" : n >= 1e3 ? "RM " + (n / 1e3).toFixed(n >= 1e5 ? 0 : 1).replace(/\.0$/, "") + "k" : "RM " + Math.round(n);
   const num = (n) => Math.round(n).toLocaleString("en-MY");
   const compact = (n) => n >= 1e6 ? (n / 1e6).toFixed(1) + "M" : n >= 1e4 ? Math.round(n / 1e3) + "k" : n >= 1e3 ? (n / 1e3).toFixed(1) + "k" : String(Math.round(n));
+  /* keep invoice numbers and domains on one line when text wraps */
+  const nowrapIds = (html) => html.replace(/\b[\w.]+(?:-[\w.]+)+\b/g, (m) => `<span class="nw">${m}</span>`);
   const pct = (n, d = 1) => (isFinite(n) ? n : 0).toFixed(d) + "%";
   const dt = (iso) => new Date(iso);
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -114,7 +116,7 @@
   const uid = (p) => p + Math.random().toString(36).slice(2, 7);
 
   /* ---------------- state ---------------- */
-  const KEY = "logsco-os-v1", UIKEY = "logsco-os-ui";
+  const KEY = "logsco-os-v2", UIKEY = "logsco-os-ui"; /* v2: data model changed, older saved state is ignored */
   function read(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
   function write(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked: demo still works in memory */ } }
   const saved = read(KEY) || {};
@@ -131,21 +133,33 @@
     notes: saved.notes || {},
     users: saved.users || clone(L.USERS),
     notifRead: saved.notifRead || false,
-    tickets: clone(L.TICKETS).map((t) => Object.assign(t, { deadline: LOADED - t.opened * 6e4 + t.sla * 36e5 })),
-    parts: clone(L.PARTS), commissioning: clone(L.COMMISSIONING), tours: clone(L.TOURS).sort((a, b) => a.date.localeCompare(b.date)), shop: clone(L.SHOP)
+    tickets: saved.tickets || clone(L.TICKETS).map((t) => Object.assign(t, { deadline: LOADED - t.opened * 6e4 + t.sla * 36e5, issue: t.issue.replace(/\{opened-(\d+)\}/, (_, m) => { const d = new Date(LOADED - (t.opened + +m) * 6e4); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); }) })),
+    parts: saved.parts || clone(L.PARTS), commissioning: saved.commissioning || clone(L.COMMISSIONING), tours: saved.tours || clone(L.TOURS).sort((a, b) => a.date.localeCompare(b.date)), shop: saved.shop || clone(L.SHOP),
+    socialSched: saved.socialSched || []
   };
   const UI = Object.assign({ theme: null, collapsed: false, division: "all", pipeView: "board", range: 30, site: "all", invFilter: "all", svcTab: "tickets" }, read(UIKEY) || {});
-  function save() { write(KEY, { deals: S.deals, invoices: S.invoices, leave: S.leave, tasks: S.tasks, integrations: S.integrations, staffStatus: S.staffStatus, sequences: S.sequences, ads: S.ads, siteTasks: S.siteTasks, notes: S.notes, users: S.users, notifRead: S.notifRead }); }
+  function save() { write(KEY, { deals: S.deals, invoices: S.invoices, leave: S.leave, tasks: S.tasks, integrations: S.integrations, staffStatus: S.staffStatus, sequences: S.sequences, ads: S.ads, siteTasks: S.siteTasks, notes: S.notes, users: S.users, notifRead: S.notifRead, tickets: S.tickets, parts: S.parts, commissioning: S.commissioning, tours: S.tours, shop: S.shop, socialSched: S.socialSched }); }
   function saveUI() { write(UIKEY, UI); }
 
   /* derived */
-  const invSub = (inv) => inv.lines.reduce((s, l) => s + (+l.qty || 0) * (+l.price || 0), 0);
-  const invTax = (inv) => invSub(inv) * (+inv.sst || 0) / 100;
-  const invTotal = (inv) => invSub(inv) + invTax(inv);
+  /* money is rounded to sen at every step, so line amounts, subtotal, SST and total always add up on paper */
+  const sen = (n) => Math.round((+n || 0) * 100 + Number.EPSILON) / 100;
+  const lineAmt = (l) => sen((+l.qty || 0) * (+l.price || 0));
+  const invSub = (inv) => sen(inv.lines.reduce((s, l) => s + lineAmt(l), 0));
+  const invTax = (inv) => sen(invSub(inv) * (+inv.sst || 0) / 100);
+  const invTotal = (inv) => sen(invSub(inv) + invTax(inv));
+  const qtyFmt = (n) => (+n || 0).toLocaleString("en-MY", { maximumFractionDigits: 2 });
   const invStatus = (inv) => inv.status === "sent" && daysFrom(inv.due) < 0 ? "overdue" : inv.status;
   const coDiv = (id) => (CO[id] ? CO[id].div : "agri");
   const inDiv = (d) => UI.division === "all" || d === UI.division;
   const openDeals = () => S.deals.filter((d) => d.stage !== "Won" && d.stage !== "Lost");
+  /* won in the last N days (by the day the deal was marked won) */
+  const WON_DAYS = 90;
+  const isWonRecent = (d, days = WON_DAYS) => d.stage === "Won" && daysFrom(d.close) >= -days && daysFrom(d.close) <= 0;
+  /* lifetime value = contracts before the CRM + every deal won since */
+  const ltvOf = (c) => (c.ltv || 0) + S.deals.filter((d) => d.co === c.id && d.stage === "Won").reduce((s, d) => s + d.value, 0);
+  /* yyyy-mm-dd in local time (toISOString would shift the date east of UTC, e.g. Malaysia) */
+  const ymd = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
 
   let DRAG_ON = false;
   document.addEventListener("touchmove", (e) => { if (DRAG_ON) e.preventDefault(); }, { passive: false });
@@ -173,14 +187,14 @@
     const lay = { panel, ov, close, kind };
     ov.addEventListener("click", close);
     panel.addEventListener("click", (e) => { if (e.target.closest("[data-close]")) close(); });
-    layers.push(lay); document.documentElement.style.overflow = "hidden";
+    layers.push(lay); root.classList.add("lock");
     setTimeout(() => { const f = panel.querySelector("[autofocus]") || panel.querySelector("input,select,textarea,button:not([data-close]),[href]") || panel.querySelector("button"); if (f) f.focus({ preventScroll: true }); }, 40);
     function close() {
       if (lay.closed) return; lay.closed = true;
       panel.classList.add("out"); ov.classList.add("out"); C.hideTip();
       setTimeout(() => { panel.remove(); ov.remove(); }, REDUCED ? 0 : 190);
       layers = layers.filter((x) => x !== lay);
-      if (!layers.length) document.documentElement.style.overflow = "";
+      if (!layers.length && !side.classList.contains("open")) root.classList.remove("lock");
       if (opt.onClose) opt.onClose();
       if (opener && opener.focus && document.contains(opener)) opener.focus({ preventScroll: true });
     }
@@ -243,8 +257,25 @@
   }
   function markNav() { $$("[data-r]").forEach((a) => a.dataset.r === current ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current")); }
   const side = $("#side"), scrim = $("#scrim");
-  function openSide() { side.classList.add("open"); scrim.hidden = false; requestAnimationFrame(() => scrim.classList.add("on")); $("#menuBtn").setAttribute("aria-expanded", "true"); setTimeout(() => { const a = $(".nav-item[aria-current]", side) || $(".nav-item", side); a && a.focus(); }, 60); }
-  function closeSide() { if (!side.classList.contains("open")) return; side.classList.remove("open"); scrim.classList.remove("on"); setTimeout(() => (scrim.hidden = true), 200); $("#menuBtn").setAttribute("aria-expanded", "false"); }
+  /* mobile menu behaves like a modal: background inert, page scroll locked, focus returns to the opener */
+  let sideOpener = null;
+  const bg = () => [$(".main-col"), $("#bnav"), $(".strip")];
+  function openSide() {
+    sideOpener = document.activeElement; closePops();
+    side.classList.add("open"); scrim.hidden = false; requestAnimationFrame(() => scrim.classList.add("on")); $("#menuBtn").setAttribute("aria-expanded", "true");
+    side.setAttribute("role", "dialog"); side.setAttribute("aria-modal", "true"); bg().forEach((x) => x && (x.inert = true)); root.classList.add("lock");
+    setTimeout(() => { const a = $(".nav-item[aria-current]", side) || $(".nav-item", side); a && a.focus(); }, 60);
+  }
+  function closeSide(refocus = true) {
+    if (!side.classList.contains("open")) return; side.classList.remove("open"); scrim.classList.remove("on"); setTimeout(() => (scrim.hidden = true), 200); $("#menuBtn").setAttribute("aria-expanded", "false");
+    side.removeAttribute("role"); side.removeAttribute("aria-modal"); bg().forEach((x) => x && (x.inert = false)); if (!layers.length) root.classList.remove("lock");
+    if (refocus && sideOpener && document.contains(sideOpener) && sideOpener.offsetParent !== null) sideOpener.focus({ preventScroll: true }); sideOpener = null;
+  }
+  side.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab" || !side.classList.contains("open")) return;
+    const f = $$("a[href],button:not([disabled])", side).filter((x) => x.offsetParent !== null); if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+  });
 
   /* popovers */
   function closePops() { $$(".popover").forEach((p) => (p.hidden = true)); $$("#bellBtn,#userBtn").forEach((b) => b.setAttribute("aria-expanded", "false")); }
@@ -260,8 +291,9 @@
     const unread = S.notifRead ? 0 : NOTIFS.filter((n) => !n.read).length;
     $("#bellCount").hidden = !unread; $("#bellCount").textContent = unread;
     $("#bellBtn").setAttribute("aria-label", "Notifications" + (unread ? ", " + unread + " unread" : ""));
-    $("#notif").innerHTML = `<div class="notif-h"><b>Notifications</b><button class="link" id="markRead">Mark all read</button></div><div class="notif-list">${NOTIFS.map((n) => `<button class="notif-item ${!S.notifRead && !n.read ? "unread" : ""}" data-go="${n.go}"><span class="ic">${ic(n.icon)}</span><div><p>${n.text}</p><small>${relH(n.t)}</small></div></button>`).join("")}</div>`;
-    $("#markRead").addEventListener("click", () => { S.notifRead = true; save(); renderNotifs(); announce("All notifications marked as read"); });
+    $("#notif").innerHTML = `<div class="notif-h"><b id="notifH">Notifications</b><button type="button" class="link" id="markRead" ${unread ? "" : "disabled"}>${unread ? "Mark all read" : "All read"}</button></div><div class="notif-list">${NOTIFS.map((n) => `<button type="button" class="notif-item ${!S.notifRead && !n.read ? "unread" : ""}" data-go="${n.go}"><span class="ic">${ic(n.icon)}</span><div><p>${!S.notifRead && !n.read ? '<span class="sr-only">Unread: </span>' : ""}${n.text}</p><small>${relH(n.t)}</small></div></button>`).join("")}</div>`;
+    /* update in place so focus and the open popover survive */
+    $("#markRead").addEventListener("click", (e) => { e.stopPropagation(); S.notifRead = true; save(); $$("#notif .notif-item.unread").forEach((x) => { x.classList.remove("unread"); const u = x.querySelector(".sr-only"); if (u) u.remove(); }); $("#bellCount").hidden = true; $("#bellBtn").setAttribute("aria-label", "Notifications"); const b = $("#markRead"); b.textContent = "All read"; b.disabled = true; const f = $("#notif .notif-item"); if (f) f.focus(); announce("All notifications marked as read"); });
     $$("#notif [data-go]").forEach((b) => b.addEventListener("click", () => { closePops(); go(b.dataset.go); }));
   }
 
@@ -270,29 +302,38 @@
   const main = $("#main");
   function go(id, then) { afterRender = then || null; if (location.hash === "#/" + id) route(true); else location.hash = "#/" + id; }
   function clearTimers() { timers.forEach(clearInterval); timers = []; }
-  function skeleton() {
-    return `<div class="page-head"><div><div class="sk sk-h"></div><div class="sk sk-line" style="width:320px;max-width:70vw"></div></div></div>
-    <div class="kpis">${'<div class="card kpi"><div class="sk sk-line" style="width:60%"></div><div class="sk" style="height:24px;width:70%;margin-top:10px"></div><div class="sk sk-line" style="width:40%"></div></div>'.repeat(6)}</div>
+  function skeleton(id) {
+    /* same outline as the page that is loading: 6 KPI tiles on the overview, 4 stat tiles elsewhere */
+    const tile = '<div class="card %C"><div class="sk sk-line" style="width:60%"></div><div class="sk" style="height:24px;width:70%;margin-top:10px"></div><div class="sk sk-line" style="width:40%"></div></div>';
+    const tiles = id === "overview" ? `<div class="kpis">${tile.replace("%C", "kpi").repeat(6)}</div>` : ["pipeline", "contacts", "websites", "settings"].includes(id) ? "" : `<div class="stat-row">${tile.replace("%C", "stat").repeat(4)}</div>`;
+    return `<div class="page-head" aria-hidden="true"><div><div class="sk sk-h"></div><div class="sk sk-line" style="width:320px;max-width:70vw"></div></div></div><p class="sr-only">Loading…</p>
+    ${tiles}
     <div class="grid g-main"><div class="card"><div class="card-b"><div class="sk sk-line" style="width:30%"></div><div class="sk" style="height:220px;margin-top:14px"></div></div></div><div class="card"><div class="card-b"><div class="sk sk-line" style="width:40%"></div>${'<div class="sk sk-line"></div>'.repeat(7)}</div></div></div>`;
   }
   function route(force) {
     const id = (location.hash.replace(/^#\/?/, "").split("/")[0]) || "overview";
     const r = ROUTES.find((x) => x.id === id) || ROUTES[0];
+    if (r.id !== id) history.replaceState(null, "", "#/" + r.id);
     if (r.id === current && !force) return;
     const first = current === null;
-    current = r.id; clearTimers(); closeSide(); closePops(); closeAll(); C.hideTip();
+    current = r.id; clearTimers(); closeSide(false); closePops(); closeAll(); C.hideTip();
     markNav(); $("#crumbTitle").innerHTML = r.short ? `<span class="c-long">${esc(r.title)}</span><span class="c-short">${esc(r.short)}</span>` : esc(r.title); document.title = r.title + " · Logsco OS · Demo";
-    main.innerHTML = skeleton(); main.classList.remove("enter");
+    main.innerHTML = skeleton(r.id); main.setAttribute("aria-busy", "true"); main.classList.remove("enter");
     window.scrollTo(0, 0);
     setTimeout(() => {
       if (current !== r.id) return;
-      main.innerHTML = ""; VIEWS[r.id](main);
+      main.innerHTML = ""; VIEWS[r.id](main); main.removeAttribute("aria-busy");
       void main.offsetWidth; main.classList.add("enter");
       if (!first) main.focus({ preventScroll: true });
       if (afterRender) { const f = afterRender; afterRender = null; f(); }
-    }, first ? 380 : REDUCED ? 60 : 240);
+    }, first ? 220 : REDUCED ? 60 : 220);
   }
   function refreshBadges() { renderNav(); }
+  /* re-render the current page in place after data changed elsewhere (drawer, palette, modal) */
+  function refreshView() {
+    if (!current || current === "pipeline" || current === "invoicing" || !main.firstElementChild || main.querySelector(".sk")) return;
+    const y = window.scrollY; clearTimers(); main.innerHTML = ""; VIEWS[current](main); window.scrollTo(0, y);
+  }
 
   /* table helper: sortable */
   function sortRows(rows, key, dir, get) { const g = get[key]; return rows.slice().sort((a, b) => { const x = g(a), y = g(b); return (x > y ? 1 : x < y ? -1 : 0) * (dir === "asc" ? 1 : -1); }); }
@@ -306,28 +347,32 @@
     const divs = UI.division === "all" ? L.DIV_ORDER : [UI.division];
     const deals = S.deals.filter((d) => inDiv(d.div));
     const pipe = deals.filter((d) => d.stage !== "Won" && d.stage !== "Lost").reduce((s, d) => s + d.value, 0);
-    const won = deals.filter((d) => d.stage === "Won").reduce((s, d) => s + d.value, 0);
+    const won = deals.filter((d) => isWonRecent(d)).reduce((s, d) => s + d.value, 0);
     const openInv = S.invoices.filter((i) => inDiv(coDiv(i.co)) && ["sent", "overdue"].includes(invStatus(i)));
     const openInvSum = openInv.reduce((s, i) => s + invTotal(i), 0), overdueN = openInv.filter((i) => invStatus(i) === "overdue").length;
-    const ex = divs.reduce((a, d) => { const k = L.KPI_EXTRA[d]; a.leads += k.leads; a.lp += k.leadsPrev; a.m += k.meetings; a.mp += k.meetingsPrev; return a; }, { leads: 0, lp: 0, m: 0, mp: 0 });
+    /* leads = the same CRM lead sources as the chart below; meetings = the outbound sequences on Campaigns */
+    const ex = divs.reduce((a, d) => { const k = L.KPI_PREV[d]; a.leads += Object.values(L.LEAD_SOURCES[d]).reduce((x, y) => x + y, 0); a.lp += k.leads; a.m += S.sequences.filter((q) => q.div === d).reduce((x, q) => x + q.meetings, 0); a.mp += k.meetings; return a; }, { leads: 0, lp: 0, m: 0, mp: 0 });
     const tix = divs.includes("agri") ? S.tickets.filter((t) => t.status !== "Resolved") : [];
     const p1 = tix.filter((t) => t.pri === "P1").length;
     const hour = new Date().getHours();
-    const greet = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    const greet = hour < 5 ? "Hello" : hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
     const delta = (a, b) => { const d = b ? ((a - b) / b) * 100 : 0; return `<span class="delta ${d > 0.5 ? "up" : d < -0.5 ? "down" : "flat"}">${ic(d >= 0 ? "trendUp" : "trendDown", "sm")}${pct(Math.abs(d), 0)} <small>vs last month</small></span>`; };
     const sp = (base, seed) => { const out = []; let v = base * 0.7; for (let i = 0; i < 12; i++) { v = v * (0.94 + ((Math.sin(seed * 9 + i * 1.7) + 1) / 2) * 0.16); out.push(v); } out.push(base); return out; };
     const kpis = [
       { l: "Pipeline value", i: "pipeline", v: rmc(pipe), title: rm(pipe), d: delta(pipe, pipe / 1.12), s: sp(pipe, 1), go: "pipeline" },
-      { l: "Won this quarter", i: "target", v: rmc(won), title: rm(won), d: delta(won, won / 1.31), s: sp(won, 2), go: "pipeline" },
+      { l: "Won · 90 days", i: "target", v: rmc(won), title: rm(won), d: delta(won, won / 1.31), s: sp(won, 2), go: "pipeline" },
       { l: "Open invoices", i: "invoice", v: rmc(openInvSum), title: rm(openInvSum), d: `<span class="delta ${overdueN ? "down" : "flat"}">${overdueN} overdue</span>`, s: sp(openInvSum, 3), go: "invoicing" },
-      { l: "Website leads", i: "globe", v: num(ex.leads), d: delta(ex.leads, ex.lp), s: sp(ex.leads, 4), go: "analytics" },
+      { l: "New leads · 30 days", i: "globe", v: num(ex.leads), d: delta(ex.leads, ex.lp), s: sp(ex.leads, 4), go: "contacts" },
       { l: "Meetings booked", i: "send", v: num(ex.m), d: delta(ex.m, ex.mp), s: sp(ex.m, 5), go: "campaigns" },
-      { l: "Open service tickets", i: "ticket", v: tix.length ? num(tix.length) : "0", d: tix.length ? `<span class="delta ${p1 ? "down" : "flat"}">${p1 ? p1 + " P1 open" : "No P1"} </span>` : `<span class="delta flat">AgriTech only</span>`, s: [3, 5, 4, 6, 5, 7, 6, 4, 5, 6, 7, 6, tix.length], go: "service" }
+      { l: "Open service tickets", i: "ticket", v: tix.length ? num(tix.length) : "0", d: tix.length ? `<span class="delta ${p1 ? "down" : "flat"}">${p1 ? p1 + " P1 open" : "No P1"} </span>` : `<span class="delta flat">AgriTech only</span>`, s: divs.includes("agri") ? [3, 5, 4, 6, 5, 7, 6, 4, 5, 6, 7, 6, tix.length] : new Array(13).fill(0), go: "service" }
     ];
     const sc = UI.division === "all" ? "var(--c-mag)" : DIVC[UI.division];
     const myTasks = S.tasks.filter((t) => inDiv(t.div));
     const todayIdx = (TODAY.getDay() + 6) % 7, monday = new Date(TODAY.getTime() - todayIdx * DAY);
-    const visits = divs.includes("agri") ? L.SCHEDULE.filter((e) => e.type !== "Leave").map((e) => { const off = e.day >= todayIdx ? e.day : e.day + 7; return Object.assign({}, e, { date: new Date(monday.getTime() + off * DAY).toISOString(), off }); }).sort((a, b) => a.off - b.off).slice(0, 5) : [];
+    /* visits still running or starting later this week first, then next week's (same weekly rota) */
+    const jobs = L.SCHEDULE.filter((e) => e.type !== "Leave");
+    const visits = divs.includes("agri") ? jobs.filter((e) => e.day + e.len - 1 >= todayIdx).map((e) => Object.assign({}, e, { off: Math.max(e.day, todayIdx), on: e.day < todayIdx }))
+      .concat(jobs.map((e) => Object.assign({}, e, { off: e.day + 7 }))).map((e) => Object.assign(e, { date: new Date(monday.getTime() + e.off * DAY).toISOString() })).sort((a, b) => a.off - b.off || a.tech.localeCompare(b.tech)).slice(0, 5) : [];
     const acts = L.ACTIVITY.filter((a) => inDiv(a.div));
     el.innerHTML = `
       <div class="page-head">
@@ -336,22 +381,22 @@
       </div>
       <div class="kpis">${kpis.map((k) => `<a class="card kpi" href="#/${k.go}" ${k.title ? `title="${k.title}"` : ""}><span class="kpi-l">${ic(k.i)}${k.l}</span><span class="kpi-v">${k.v}</span><span class="kpi-row">${k.d}${C.spark(k.s, sc, 72, 26)}</span></a>`).join("")}</div>
       <div class="grid g-main">
-        <section class="card" aria-labelledby="revH"><div class="card-h"><div><h2 id="revH">Revenue by division</h2><span class="sub">Invoiced, last 6 months · total ${rm0(divs.reduce((s, d) => s + L.REVENUE[d].reduce((a, b) => a + b, 0), 0))}</span></div><div class="legend">${divs.map((d) => `<span><i style="background:${DIVC[d]}"></i>${L.DIVS[d].short}</span>`).join("")}</div></div><div class="card-b"><div class="chart-box" id="revChart"></div>${divs.includes("bev") ? `<p class="faint" style="font-size:12px;margin-top:6px">Beverages is pre-launch: sampling and event sales only until Batch 001 ships.</p>` : ""}</div></section>
+        <section class="card" aria-labelledby="revH"><div class="card-h"><div><h2 id="revH">Revenue by division</h2><span class="sub">Recognised revenue, last 6 months · total ${rm0(divs.reduce((s, d) => s + L.REVENUE[d].reduce((a, b) => a + b, 0), 0))}</span></div><div class="legend">${divs.map((d) => `<span><i style="background:${DIVC[d]}"></i>${L.DIVS[d].short}</span>`).join("")}</div></div><div class="card-b"><div class="chart-box" id="revChart"></div>${divs.includes("bev") ? `<p class="faint" style="font-size:12px;margin-top:6px">Beverages is pre-launch: sampling and event sales only until Batch 001 ships.</p>` : ""}</div></section>
         <section class="card" aria-labelledby="srcH"><div class="card-h"><div><h2 id="srcH">Leads by source</h2><span class="sub">Last 30 days · ${num(divs.reduce((s, d) => s + Object.values(L.LEAD_SOURCES[d]).reduce((a, b) => a + b, 0), 0))} leads</span></div><a class="link" href="#/analytics">Analytics ${ic("chev", "sm")}</a></div><div class="card-b"><div id="srcChart"></div></div></section>
       </div>
       <div class="grid g-3 mt">
-        <section class="card" aria-labelledby="taskH"><div class="card-h"><h2 id="taskH">Today’s tasks</h2><span class="sub" id="taskCount"></span></div><div class="card-b flush"><div class="list" id="taskList" role="list"></div></div></section>
-        <section class="card" aria-labelledby="visH"><div class="card-h"><h2 id="visH">Upcoming technician visits</h2><a class="link" href="#/staff">Schedule ${ic("chev", "sm")}</a></div><div class="card-b flush">${visits.length ? `<div class="list">${visits.map((v) => `<div class="li"><span class="date-tile"><small>${fday(v.date)}</small><b>${dt(v.date).getDate()}</b></span><div class="grow"><div class="t">${esc(CO[v.co].name)}</div><div class="s">${esc(v.text)} · ${esc(ST[v.tech].name)}</div></div><span class="ev-dot tag">${esc(v.type)}</span></div>`).join("")}</div>` : empty("wrench", "No technician visits", "Field visits are scheduled for AgriTech customers. Switch the filter to All or AgriTech.")}</div></section>
+        <section class="card" aria-labelledby="taskH"><div class="card-h"><h2 id="taskH">Today’s tasks</h2><span class="sub" id="taskCount"></span></div><div class="card-b flush"><div class="list" id="taskList"></div></div></section>
+        <section class="card" aria-labelledby="visH"><div class="card-h"><h2 id="visH">Upcoming technician visits</h2><a class="link" href="#/staff">Schedule ${ic("chev", "sm")}</a></div><div class="card-b flush">${visits.length ? `<div class="list">${visits.map((v) => `<div class="li"><span class="date-tile"><small>${fday(v.date)}</small><b>${dt(v.date).getDate()}</b></span><div class="grow"><div class="t">${esc(CO[v.co].name)}</div><div class="s">${esc(v.text)} · ${esc(ST[v.tech].name)}${v.on ? " · in progress" : ""}</div></div><span class="ev-dot tag">${esc(v.type)}</span></div>`).join("")}</div>` : empty("wrench", "No technician visits", "Field visits are scheduled for AgriTech customers. Switch the filter to All or AgriTech.")}</div></section>
         <section class="card" aria-labelledby="actH"><div class="card-h"><h2 id="actH">Recent activity</h2><span class="sub">Live feed</span></div><div class="feed">${acts.length ? acts.slice(0, 6).map((a) => `<div class="feed-i"><span class="ic">${ic(a.icon === "deal" ? "target" : a.icon)}</span><div><p>${a.text}</p><small>${esc(a.who)} · ${relH(a.t)}</small></div></div>`).join("") : empty("clock", "Nothing yet", "Activity from this division will appear here.")}</div></section>
       </div>`;
     $$("#divSeg button", el).forEach((b) => b.addEventListener("click", () => { UI.division = b.dataset.div; saveUI(); VIEWS.overview(el); announce("Showing " + b.textContent.trim()); $(`#divSeg [data-div="${UI.division}"]`).focus(); }));
-    C.bars($("#revChart", el), { labels: L.REVENUE.months, stacked: true, height: 250, label: "Revenue by division, last 6 months", series: divs.map((d) => ({ name: L.DIVS[d].short, color: DIVC[d], values: L.REVENUE[d] })), format: rm, axis: rmc });
+    C.bars($("#revChart", el), { labels: L.REVENUE.months, stacked: true, height: 250, label: "Revenue by division, last 6 months", rowHead: "Month", series: divs.map((d) => ({ name: L.DIVS[d].short, color: DIVC[d], values: L.REVENUE[d] })), format: rm, axis: rmc });
     const src = {}; divs.forEach((d) => Object.entries(L.LEAD_SOURCES[d]).forEach(([k, v]) => (src[k] = (src[k] || 0) + v)));
-    C.hbars($("#srcChart", el), { items: Object.entries(src).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]).map(([label, value]) => ({ label, value })), color: sc, format: (v) => num(v), unit: "Leads", label: "Leads by source", labelWidth: 118, valueWidth: 36 });
+    C.hbars($("#srcChart", el), { items: Object.entries(src).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]).map(([label, value]) => ({ label, value })), color: sc, format: (v) => num(v), unit: "Leads", label: "Leads by source, last 30 days", rowHead: "Source", rowH: 34, labelWidth: 118, valueWidth: 36 });
     function drawTasks() {
       const list = $("#taskList", el); const done = myTasks.filter((t) => t.done).length;
       $("#taskCount", el).textContent = `${done} of ${myTasks.length} done`;
-      list.innerHTML = myTasks.length ? myTasks.map((t) => `<div class="li task" role="checkbox" tabindex="0" aria-checked="${t.done}" data-id="${t.id}"><span class="check">${ic("check")}</span><div class="grow"><div class="t">${esc(t.text)}</div><div class="s">${divTag(t.div)}</div></div><span class="when">${esc(t.due)}</span></div>`).join("") : empty("check", "All clear", "No tasks for this division today.");
+      list.innerHTML = myTasks.length ? myTasks.map((t) => `<div class="li task" role="checkbox" tabindex="0" aria-checked="${t.done}" data-id="${t.id}"><span class="check">${ic("check")}</span><div class="grow"><div class="t">${nowrapIds(esc(t.text))}</div><div class="s">${divTag(t.div)}</div></div><span class="when">${esc(t.due)}</span></div>`).join("") : empty("check", "All clear", "No tasks for this division today.");
       $$(".task", list).forEach((row) => { const flip = () => { const t = S.tasks.find((x) => x.id === row.dataset.id); t.done = !t.done; save(); drawTasks(); $(`.task[data-id="${t.id}"]`, el).focus(); if (t.done) toast("Task done · " + esc(t.text)); }; row.addEventListener("click", flip); row.addEventListener("keydown", (e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); } }); });
     }
     drawTasks();
@@ -375,8 +420,8 @@
     const filtered = () => S.deals.filter((d) => (pf.owner === "all" || d.owner === pf.owner) && (pf.div === "all" || d.div === pf.div) && (!pf.q || (d.title + " " + CO[d.co].name).toLowerCase().includes(pf.q.toLowerCase())));
     function summary() {
       const f = filtered(), open = f.filter((d) => d.stage !== "Won" && d.stage !== "Lost");
-      const v = open.reduce((s, d) => s + d.value, 0), w = open.reduce((s, d) => s + d.value * L.PROB[d.stage] / 100, 0), won = f.filter((d) => d.stage === "Won").reduce((s, d) => s + d.value, 0);
-      $("#pipeSum", el).innerHTML = `<b class="tnum">${rm(v)}</b> open across ${open.length} deals · weighted <b class="tnum">${rm0(w)}</b> · won this quarter <b class="tnum">${rm0(won)}</b>`;
+      const v = open.reduce((s, d) => s + d.value, 0), w = open.reduce((s, d) => s + d.value * L.PROB[d.stage] / 100, 0), won = f.filter((d) => isWonRecent(d)).reduce((s, d) => s + d.value, 0);
+      $("#pipeSum", el).innerHTML = `<b class="tnum">${rm(v)}</b> open across ${open.length} deal${open.length === 1 ? "" : "s"} · weighted <b class="tnum">${rm(w)}</b> · won in the last ${WON_DAYS} days <b class="tnum">${rm(won)}</b>`;
     }
     function draw(focusId) {
       summary(); const f = filtered();
@@ -399,16 +444,16 @@
     function drawTable(f) {
       const get = { title: (d) => d.title, co: (d) => CO[d.co].name, stage: (d) => L.STAGES.indexOf(d.stage), value: (d) => d.value, owner: (d) => d.owner, close: (d) => d.close };
       const rows = sortRows(f, pf.sort.key, pf.sort.dir, get);
-      body.innerHTML = `<div class="card"><div class="tbl-wrap"><table class="tbl cards"><thead><tr>${th("Deal", "title", pf.sort)}${th("Stage", "stage", pf.sort)}${th("Value", "value", pf.sort, "r")}${th("Owner", "owner", pf.sort)}<th>Division</th>${th("Expected close", "close", pf.sort)}<th>Next step</th></tr></thead><tbody>${rows.length ? rows.map((d) => `<tr class="click" tabindex="0" data-id="${d.id}"><td class="first" data-l="Deal"><div class="co">${lq(CO[d.co].name)}<div><b>${esc(d.title)}</b><small>${esc(CO[d.co].name)}</small></div></div></td><td data-l="Stage">${stageTag(d.stage)}</td><td class="r strong" data-l="Value">${rm(d.value)}</td><td data-l="Owner"><span class="co">${av(d.owner)}<span>${esc(d.owner)}</span></span></td><td data-l="Division">${divTag(d.div)}</td><td data-l="Close">${fdateY(d.close)}</td><td data-l="Next" class="muted wrap">${esc(d.next)}</td></tr>`).join("") : `<tr><td colspan="7">${empty("search", "No deals match", "Try a different search or clear the filters.")}</td></tr>`}</tbody></table></div><div class="tfoot"><span>${rows.length} deals</span><span class="tnum">Total ${rm(rows.reduce((s, d) => s + d.value, 0))}</span></div></div>`;
+      body.innerHTML = `<div class="card"><div class="tbl-wrap"><table class="tbl cards"><thead><tr>${th("Deal", "title", pf.sort)}${th("Stage", "stage", pf.sort)}${th("Value", "value", pf.sort, "r")}${th("Owner", "owner", pf.sort, "hide-m")}<th class="hide-l">Division</th>${th("Close date", "close", pf.sort)}<th class="hide-l">Next step</th></tr></thead><tbody>${rows.length ? rows.map((d) => `<tr class="click" tabindex="0" data-id="${d.id}"><td class="first" data-l="Deal"><div class="co">${lq(CO[d.co].name)}<div><b>${esc(d.title)}</b><small>${esc(CO[d.co].name)}</small></div></div></td><td data-l="Stage">${stageTag(d.stage)}</td><td class="r strong" data-l="Value">${rm(d.value)}</td><td data-l="Owner" class="hide-m"><span class="co">${av(d.owner)}<span>${esc(d.owner)}</span></span></td><td data-l="Division" class="hide-l">${divTag(d.div)}</td><td data-l="Close">${fdateY(d.close)}</td><td data-l="Next" class="muted wrap hide-l">${esc(d.next)}</td></tr>`).join("") : `<tr><td colspan="7">${empty("search", "No deals match", "Try a different search or clear the filters.")}</td></tr>`}</tbody></table></div><div class="tfoot"><span>${rows.length} deals</span><span class="tnum">Total ${rm(rows.reduce((s, d) => s + d.value, 0))}</span></div></div>`;
       $$("[data-sort]", body).forEach((b) => b.addEventListener("click", () => { const k = b.dataset.sort; pf.sort = { key: k, dir: pf.sort.key === k && pf.sort.dir === "desc" ? "asc" : "desc" }; drawTable(filtered()); $(`[data-sort="${k}"]`, body).focus(); }));
       $$("tr.click", body).forEach((tr) => { tr.addEventListener("click", () => openDeal(tr.dataset.id, draw)); tr.addEventListener("keydown", (e) => { if (e.key === "Enter") openDeal(tr.dataset.id, draw); }); });
     }
     function moveDeal(id, stage, undoable = true) {
       const d = S.deals.find((x) => x.id === id); if (!d || d.stage === stage) return;
-      const from = d.stage; d.stage = stage; d.timeline.push({ t: new Date().toISOString(), kind: "stage", text: `Moved from ${from} to ${stage}` });
+      const undo = applyStage(d, stage);
       save(); draw(id); refreshBadges();
       announce(`${d.title} moved to ${stage}`);
-      toast(`Moved <b>${esc(d.title)}</b> to ${esc(stage)}${stage === "Won" ? " · " + rm(d.value) + " added to won this quarter" : ""}`, { icon: stage === "Won" ? "target" : "check", action: undoable ? { label: "Undo", fn: () => { d.stage = from; d.timeline.pop(); save(); draw(id); refreshBadges(); announce("Move undone"); } } : null });
+      toast(`Moved <b>${esc(d.title)}</b> to ${esc(stage)}${stage === "Won" ? " · " + rm(d.value) + " added to won" : ""}`, { icon: stage === "Won" ? "target" : "check", action: undoable ? { label: "Undo", fn: () => { undo(); save(); if (current === "pipeline") draw(id); refreshBadges(); announce("Move undone"); } } : null });
     }
     S._moveDeal = moveDeal;
     function wireBoard(board) {
@@ -435,22 +480,33 @@
       st.dx = st.x - r.left; st.dy = st.y - r.top;
       st.ghost = st.c.cloneNode(true); st.ghost.classList.add("ghost"); st.ghost.removeAttribute("tabindex"); st.ghost.style.width = r.width + "px";
       document.body.appendChild(st.ghost); st.c.classList.add("dragging"); DRAG_ON = true; position(st);
+      const board = $("#board"); if (board) board.classList.add("is-dragging");
+      /* keep auto-scrolling while the pointer rests near an edge (board sideways, page up/down) */
+      const loop = () => {
+        if (dragState !== st || !st.on) return;
+        const bd = $("#board"); if (bd) { const br = bd.getBoundingClientRect(); const e = 64; const dx = st.x > br.right - e ? (st.x - (br.right - e)) / e : st.x < br.left + e ? -((br.left + e) - st.x) / e : 0; if (dx) { bd.scrollLeft += Math.round(dx * 18); position(st, true); } }
+        const vh = window.innerHeight, ve = 72, bottomBar = window.innerWidth <= 860 ? 70 : 0; const dy = st.y > vh - bottomBar - ve ? 1 : st.y < ve + 60 ? -1 : 0; if (dy) { window.scrollBy(0, dy * 10); position(st, true); }
+        st.raf = requestAnimationFrame(loop);
+      };
+      st.raf = requestAnimationFrame(loop);
       if (navigator.vibrate && st.touch) try { navigator.vibrate(12); } catch (e) { /* ignore */ }
     }
     function position(st) {
       st.ghost.style.left = st.x - st.dx + "px"; st.ghost.style.top = st.y - st.dy + "px";
-      const under = document.elementFromPoint(st.x, st.y); const col = under && under.closest(".col");
+      const under = document.elementFromPoint(st.x, st.y); let col = under && under.closest(".col");
+      if (!col) { /* in a gutter or between columns: use the nearest visible column at this height */
+        const bd = $("#board"), br = bd && bd.getBoundingClientRect();
+        if (br && st.y >= br.top && st.y <= br.bottom) { let best = null, bd0 = 1e9; $$(".col", bd).forEach((c) => { const r = c.getBoundingClientRect(); if (r.right < br.left || r.left > br.right) return; const dist = st.x < r.left ? r.left - st.x : st.x > r.right ? st.x - r.right : 0; if (dist < bd0) { bd0 = dist; best = c; } }); if (bd0 < 40) col = best; }
+      }
       if (st.over && st.over !== col) st.over.classList.remove("over");
       if (col) col.classList.add("over"); st.over = col;
-      const board = $("#board"); if (!board) return; const br = board.getBoundingClientRect();
-      if (st.x > br.right - 60) board.scrollLeft += 14; else if (st.x < br.left + 60) board.scrollLeft -= 14;
     }
     function onMove(e) {
       const st = dragState; if (!st) return; st.x = e.clientX; st.y = e.clientY;
       if (!st.on) { const dist = Math.hypot(st.x - st.x0, st.y - st.y0); if (st.touch) { if (dist > 8) onCancel(); return; } if (dist > 5) begin(st); else return; }
       e.preventDefault(); position(st);
     }
-    function end() { const st = dragState; window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", onCancel); if (!st) return; clearTimeout(st.timer); if (st.ghost) st.ghost.remove(); st.c.classList.remove("dragging"); if (st.over) st.over.classList.remove("over"); dragState = null; DRAG_ON = false; return st; }
+    function end() { const st = dragState; window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", onUp); window.removeEventListener("pointercancel", onCancel); if (!st) return; clearTimeout(st.timer); cancelAnimationFrame(st.raf); const bd = $("#board"); if (bd) bd.classList.remove("is-dragging"); if (st.ghost) st.ghost.remove(); st.c.classList.remove("dragging"); if (st.over) st.over.classList.remove("over"); dragState = null; DRAG_ON = false; return st; }
     function onUp() { const st = end(); if (st && st.on) { justDragged = true; setTimeout(() => (justDragged = false), 50); if (st.over) moveDeal(st.id, st.over.dataset.stage); } }
     function onCancel() { end(); }
 
@@ -463,6 +519,13 @@
     draw();
   };
 
+  /* change a deal's stage; closing it (won / lost) dates it today. Returns an undo function. */
+  function applyStage(d, stage) {
+    const from = d.stage, close = d.close;
+    d.stage = stage; d.timeline.push({ t: new Date().toISOString(), kind: "stage", text: stage === "Won" ? "Marked as won" : stage === "Lost" ? "Marked as lost" : `Moved from ${from} to ${stage}` });
+    if ((stage === "Won" || stage === "Lost") && from !== stage) d.close = TODAY.toISOString();
+    return () => { d.stage = from; d.close = close; d.timeline.pop(); };
+  }
   function openDeal(id, redraw) {
     const d = S.deals.find((x) => x.id === id); if (!d) return; const co = CO[d.co];
     const kindIcon = { create: "plus", call: "phone", email: "mail", stage: "arrowR", note: "note" };
@@ -471,14 +534,14 @@
       lead: lq(co.name), title: esc(d.title), sub: `${esc(co.name)} · ${esc(co.state)}`,
       body: `<dl class="kv"><div><dt>Value</dt><dd class="tnum">${rm(d.value)}</dd></div><div><dt>Weighted</dt><dd class="tnum" id="dw">${rm(d.value * L.PROB[d.stage] / 100)}</dd></div>
         <div><dt><label for="dst">Stage</label></dt><dd><select class="select" id="dst" style="width:100%">${L.STAGES.map((s) => `<option ${s === d.stage ? "selected" : ""}>${s}</option>`).join("")}</select></dd></div><div><dt>Probability</dt><dd id="dp">${L.PROB[d.stage]}%</dd></div>
-        <div><dt>Owner</dt><dd><span class="co" style="display:flex;gap:8px;align-items:center">${av(d.owner)}${esc(d.owner)}</span></dd></div><div><dt>Expected close</dt><dd>${fdateY(d.close)}</dd></div>
+        <div><dt>Owner</dt><dd><span class="co" style="display:flex;gap:8px;align-items:center">${av(d.owner)}${esc(d.owner)}</span></dd></div><div><dt id="dclose-l">${d.stage === "Won" ? "Won on" : d.stage === "Lost" ? "Lost on" : "Expected close"}</dt><dd id="dclose">${fdateY(d.close)}</dd></div>
         <div><dt>Division</dt><dd>${divTag(d.div)}</dd></div><div><dt>Contact</dt><dd>${esc(co.contact)} · ${esc(co.title)}</dd></div></dl>
         <div class="card" style="padding:12px 14px;display:flex;gap:10px;align-items:flex-start">${ic("flag")}<div><b style="font-size:13px">Next step</b><p class="muted" style="font-size:13.5px">${esc(d.next)}</p></div></div>
         <div class="sec-h">Timeline</div><div class="note-box"><label class="sr-only" for="dnote">Add a note</label><input class="input" id="dnote" placeholder="Log a call, note or next step…"><button class="btn btn-s" id="dadd">Add</button></div><div class="tl mt" id="dtl">${tl()}</div>`,
       foot: `<button class="btn btn-g" data-close>Close</button><button class="btn btn-s" id="dinv">${ic("invoice")}Create invoice</button>${d.stage !== "Won" ? `<button class="btn btn-p" id="dwon">${ic("target")}Mark as won</button>` : ""}`
     }), { label: "Deal details" });
     const p = lay.panel;
-    const setStage = (s) => { if (S._moveDeal && current === "pipeline") S._moveDeal(d.id, s); else { const from = d.stage; d.stage = s; d.timeline.push({ t: new Date().toISOString(), kind: "stage", text: `Moved from ${from} to ${s}` }); save(); toast(`Moved to ${esc(s)}`); } $("#dp", p).textContent = L.PROB[s] + "%"; $("#dw", p).textContent = rm(d.value * L.PROB[s] / 100); $("#dtl", p).innerHTML = tl(); };
+    const setStage = (s) => { if (S._moveDeal && current === "pipeline") S._moveDeal(d.id, s); else { const undo = applyStage(d, s); save(); refreshBadges(); refreshView(); toast(`Moved <b>${esc(d.title)}</b> to ${esc(s)}`, { action: { label: "Undo", fn: () => { undo(); save(); refreshBadges(); refreshView(); } } }); } if (!document.contains(p)) return; $("#dp", p).textContent = L.PROB[s] + "%"; $("#dw", p).textContent = rm(d.value * L.PROB[s] / 100); $("#dtl", p).innerHTML = tl(); $("#dclose", p).textContent = fdateY(d.close); $("#dclose-l", p).textContent = d.stage === "Won" ? "Won on" : d.stage === "Lost" ? "Lost on" : "Expected close"; };
     $("#dst", p).addEventListener("change", (e) => setStage(e.target.value));
     const add = () => { const v = $("#dnote", p).value.trim(); if (!v) return; d.timeline.push({ t: new Date().toISOString(), kind: "note", text: v, fresh: true }); save(); $("#dnote", p).value = ""; $("#dtl", p).innerHTML = tl(); toast("Note added to timeline", { icon: "note" }); };
     $("#dadd", p).addEventListener("click", add); $("#dnote", p).addEventListener("keydown", (e) => { if (e.key === "Enter") add(); });
@@ -515,11 +578,11 @@
         <label class="sr-only" for="cow">Owner</label><select class="select" id="cow"><option value="all">All owners</option>${owners.map((t) => `<option ${cf.owner === t ? "selected" : ""}>${esc(t)}</option>`).join("")}</select>
         <button class="btn btn-g btn-sm" id="cClear">Clear</button></div>
       <div class="card" id="cBody"></div>`;
-    const get = { name: (c) => c.name, contact: (c) => c.contact, type: (c) => c.type, state: (c) => c.state, owner: (c) => c.owner, last: (c) => c.last, ltv: (c) => c.ltv };
+    const get = { name: (c) => c.name, contact: (c) => c.contact, type: (c) => c.type, state: (c) => c.state, owner: (c) => c.owner, last: (c) => c.last, ltv: (c) => ltvOf(c) };
     function draw() {
       const q = cf.q.toLowerCase();
       const rows = sortRows(L.COMPANIES.filter((c) => (cf.type === "all" || c.type === cf.type) && (cf.state === "all" || c.state === cf.state) && (cf.owner === "all" || c.owner === cf.owner) && (!q || (c.name + c.contact + c.email).toLowerCase().includes(q))), cf.sort.key, cf.sort.dir, get);
-      $("#cBody", el).innerHTML = `<div class="tbl-wrap"><table class="tbl cards"><thead><tr>${th("Company", "name", cf.sort)}${th("Contact", "contact", cf.sort)}${th("Type", "type", cf.sort)}${th("State", "state", cf.sort)}${th("Owner", "owner", cf.sort)}${th("Last activity", "last", cf.sort)}${th("Lifetime value", "ltv", cf.sort, "r")}</tr></thead><tbody>${rows.length ? rows.map((c) => `<tr class="click" tabindex="0" data-id="${c.id}"><td class="first" data-l="Company"><div class="co">${lq(c.name)}<div><b>${esc(c.name)}</b><small>${divTag(c.div)}</small></div></div></td><td data-l="Contact"><div style="text-align:inherit"><b style="font-weight:600">${esc(c.contact)}</b><div class="faint" style="font-size:12px">${esc(c.title)}</div></div></td><td data-l="Type"><span class="tag">${esc(c.type)}</span></td><td data-l="State">${esc(c.state)}</td><td data-l="Owner"><span class="co">${av(c.owner)}<span>${esc(c.owner)}</span></span></td><td data-l="Last activity" class="muted">${rel(c.last)}</td><td class="r strong" data-l="Lifetime value">${c.ltv ? rm(c.ltv) : '<span class="faint">—</span>'}</td></tr>`).join("") : `<tr><td colspan="7">${empty("search", "No companies match", "Try another search term or clear the filters.")}</td></tr>`}</tbody></table></div><div class="tfoot"><span>${rows.length} of ${L.COMPANIES.length} companies</span><span class="tnum">Lifetime value ${rm(rows.reduce((s, c) => s + c.ltv, 0))}</span></div>`;
+      $("#cBody", el).innerHTML = `<div class="tbl-wrap"><table class="tbl cards"><thead><tr>${th("Company", "name", cf.sort)}${th("Contact", "contact", cf.sort)}${th("Type", "type", cf.sort, "hide-l")}${th("State", "state", cf.sort, "hide-l")}${th("Owner", "owner", cf.sort, "hide-m")}${th("Last activity", "last", cf.sort)}${th("Lifetime value", "ltv", cf.sort, "r")}</tr></thead><tbody>${rows.length ? rows.map((c) => `<tr class="click" tabindex="0" data-id="${c.id}"><td class="first" data-l="Company"><div class="co">${lq(c.name)}<div><b>${esc(c.name)}</b><small>${divTag(c.div)}</small></div></div></td><td data-l="Contact"><div style="text-align:inherit"><b style="font-weight:600">${esc(c.contact)}</b><div class="faint" style="font-size:12px">${esc(c.title)}</div></div></td><td data-l="Type" class="hide-l"><span class="tag">${esc(c.type)}</span></td><td data-l="State" class="hide-l">${esc(c.state)}</td><td data-l="Owner" class="hide-m"><span class="co">${av(c.owner)}<span>${esc(c.owner)}</span></span></td><td data-l="Last activity" class="muted">${rel(c.last)}</td><td class="r strong" data-l="Lifetime value">${ltvOf(c) ? rm(ltvOf(c)) : '<span class="faint">—</span><span class="sr-only">none yet</span>'}</td></tr>`).join("") : `<tr><td colspan="7">${empty("search", "No companies match", "Try another search term or clear the filters.")}</td></tr>`}</tbody></table></div><div class="tfoot"><span>${rows.length} of ${L.COMPANIES.length} companies</span><span class="tnum">Lifetime value ${rm(rows.reduce((s, c) => s + ltvOf(c), 0))}</span></div>`;
       $$("[data-sort]", el).forEach((b) => b.addEventListener("click", () => { const k = b.dataset.sort; cf.sort = { key: k, dir: cf.sort.key === k && cf.sort.dir === "desc" ? "asc" : "desc" }; draw(); $(`[data-sort="${k}"]`, el).focus(); }));
       $$("tr.click", el).forEach((tr) => { tr.addEventListener("click", () => openCompany(tr.dataset.id)); tr.addEventListener("keydown", (e) => { if (e.key === "Enter") openCompany(tr.dataset.id); }); });
     }
@@ -538,13 +601,13 @@
     const lay = openLayer("drawer", drawerShell({
       lead: lq(c.name), title: esc(c.name), sub: `${esc(c.type)} · ${esc(c.state)} · Owner ${esc(c.owner)}`,
       body: `<div class="card" style="padding:12px 14px;display:flex;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap">${av(c.contact, "lg")}<div style="flex:1;min-width:160px"><b>${esc(c.contact)}</b><div class="faint" style="font-size:12.5px">${esc(c.title)} · ${esc(c.email)}</div></div><div style="display:flex;gap:6px"><button class="btn btn-s btn-sm" data-demo="Email draft opened (demo)">${ic("mail")}Email</button><button class="btn btn-s btn-sm" data-demo="WhatsApp chat opened (demo)">${ic("chat")}WhatsApp</button><button class="btn btn-s btn-sm" data-demo="Calling ${esc(c.phone)} (demo)">${ic("phone")}Call</button></div></div>
-        <dl class="kv"><div><dt>Lifetime value</dt><dd class="tnum">${c.ltv ? rm(c.ltv) : "—"}</dd></div><div><dt>Open deals</dt><dd class="tnum">${deals.filter((d) => d.stage !== "Won" && d.stage !== "Lost").length} · ${rm0(deals.filter((d) => d.stage !== "Won" && d.stage !== "Lost").reduce((s, d) => s + d.value, 0))}</dd></div><div><dt>Phone</dt><dd>${esc(c.phone)}</dd></div><div><dt>Last activity</dt><dd>${rel(c.last)}</dd></div></dl>
+        <dl class="kv"><div><dt>Lifetime value</dt><dd class="tnum">${ltvOf(c) ? rm(ltvOf(c)) : "—"}</dd></div><div><dt>Open deals</dt><dd class="tnum">${deals.filter((d) => d.stage !== "Won" && d.stage !== "Lost").length} · ${rm0(deals.filter((d) => d.stage !== "Won" && d.stage !== "Lost").reduce((s, d) => s + d.value, 0))}</dd></div><div><dt>Phone</dt><dd>${esc(c.phone)}</dd></div><div><dt>Last activity</dt><dd>${rel(c.last)}</dd></div></dl>
         <div class="tabs" role="tablist" aria-label="Company records">${[["notes", "Notes", S.notes[id].length], ["deals", "Deals", deals.length], ["invoices", "Invoices", invs.length], ["emails", "Emails", emails.length]].map(([k, l, n]) => `<button role="tab" type="button" id="ct-${k}" aria-controls="cp" aria-selected="${k === tab}" data-tab="${k}">${l}<span class="n">${n}</span></button>`).join("")}</div><div id="cp" role="tabpanel"></div>`,
       foot: `<button class="btn btn-g" data-close>Close</button><button class="btn btn-s" id="cInv">${ic("invoice")}New invoice</button><button class="btn btn-p" id="cDeal">${ic("plus")}New deal</button>`
     }), { label: "Company details" });
     const p = lay.panel;
     function show(k) {
-      tab = k; $$("[data-tab]", p).forEach((b) => b.setAttribute("aria-selected", String(b.dataset.tab === k))); $("#cp", p).setAttribute("aria-labelledby", "ct-" + k);
+      tab = k; $$("[data-tab]", p).forEach((b) => { b.setAttribute("aria-selected", String(b.dataset.tab === k)); b.tabIndex = b.dataset.tab === k ? 0 : -1; }); $("#cp", p).setAttribute("aria-labelledby", "ct-" + k);
       const box = $("#cp", p);
       if (k === "notes") {
         box.innerHTML = `<div class="note-box" style="margin:0 0 10px"><label class="sr-only" for="cn">New note</label><input class="input" id="cn" placeholder="Write a note…"><button class="btn btn-s" id="cna">Add note</button></div><div class="tl">${S.notes[id].map((n, i) => `<div class="tl-i ${n.fresh && i === 0 ? "new" : ""}"><span class="ic">${ic("note")}</span><div><p>${esc(n.text)}</p><small>${esc(n.by)} · ${rel(n.t)}</small></div></div>`).join("")}</div>`;
@@ -580,14 +643,14 @@
       <div id="sHead">${head()}</div>
       <section class="card" aria-labelledby="schH"><div class="card-h"><div><h2 id="schH">Technician field schedule</h2><span class="sub">Week of ${fdateY(monday.toISOString())} · installations, commissioning, service and training</span></div><div class="legend">${["Installation", "Commissioning", "Service", "Training", "Leave"].map((t) => `<span><i class="ev ${t}" style="position:static;width:12px;height:12px;padding:0;border-radius:3px"></i>${t}</span>`).join("")}</div></div>
         <div class="card-b" style="overflow-x:auto"><div class="week" role="table" aria-label="Technician schedule this week">
-          <div class="week-h" role="columnheader">Technician</div>${days.map((d, i) => `<div class="week-h ${i === todayIdx ? "today" : ""}" role="columnheader">${d.toLocaleDateString("en-GB", { weekday: "short" })}<b>${d.getDate()}</b></div>`).join("")}
-          ${L.STAFF.filter((s) => s.tech).map((t) => `<div class="week-r" role="row"><div class="week-n" role="rowheader">${av(t.name)}<span>${esc(t.name)}</span></div>${days.map((d, i) => { const ev = L.SCHEDULE.find((e) => e.tech === t.id && e.day === i); return `<div class="week-c ${i === todayIdx ? "today" : ""}" role="cell">${ev ? `<button class="ev ${ev.type}" style="width:calc(${ev.len * 100}% + ${ev.len - 1}px - 10px)" data-ev="${L.SCHEDULE.indexOf(ev)}"><b>${esc(ev.co ? CO[ev.co].name : ev.text)}</b><span>${esc(ev.type)}${ev.co ? " · " + esc(ev.text) : ""}</span></button>` : ""}</div>`; }).join("")}</div>`).join("")}
+          <div class="week-r" role="row"><div class="week-h" role="columnheader">Technician</div>${days.map((d, i) => `<div class="week-h ${i === todayIdx ? "today" : ""}" role="columnheader" ${i === todayIdx ? 'aria-current="date"' : ""}>${d.toLocaleDateString("en-GB", { weekday: "short" })}<b>${d.getDate()}</b></div>`).join("")}</div>
+          ${L.STAFF.filter((s) => s.tech).map((t) => `<div class="week-r" role="row"><div class="week-n" role="rowheader">${av(t.name)}<span>${esc(t.name)}</span></div>${days.map((d, i) => { const ev = L.SCHEDULE.find((e) => e.tech === t.id && e.day === i); return `<div class="week-c ${i === todayIdx ? "today" : ""}" role="cell">${ev ? `<button class="ev ${ev.type}" style="width:calc(${ev.len * 100}% + ${ev.len - 1}px - 10px)" data-ev="${L.SCHEDULE.indexOf(ev)}"><b>${esc(ev.co ? CO[ev.co].name : ev.text)}</b><span>${ev.type === "Leave" ? "Approved · whole week" : esc(ev.type) + (ev.co ? " · " + esc(ev.text) : "")}</span></button>` : ""}</div>`; }).join("")}</div>`).join("")}
         </div></div></section>
       <div class="grid g-main mt">
         <section class="card" aria-labelledby="dirH"><div class="card-h"><h2 id="dirH">Team directory</h2><span class="sub">Change a status to update the board</span></div><div class="card-b"><div class="people">${L.STAFF.map((s) => `<div class="card person"><div class="person-top">${av(s.name, "lg")}<div style="min-width:0"><b>${esc(s.name)}</b><small>${esc(s.role)}</small></div></div><div class="person-row">${divTag(s.div)}<label class="sr-only" for="ss-${s.id}">Status for ${esc(s.name)}</label><select class="select status-sel" id="ss-${s.id}" data-sid="${s.id}">${Object.entries(STATUS_L).map(([k, l]) => `<option value="${k}" ${S.staffStatus[s.id] === k ? "selected" : ""}>${l}</option>`).join("")}</select></div></div>`).join("")}</div></div></section>
         <div class="stack">
           <section class="card" aria-labelledby="lvH"><div class="card-h"><h2 id="lvH">Leave requests</h2><span class="sub" id="lvSub"></span></div><div id="lvList"></div></section>
-          <section class="card" aria-labelledby="wlH"><div class="card-h"><h2 id="wlH">Workload this week</h2><span class="sub">Hours booked vs capacity</span></div><div class="card-b flush" style="padding:8px 0 12px">${L.STAFF.filter((s) => s.tech || s.id === "u9" || s.id === "u6" || s.id === "u2").sort((a, b) => b.load - a.load).map((s) => `<div class="load-row"><span>${esc(s.name)}</span><div class="bar lg ${s.load >= 90 ? "crit" : s.load >= 80 ? "warn" : ""}" role="progressbar" aria-valuenow="${s.load}" aria-valuemin="0" aria-valuemax="100" aria-label="${esc(s.name)} workload"><i style="width:${s.load}%"></i></div><em>${s.load}%</em></div>`).join("")}<p class="faint" style="font-size:12px;padding:6px 16px 0">${ic("alert", "sm")} 90% and above flagged as over capacity.</p></div></section>
+          <section class="card" aria-labelledby="wlH"><div class="card-h"><h2 id="wlH">Workload this week</h2><span class="sub">Hours booked vs capacity</span></div><div class="card-b flush" style="padding:8px 0 12px">${L.STAFF.filter((s) => s.tech || s.id === "u9" || s.id === "u6" || s.id === "u2").sort((a, b) => b.load - a.load).map((s) => `<div class="load-row"><span>${esc(s.name)}</span><div class="bar lg ${s.load >= 90 ? "crit" : s.load >= 80 ? "warn" : ""}" role="progressbar" aria-valuenow="${s.load}" aria-valuemin="0" aria-valuemax="100" aria-label="${esc(s.name)} workload"><i style="width:${s.load}%"></i></div><em>${s.load}%</em></div>`).join("")}<p class="faint note-i" style="font-size:12px;padding:6px 16px 0">${ic("alert", "sm")}<span>90% and above is flagged as over capacity.</span></p></div></section>
         </div>
       </div>`;
     function drawLeave() {
@@ -622,19 +685,20 @@
     }
     el.innerHTML = `<div class="page-head"><div><div class="eyebrow">${divTag("agri")}</div><h1>Service & spare parts</h1><p>24/7 support, 3–5 day spare parts and 2-month commissioning for AgriTech customers.</p></div><div class="actions"><button class="btn btn-p" id="tNew">${ic("plus")}New ticket</button></div></div>
       <div id="svStats">${stats()}</div>
-      <div class="tabs" role="tablist" aria-label="Service sections">${[["tickets", "Support tickets", S.tickets.filter((t) => t.status !== "Resolved").length], ["parts", "Spare-parts orders", S.parts.filter((p) => p.step < 4).length], ["comm", "Commissioning", S.commissioning.length]].map(([k, l, n]) => `<button type="button" role="tab" id="svt-${k}" aria-controls="svp" aria-selected="${UI.svcTab === k}" data-t="${k}">${l}<span class="n">${n}</span></button>`).join("")}</div>
+      <div class="tabs" role="tablist" aria-label="Service sections">${[["tickets", "Support tickets", "Tickets", S.tickets.filter((t) => t.status !== "Resolved").length], ["parts", "Spare-parts orders", "Parts", S.parts.filter((p) => p.step < 4).length], ["comm", "Commissioning", "Commissioning", S.commissioning.length]].map(([k, l, sh, n]) => `<button type="button" role="tab" id="svt-${k}" aria-controls="svp" aria-selected="${UI.svcTab === k}" tabindex="${UI.svcTab === k ? 0 : -1}" data-t="${k}"><span class="c-long">${l}</span><span class="c-short">${sh}</span><span class="n">${n}</span></button>`).join("")}</div>
       <div id="svp" role="tabpanel"></div>`;
     const box = $("#svp", el);
     function draw() {
       clearTimers();
-      $$("[data-t]", el).forEach((b) => b.setAttribute("aria-selected", String(b.dataset.t === UI.svcTab))); box.setAttribute("aria-labelledby", "svt-" + UI.svcTab);
+      const cnt = { tickets: S.tickets.filter((t) => t.status !== "Resolved").length, parts: S.parts.filter((p) => p.step < 4).length, comm: S.commissioning.length };
+      $$("[data-t]", el).forEach((b) => { const on = b.dataset.t === UI.svcTab; b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1; b.querySelector(".n").textContent = cnt[b.dataset.t]; }); box.setAttribute("aria-labelledby", "svt-" + UI.svcTab);
       if (UI.svcTab === "tickets") {
         const rows = S.tickets.slice().sort((a, b) => (a.status === "Resolved") - (b.status === "Resolved") || a.pri.localeCompare(b.pri) || a.deadline - b.deadline);
-        box.innerHTML = `<div class="card"><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Priority</th><th>Ticket</th><th>Customer · machine</th><th>Assigned</th><th>Status</th><th>SLA</th><th class="r"><span class="sr-only">Actions</span></th></tr></thead><tbody>${rows.map((t) => `<tr data-id="${t.id}"><td data-l="Priority"><span class="pri ${t.pri}" title="${t.pri}: ${t.sla}h response">${t.pri}</span></td><td class="first wrap" data-l="Ticket"><b class="mono">${t.id}</b><div style="font-weight:600">${esc(t.issue)}</div></td><td data-l="Customer"><div><b style="font-weight:600">${esc(CO[t.co].name)}</b><div class="faint" style="font-size:12px">${esc(t.machine)}</div></div></td><td data-l="Assigned"><label class="sr-only" for="ta-${t.id}">Assign ${t.id}</label><select class="select status-sel" id="ta-${t.id}" data-assign="${t.id}"><option value="">Unassigned</option>${techs.map((s) => `<option value="${s.id}" ${t.tech === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select></td><td data-l="Status"><label class="sr-only" for="ts-${t.id}">Status ${t.id}</label><select class="select status-sel" id="ts-${t.id}" data-status="${t.id}">${["New", "Assigned", "On site", "Waiting parts", "Resolved"].map((s) => `<option ${t.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></td><td data-l="SLA" data-sla="${t.id}">${slaText(t)}</td><td class="r" data-l="">${t.status !== "Resolved" ? `<button class="btn btn-s btn-xs" data-resolve="${t.id}">${ic("check")}Resolve</button>` : ""}</td></tr>`).join("")}</tbody></table></div><div class="tfoot"><span>SLA: P1 4 h · P2 8 h · P3 24 h · P4 72 h</span><span>Hotline routes to on-call technician after hours</span></div></div>`;
+        box.innerHTML = `<div class="card"><div class="tbl-wrap"><table class="tbl cards cards-l"><thead><tr><th>Priority</th><th>Ticket</th><th>Customer · machine</th><th>Assigned</th><th>Status</th><th>SLA</th></tr></thead><tbody>${rows.map((t) => `<tr data-id="${t.id}"><td data-l="Priority"><span class="pri ${t.pri}" title="${t.pri}: ${t.sla}h response">${t.pri}</span></td><td class="first wrap" data-l="Ticket"><b class="mono">${t.id}</b><div style="font-weight:600">${esc(t.issue)}</div></td><td data-l="Customer"><div><b style="font-weight:600">${esc(CO[t.co].name)}</b><div class="faint" style="font-size:12px">${esc(t.machine)}</div></div></td><td data-l="Assigned"><label class="sr-only" for="ta-${t.id}">Assign ${t.id}</label><select class="select status-sel" id="ta-${t.id}" data-assign="${t.id}"><option value="">Unassigned</option>${techs.map((s) => `<option value="${s.id}" ${t.tech === s.id ? "selected" : ""}>${esc(s.name)}</option>`).join("")}</select></td><td data-l="Status"><label class="sr-only" for="ts-${t.id}">Status ${t.id}</label><select class="select status-sel" id="ts-${t.id}" data-status="${t.id}">${["New", "Assigned", "On site", "Waiting parts", "Resolved"].map((s) => `<option ${t.status === s ? "selected" : ""}>${s}</option>`).join("")}</select></td><td data-l="SLA"><span data-sla="${t.id}">${slaText(t)}</span>${t.status !== "Resolved" ? `<button type="button" class="btn btn-s btn-xs resolve" data-resolve="${t.id}" aria-label="Resolve ${t.id}">${ic("check")}Resolve</button>` : ""}</td></tr>`).join("")}</tbody></table></div><div class="tfoot"><span>SLA: P1 4 h · P2 8 h · P3 24 h · P4 72 h</span><span>Hotline routes to on-call technician after hours</span></div></div>`;
         const tick = () => S.tickets.forEach((t) => { const c = $(`[data-sla="${t.id}"]`, box); if (c) c.innerHTML = slaText(t); });
         timers.push(setInterval(tick, 1000));
-        const upd = (t, k, v) => { t[k] = v; if (k === "status" && v === "Resolved") toast(`${t.id} resolved · SLA ${t.deadline > Date.now() ? "met" : "missed"}`); draw(); $("#svStats", el).innerHTML = stats(); refreshBadges(); };
-        $$("[data-assign]", box).forEach((s) => s.addEventListener("change", () => { const t = S.tickets.find((x) => x.id === s.dataset.assign); t.tech = s.value || null; if (t.status === "New" && s.value) t.status = "Assigned"; toast(`${t.id} assigned to ${s.value ? esc(ST[s.value].name) : "nobody"}`); draw(); }));
+        const upd = (t, k, v) => { t[k] = v; save(); if (k === "status" && v === "Resolved") toast(`${t.id} resolved · SLA ${t.deadline > Date.now() ? "met" : "missed"}`); draw(); $("#svStats", el).innerHTML = stats(); refreshBadges(); };
+        $$("[data-assign]", box).forEach((s) => s.addEventListener("change", () => { const t = S.tickets.find((x) => x.id === s.dataset.assign); t.tech = s.value || null; if (t.status === "New" && s.value) t.status = "Assigned"; save(); toast(`${t.id} assigned to ${s.value ? esc(ST[s.value].name) : "nobody"}`); draw(); }));
         $$("[data-status]", box).forEach((s) => s.addEventListener("change", () => upd(S.tickets.find((x) => x.id === s.dataset.status), "status", s.value)));
         $$("[data-resolve]", box).forEach((b) => b.addEventListener("click", () => upd(S.tickets.find((x) => x.id === b.dataset.resolve), "status", "Resolved")));
       } else if (UI.svcTab === "parts") {
@@ -642,7 +706,7 @@
           const day = -p.ordered, delivered = p.step >= 4, late = !delivered && day > p.target, risk = !delivered && !late && day >= p.target - 1;
           return `<tr><td class="first wrap" data-l="Order"><b class="mono">${p.id}</b><div style="font-weight:600">${esc(p.part)} × ${p.qty}</div></td><td data-l="Customer">${esc(CO[p.co].name)}</td><td data-l="Progress"><div style="display:grid;gap:5px;min-width:150px"><div class="steps" aria-hidden="true">${L.PART_STEPS.map((_, i) => `<i class="${i <= p.step ? "on" : ""}"></i>`).join("")}</div><small class="faint">${L.PART_STEPS[p.step]}</small></div></td><td data-l="Day" class="tnum">${delivered ? "—" : `Day ${day} of ${p.target}`}</td><td data-l="Status"><span class="pill ${delivered ? "good" : late ? "crit" : risk ? "warn" : "info"}">${delivered ? "Delivered" : late ? "Late" : risk ? "At risk" : "On track"}</span></td><td class="r" data-l="">${!delivered ? `<button class="btn btn-s btn-xs" data-adv="${p.id}">Next step ${ic("chev", "sm")}</button>` : ""}</td></tr>`;
         }).join("")}</tbody></table></div><div class="tfoot"><span>Target: 3–5 working days from order to delivery</span><span>${S.parts.filter((p) => p.step >= 4).length} delivered this week</span></div></div>`;
-        $$("[data-adv]", box).forEach((b) => b.addEventListener("click", () => { const p = S.parts.find((x) => x.id === b.dataset.adv); p.step = Math.min(4, p.step + 1); toast(`${p.id}: ${L.PART_STEPS[p.step]}`, { icon: "truck" }); draw(); $("#svStats", el).innerHTML = stats(); }));
+        $$("[data-adv]", box).forEach((b) => b.addEventListener("click", () => { const p = S.parts.find((x) => x.id === b.dataset.adv); p.step = Math.min(4, p.step + 1); save(); toast(`${p.id}: ${L.PART_STEPS[p.step]}`, { icon: "truck" }); draw(); $("#svStats", el).innerHTML = stats(); }));
       } else {
         box.innerHTML = `<div class="grid g-2">${S.commissioning.map((c) => {
           const wk = Math.min(c.weeks, Math.floor(-c.start / 7) + 1), pr = Math.round((-c.start / (c.weeks * 7)) * 100);
@@ -651,14 +715,14 @@
             <div class="ms">${c.milestones.map((m, i) => `<div class="${i < c.done ? "on" : i === c.done ? "cur" : ""}"><i></i>${esc(m)}</div>`).join("")}</div>
             <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap"><span class="faint" style="font-size:12.5px">${c.done < c.milestones.length ? "Next: " + esc(c.milestones[c.done]) : "Handed over"}</span>${c.done < c.milestones.length ? `<button class="btn btn-s btn-sm" data-ms="${c.id}">${ic("check")}Mark ${esc(c.milestones[c.done].toLowerCase())} done</button>` : `<span class="pill good">Complete</span>`}</div></div>`;
         }).join("")}</div>`;
-        $$("[data-ms]", box).forEach((b) => b.addEventListener("click", () => { const c = S.commissioning.find((x) => x.id === b.dataset.ms); toast(`${esc(c.milestones[c.done])} done · ${esc(CO[c.co].name)}`); c.done++; draw(); }));
+        $$("[data-ms]", box).forEach((b) => b.addEventListener("click", () => { const c = S.commissioning.find((x) => x.id === b.dataset.ms); toast(`${esc(c.milestones[c.done])} done · ${esc(CO[c.co].name)}`); c.done++; save(); draw(); }));
       }
     }
     $$("[data-t]", el).forEach((b) => b.addEventListener("click", () => { UI.svcTab = b.dataset.t; saveUI(); draw(); }));
     $(".tabs", el).addEventListener("keydown", (e) => { if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return; const ks = ["tickets", "parts", "comm"]; const i = (ks.indexOf(UI.svcTab) + (e.key === "ArrowRight" ? 1 : 2)) % 3; UI.svcTab = ks[i]; draw(); $(`[data-t="${ks[i]}"]`, el).focus(); });
     $("#tNew", el).addEventListener("click", () => {
       const lay = openLayer("modal", drawerShell({ title: "New support ticket", sub: "Starts the SLA clock as soon as it is created.", body: `<div class="form-grid" style="grid-template-columns:1fr 1fr"><div class="field"><label for="nt-c">Customer</label><select class="select" id="nt-c">${L.COMPANIES.filter((c) => c.div === "agri").map((c) => `<option value="${c.id}">${esc(c.name)}</option>`).join("")}</select></div><div class="field"><label for="nt-p">Priority</label><select class="select" id="nt-p"><option value="P1">P1 · line down (4 h)</option><option value="P2" selected>P2 · degraded (8 h)</option><option value="P3">P3 · minor (24 h)</option><option value="P4">P4 · request (72 h)</option></select></div><div class="field" style="grid-column:1/-1"><label for="nt-m">Machine</label><input class="input" id="nt-m" value="Reemoon grading line"></div><div class="field" style="grid-column:1/-1"><label for="nt-i">What is wrong?</label><textarea class="input" id="nt-i" placeholder="Describe the issue" autofocus></textarea></div></div>`, foot: `<button class="btn btn-g" data-close>Cancel</button><button class="btn btn-p" id="nt-save">${ic("ticket")}Create ticket</button>` }), { cls: "sm", label: "New ticket" });
-      $("#nt-save", lay.panel).addEventListener("click", () => { const p = lay.panel; const pri = $("#nt-p", p).value, sla = { P1: 4, P2: 8, P3: 24, P4: 72 }[pri]; const t = { id: "SR-" + (2292 + S.tickets.length - 7), co: $("#nt-c", p).value, machine: $("#nt-m", p).value, issue: $("#nt-i", p).value.trim() || "New issue reported", pri, sla, status: "New", tech: null, deadline: Date.now() + sla * 36e5 }; S.tickets.unshift(t); lay.close(); UI.svcTab = "tickets"; draw(); $("#svStats", el).innerHTML = stats(); refreshBadges(); toast(`${t.id} created · ${sla} h SLA started`, { icon: "ticket" }); });
+      $("#nt-save", lay.panel).addEventListener("click", () => { const p = lay.panel; const pri = $("#nt-p", p).value, sla = { P1: 4, P2: 8, P3: 24, P4: 72 }[pri]; const t = { id: "SR-" + (Math.max(...S.tickets.map((x) => +x.id.slice(3))) + 1), co: $("#nt-c", p).value, machine: $("#nt-m", p).value, issue: $("#nt-i", p).value.trim() || "New issue reported", pri, sla, status: "New", tech: null, deadline: Date.now() + sla * 36e5 }; S.tickets.unshift(t); save(); lay.close(); UI.svcTab = "tickets"; draw(); $("#svStats", el).innerHTML = stats(); refreshBadges(); toast(`${t.id} created · ${sla} h SLA started`, { icon: "ticket" }); });
     });
     draw();
   };
@@ -683,7 +747,7 @@
       <div class="card" id="iBody"></div>`;
     function aging() {
       const b = [0, 0, 0, 0, 0]; S.invoices.filter((i) => ["sent", "overdue"].includes(invStatus(i))).forEach((i) => { const late = -daysFrom(i.due); b[late <= 0 ? 0 : late <= 30 ? 1 : late <= 60 ? 2 : late <= 90 ? 3 : 4] += invTotal(i); });
-      C.bars($("#agChart", el), { labels: ["Not yet due", "1–30 days", "31–60", "61–90", "90+"], height: 220, label: "Receivables aging", series: [{ name: "Outstanding", color: "var(--c-mag)", values: b }], format: rm, axis: rmc });
+      C.bars($("#agChart", el), { labels: ["Not yet due", "1–30 days", "31–60", "61–90", "90+"], height: 220, label: "Receivables aging: unpaid invoices by days past due", rowHead: "Days past due", series: [{ name: "Outstanding", color: "var(--c-mag)", values: b }], format: rm, axis: rmc });
       $("#eiList", el).innerHTML = [["Ready to submit", S.invoices.filter((i) => i.status !== "draft").length], ["Drafts, not ready", S.invoices.filter((i) => i.status === "draft").length], ["Validated by LHDN", 0]].map(([l, n]) => `<div class="li" style="padding:8px 0"><div class="grow"><div class="t" style="font-weight:500">${l}</div></div><b class="tnum">${n}</b></div>`).join("");
     }
     function draw(flashId) {
@@ -693,7 +757,7 @@
       const get = { id: (i) => i.id, co: (i) => CO[i.co].name, issued: (i) => i.issued, due: (i) => i.due, total: (i) => invTotal(i), status: (i) => invStatus(i) };
       const q = iq.q.toLowerCase();
       const rows = sortRows(S.invoices.filter((i) => (UI.invFilter === "all" || invStatus(i) === UI.invFilter) && (!q || (i.id + CO[i.co].name).toLowerCase().includes(q))), iq.sort.key, iq.sort.dir, get);
-      $("#iBody", el).innerHTML = `<div class="tbl-wrap"><table class="tbl cards"><thead><tr>${th("Invoice", "id", iq.sort)}${th("Customer", "co", iq.sort)}${th("Issued", "issued", iq.sort)}${th("Due", "due", iq.sort)}${th("Amount", "total", iq.sort, "r")}${th("Status", "status", iq.sort)}<th>e-Invoice (MyInvois) <span class="pill plan nodot" style="margin-left:4px">Planned</span></th></tr></thead><tbody>${rows.length ? rows.map((i) => `<tr class="click ${i.id === flashId ? "flash" : ""}" tabindex="0" data-id="${i.id}"><td class="first" data-l="Invoice"><b class="mono">${i.id}</b></td><td data-l="Customer"><div class="co">${lq(CO[i.co].name)}<b>${esc(CO[i.co].name)}</b></div></td><td data-l="Issued">${fdateY(i.issued)}</td><td data-l="Due" class="${invStatus(i) === "overdue" ? "" : "muted"}"><span>${fdate(i.due)}${invStatus(i) === "overdue" ? ` <small style="color:var(--crit-ink);font-weight:700">· ${-daysFrom(i.due)}d late</small>` : ""}</span></td><td class="r strong" data-l="Amount">${rm(invTotal(i))}</td><td data-l="Status">${invPill(i)}</td><td data-l="e-Invoice"><span class="pill plan nodot">${esc(i.einv)}</span></td></tr>`).join("") : `<tr><td colspan="7">${empty("invoice", "No invoices here", UI.invFilter === "all" ? "Create your first invoice." : "Nothing with this status right now.")}</td></tr>`}</tbody></table></div><div class="tfoot"><span>${rows.length} invoices</span><span class="tnum">Total ${rm(rows.reduce((s, i) => s + invTotal(i), 0))}</span></div>`;
+      $("#iBody", el).innerHTML = `<div class="tbl-wrap"><table class="tbl cards"><thead><tr>${th("Invoice", "id", iq.sort)}${th("Customer", "co", iq.sort)}${th("Issued", "issued", iq.sort, "hide-m")}${th("Due", "due", iq.sort)}${th("Amount", "total", iq.sort, "r")}${th("Status", "status", iq.sort)}<th class="hide-l">e-Invoice · planned</th></tr></thead><tbody>${rows.length ? rows.map((i) => `<tr class="click ${i.id === flashId ? "flash" : ""}" tabindex="0" data-id="${i.id}"><td class="first" data-l="Invoice"><b class="mono">${i.id}</b></td><td data-l="Customer"><div class="co">${lq(CO[i.co].name)}<b>${esc(CO[i.co].name)}</b></div></td><td data-l="Issued" class="hide-m">${fdateY(i.issued)}</td><td data-l="Due" class="${invStatus(i) === "overdue" ? "" : "muted"}"><span>${fdate(i.due)}${invStatus(i) === "overdue" ? ` <small style="color:var(--crit-ink);font-weight:700">· ${-daysFrom(i.due)}d late</small>` : ""}</span></td><td class="r strong" data-l="Amount">${rm(invTotal(i))}</td><td data-l="Status">${invPill(i)}</td><td data-l="e-Invoice" class="faint einv hide-l">${esc(i.einv)}</td></tr>`).join("") : `<tr><td colspan="7">${empty("invoice", "No invoices here", UI.invFilter === "all" ? "Create your first invoice." : "Nothing with this status right now.")}</td></tr>`}</tbody></table></div><div class="tfoot"><span>${rows.length} invoices</span><span class="tnum">Total ${rm(rows.reduce((s, i) => s + invTotal(i), 0))}</span></div>`;
       $$("[data-sort]", el).forEach((b) => b.addEventListener("click", () => { const k = b.dataset.sort; iq.sort = { key: k, dir: iq.sort.key === k && iq.sort.dir === "desc" ? "asc" : "desc" }; draw(); $(`[data-sort="${k}"]`, el).focus(); }));
       $$("tr.click", el).forEach((tr) => { tr.addEventListener("click", () => openInvoice(tr.dataset.id)); tr.addEventListener("keydown", (e) => { if (e.key === "Enter") openInvoice(tr.dataset.id); }); });
       aging(); $("#iStats", el).innerHTML = stats();
@@ -709,7 +773,7 @@
     return `<div class="inv-paper">
       <div class="inv-top"><img src="assets/logo.png" alt="Logsco Agri Technology"><div class="inv-title"><h3>INVOICE</h3><p class="mono">${esc(inv.id)}</p>${s !== "sent" ? `<div class="inv-stamp ${s}">${s.toUpperCase()}</div>` : ""}</div></div>
       <div class="inv-parties"><div><h4>From</h4><b>Logsco Agri Technology Sdn. Bhd.</b><div>SSM 202501040607 · MOF registered</div><div>Masai, Johor, Malaysia</div><div>SST reg. no.: <i>configurable</i></div></div><div><h4>Bill to</h4><b>${esc(co.name)}</b><div>Attn: ${esc(co.contact)}, ${esc(co.title)}</div><div>${esc(co.state)}, Malaysia</div><div>Issued ${fdateY(inv.issued)} · Due ${fdateY(inv.due)} (${inv.terms} days)</div></div></div>
-      <table><thead><tr><th>Description</th><th class="r">Qty</th><th class="r">Unit price</th><th class="r">Amount</th></tr></thead><tbody>${inv.lines.map((l) => `<tr><td>${esc(l.desc || "—")}</td><td class="r">${num(l.qty)}</td><td class="r">${rm(l.price)}</td><td class="r">${rm(l.qty * l.price)}</td></tr>`).join("")}</tbody></table>
+      <table><thead><tr><th>Description</th><th class="r">Qty</th><th class="r">Unit price</th><th class="r">Amount</th></tr></thead><tbody>${inv.lines.map((l) => `<tr><td>${esc(l.desc || "—")}</td><td class="r">${qtyFmt(l.qty)}</td><td class="r">${rm(l.price)}</td><td class="r">${rm(lineAmt(l))}</td></tr>`).join("")}</tbody></table>
       <div class="inv-sum"><div><span>Subtotal</span><span>${rm(invSub(inv))}</span></div><div><span>SST (${inv.sst}%)</span><span>${rm(invTax(inv))}</span></div><div class="g"><span>Total due</span><span>${rm(invTotal(inv))}</span></div></div>
       <div class="inv-foot"><div>Bank transfer to Logsco Agri Technology Sdn. Bhd. · bank details on the final template<br>Please quote ${esc(inv.id)} as the payment reference. Thank you for your business.</div><div class="qr">MyInvois QR · planned</div></div></div>`;
   }
@@ -721,52 +785,84 @@
       foot: `<button class="btn btn-g" id="ivPrint">${ic("print")}Print / PDF</button><button class="btn btn-s" id="ivDup">${ic("copy")}Duplicate</button>${s === "draft" ? `<button class="btn btn-p" id="ivSend">${ic("send")}Send to customer</button>` : s !== "paid" ? `<button class="btn btn-p" id="ivPaid">${ic("check")}Mark as paid</button>` : ""}`
     }), { label: "Invoice preview" });
     const p = lay.panel;
-    $("#ivPrint", p).addEventListener("click", () => window.print());
+    $("#ivPrint", p).addEventListener("click", () => { root.classList.add("print-inv"); const off = () => { root.classList.remove("print-inv"); window.removeEventListener("afterprint", off); }; window.addEventListener("afterprint", off); window.print(); setTimeout(off, 1000); });
     $("#ivDup", p).addEventListener("click", () => { lay.close(); setTimeout(() => newInvoiceModal({ co: inv.co, lines: clone(inv.lines), sst: inv.sst }), 200); });
-    const after = (msg) => { save(); lay.close(); if (S._redrawInv && current === "invoicing") S._redrawInv(inv.id); refreshBadges(); toast(msg, { icon: "invoice" }); };
+    const after = (msg, undo) => { save(); lay.close(); if (S._redrawInv && current === "invoicing") S._redrawInv(inv.id); else refreshView(); refreshBadges(); toast(msg, { icon: "invoice", action: undo ? { label: "Undo", fn: () => { undo(); save(); if (S._redrawInv && current === "invoicing") S._redrawInv(inv.id); else refreshView(); refreshBadges(); } } : null }); };
     const sb = $("#ivSend", p); if (sb) sb.addEventListener("click", () => { inv.status = "sent"; inv.einv = "Not submitted"; after(`${esc(inv.id)} sent to ${esc(CO[inv.co].contact)}`); });
-    const pb = $("#ivPaid", p); if (pb) pb.addEventListener("click", () => { const prev = inv.status; inv.status = "paid"; after(`${esc(inv.id)} marked as paid · ${rm(invTotal(inv))}`); });
+    const pb = $("#ivPaid", p); if (pb) pb.addEventListener("click", () => { const prev = inv.status; inv.status = "paid"; after(`${esc(inv.id)} marked as paid · ${rm(invTotal(inv))}`, () => (inv.status = prev)); });
   }
+  const SST_RATES = [0, 5, 6, 8, 10];
   function nextInvNo() { const n = Math.max(...S.invoices.map((i) => parseInt(i.id.slice(-4), 10))) + 1; return "LAT-INV-26-" + String(n).padStart(4, "0"); }
   function newInvoiceModal(pre = {}) {
-    const draft = { id: nextInvNo(), co: pre.co || "c1", issued: TODAY.toISOString(), terms: 30, sst: pre.sst != null ? pre.sst : 8, lines: pre.lines || [{ desc: "", qty: 1, price: 0 }], status: "draft", einv: "Not ready" };
+    const defSst = UI.sst != null ? UI.sst : 8;
+    const draft = { id: nextInvNo(), co: pre.co || "c1", issued: TODAY.toISOString(), terms: 30, sst: pre.sst != null ? pre.sst : defSst, lines: pre.lines ? clone(pre.lines) : [{ desc: "", qty: 1, price: 0 }], status: "draft", einv: "Not ready" };
     const lay = openLayer("modal", drawerShell({
       title: "New invoice", sub: `<span class="mono">${draft.id}</span> · Ringgit Malaysia (RM)`,
       body: `<div id="niForm"><div class="form-grid">
           <div class="field" style="grid-column:span 2"><label for="ni-c">Customer</label><select class="select" id="ni-c">${L.COMPANIES.map((c) => `<option value="${c.id}" ${c.id === draft.co ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select></div>
-          <div class="field"><label for="ni-d">Invoice date</label><input class="input" type="date" id="ni-d" value="${TODAY.toISOString().slice(0, 10)}"></div>
-          <div class="field"><label for="ni-t">Payment terms</label><select class="select" id="ni-t">${[7, 14, 30, 60].map((t) => `<option value="${t}" ${t === 30 ? "selected" : ""}>${t} days</option>`).join("")}</select></div>
-          <div class="field"><label for="ni-s">SST rate <span class="tag" style="height:18px;margin-left:4px">configurable</span></label><select class="select" id="ni-s">${[0, 5, 6, 8, 10].map((r) => `<option value="${r}" ${r === draft.sst ? "selected" : ""}>${r === 0 ? "0% · exempt / not registered" : r + "%"}</option>`).join("")}</select><small>Set the default in Settings. Confirm the rate with your tax adviser.</small></div>
+          <div class="field"><label for="ni-d">Invoice date</label><input class="input" type="date" id="ni-d" required value="${ymd(TODAY)}"></div>
+          <div class="field"><label for="ni-t">Payment terms</label><select class="select" id="ni-t">${[7, 14, 30, 60].map((t) => `<option value="${t}" ${t === 30 ? "selected" : ""}>${t} days</option>`).join("")}</select><small id="ni-due"></small></div>
+          <div class="field"><label for="ni-s">SST rate <span class="tag" style="height:18px;margin-left:4px">configurable</span></label><select class="select" id="ni-s" aria-describedby="ni-s-h">${SST_RATES.map((r) => `<option value="${r}" ${r === draft.sst ? "selected" : ""}>${r === 0 ? "0% · exempt / not registered" : r + "%"}</option>`).join("")}</select><small id="ni-s-h">Default comes from Settings. Confirm the rate with your tax adviser.</small></div>
           <div class="field"><span class="lab">e-Invoice (MyInvois)</span><span class="pill plan nodot" style="height:36px;border-radius:9px;justify-content:flex-start;padding:0 12px">Planned integration · not submitted</span></div>
         </div>
-        <table class="lines"><thead><tr><th style="width:52%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Unit price (RM)</th><th class="r" style="text-align:right">Amount</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody id="niLines"></tbody></table>
-        <button class="btn btn-g btn-sm" id="niAdd" style="margin-top:8px">${ic("plus")}Add line</button>
-        <div class="totals" id="niTot"></div>
+        <table class="lines"><caption class="sr-only">Invoice lines</caption><thead><tr><th style="width:52%">Description</th><th style="width:12%">Qty</th><th style="width:18%">Unit price (RM)</th><th class="r" style="text-align:right">Amount</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody id="niLines"></tbody></table>
+        <p class="form-err" id="niErr" role="alert" hidden></p>
+        <button type="button" class="btn btn-g btn-sm" id="niAdd" style="margin-top:8px">${ic("plus")}Add line</button>
+        <div class="totals" id="niTot" aria-live="polite"></div>
         <div class="field mt"><label for="ni-n">Notes to customer</label><textarea class="input" id="ni-n" rows="2">Thank you for your business. Payment by bank transfer within the terms above.</textarea></div></div>
         <div id="niPrev" hidden></div>`,
-      foot: `<button class="btn btn-g" data-close>Cancel</button><button class="btn btn-s" id="niPv" aria-pressed="false">${ic("file")}Preview</button><button class="btn btn-s" id="niDraft">Save draft</button><button class="btn btn-p" id="niSend">${ic("send")}Create & send</button>`
+      foot: `<button type="button" class="btn btn-g" data-close>Cancel</button><button type="button" class="btn btn-s" id="niPv" aria-pressed="false">${ic("file")}<span>Preview</span></button><button type="button" class="btn btn-s" id="niDraft">Save draft</button><button type="button" class="btn btn-p" id="niSend">${ic("send")}Create & send</button>`
     }), { label: "New invoice" });
     const p = lay.panel;
+    const due = () => new Date(dt(draft.issued).getTime() + draft.terms * DAY).toISOString();
+    const showDue = () => { $("#ni-due", p).textContent = "Due " + fdateY(due()); };
+    const err = (msg) => { const e = $("#niErr", p); e.textContent = msg || ""; e.hidden = !msg; };
     function lines() {
-      $("#niLines", p).innerHTML = draft.lines.map((l, i) => `<tr data-i="${i}"><td class="desc"><label class="sr-only" for="nl-d${i}">Description line ${i + 1}</label><input class="input" id="nl-d${i}" data-k="desc" value="${esc(l.desc)}" placeholder="e.g. Reemoon grading line, deposit (30%)"></td><td><span class="cap" aria-hidden="true">Qty</span><label class="sr-only" for="nl-q${i}">Quantity line ${i + 1}</label><input class="input tnum" id="nl-q${i}" data-k="qty" type="number" min="0" step="1" value="${l.qty}"></td><td><span class="cap" aria-hidden="true">Unit price (RM)</span><label class="sr-only" for="nl-p${i}">Unit price line ${i + 1}</label><input class="input tnum" id="nl-p${i}" data-k="price" type="number" min="0" step="0.01" value="${l.price}"></td><td class="amt" data-amt>${rm(l.qty * l.price)}</td><td><button class="icon-btn" data-rm="${i}" aria-label="Remove line ${i + 1}" ${draft.lines.length === 1 ? "disabled" : ""}>${ic("trash")}</button></td></tr>`).join("");
-      $$("#niLines input", p).forEach((inp) => inp.addEventListener("input", () => { const i = +inp.closest("tr").dataset.i; draft.lines[i][inp.dataset.k] = inp.dataset.k === "desc" ? inp.value : +inp.value || 0; inp.closest("tr").querySelector("[data-amt]").textContent = rm(draft.lines[i].qty * draft.lines[i].price); totals(); }));
-      $$("[data-rm]", p).forEach((b) => b.addEventListener("click", () => { draft.lines.splice(+b.dataset.rm, 1); lines(); totals(); }));
+      $("#niLines", p).innerHTML = draft.lines.map((l, i) => `<tr data-i="${i}"><td class="desc"><label class="sr-only" for="nl-d${i}">Description, line ${i + 1}</label><input class="input" id="nl-d${i}" data-k="desc" value="${esc(l.desc)}" placeholder="e.g. Reemoon grading line, deposit (30%)" autocomplete="off"></td><td><span class="cap" aria-hidden="true">Qty</span><label class="sr-only" for="nl-q${i}">Quantity, line ${i + 1}</label><input class="input tnum" id="nl-q${i}" data-k="qty" type="number" inputmode="decimal" min="0" step="any" value="${l.qty}"></td><td><span class="cap" aria-hidden="true">Unit price (RM)</span><label class="sr-only" for="nl-p${i}">Unit price in RM, line ${i + 1}</label><input class="input tnum" id="nl-p${i}" data-k="price" type="number" inputmode="decimal" min="0" step="0.01" value="${l.price}"></td><td class="amt" data-amt>${rm(lineAmt(l))}</td><td><button type="button" class="icon-btn" data-rm="${i}" aria-label="Remove line ${i + 1}" ${draft.lines.length === 1 ? "disabled" : ""}>${ic("trash")}</button></td></tr>`).join("");
+      $$("#niLines input", p).forEach((inp) => inp.addEventListener("input", () => {
+        const i = +inp.closest("tr").dataset.i, k = inp.dataset.k;
+        draft.lines[i][k] = k === "desc" ? inp.value : Math.max(0, +inp.value || 0);
+        inp.removeAttribute("aria-invalid"); err("");
+        inp.closest("tr").querySelector("[data-amt]").textContent = rm(lineAmt(draft.lines[i])); totals();
+      }));
+      $$("#niLines input[type=number]", p).forEach((inp) => inp.addEventListener("blur", () => { if (inp.value !== "" && +inp.value < 0) { inp.value = 0; inp.dispatchEvent(new Event("input")); } }));
+      $$("[data-rm]", p).forEach((b) => b.addEventListener("click", () => {
+        const i = +b.dataset.rm; draft.lines.splice(i, 1); lines(); totals();
+        const n = $(`#nl-d${Math.min(i, draft.lines.length - 1)}`, p); if (n) n.focus(); announce("Line removed");
+      }));
     }
     function totals() { $("#niTot", p).innerHTML = `<div><span class="muted">Subtotal</span><span>${rm(invSub(draft))}</span></div><div><span class="muted">SST (${draft.sst}%)</span><span>${rm(invTax(draft))}</span></div><div class="grand"><span>Total</span><span>${rm(invTotal(draft))}</span></div>`; }
-    lines(); totals();
+    lines(); totals(); showDue();
     $("#niAdd", p).addEventListener("click", () => { draft.lines.push({ desc: "", qty: 1, price: 0 }); lines(); totals(); $(`#nl-d${draft.lines.length - 1}`, p).focus(); });
     $("#ni-s", p).addEventListener("change", (e) => { draft.sst = +e.target.value; totals(); });
     $("#ni-c", p).addEventListener("change", (e) => (draft.co = e.target.value));
-    $("#ni-t", p).addEventListener("change", (e) => (draft.terms = +e.target.value));
-    $("#ni-d", p).addEventListener("change", (e) => { if (e.target.value) draft.issued = new Date(e.target.value + "T00:00:00").toISOString(); });
-    $("#niPv", p).addEventListener("click", (e) => { const on = $("#niPrev", p).hidden; draft.due = new Date(dt(draft.issued).getTime() + draft.terms * DAY).toISOString(); $("#niPrev", p).innerHTML = invoicePaper(draft); $("#niPrev", p).hidden = !on; $("#niForm", p).hidden = on; e.currentTarget.setAttribute("aria-pressed", String(on)); e.currentTarget.lastChild.textContent = on ? "Edit" : "Preview"; });
+    $("#ni-t", p).addEventListener("change", (e) => { draft.terms = +e.target.value; showDue(); });
+    $("#ni-d", p).addEventListener("change", (e) => { if (e.target.value) { draft.issued = new Date(e.target.value + "T00:00:00").toISOString(); e.target.removeAttribute("aria-invalid"); showDue(); } });
+    const showForm = () => { $("#niPrev", p).hidden = true; $("#niForm", p).hidden = false; const b = $("#niPv", p); b.setAttribute("aria-pressed", "false"); b.lastChild.textContent = "Preview"; };
+    $("#niPv", p).addEventListener("click", (e) => { const on = $("#niPrev", p).hidden; if (!on) return showForm(); draft.due = due(); $("#niPrev", p).innerHTML = invoicePaper(Object.assign({}, draft, { lines: draft.lines.filter((l) => l.desc.trim() || lineAmt(l)) })); $("#niPrev", p).hidden = false; $("#niForm", p).hidden = true; e.currentTarget.setAttribute("aria-pressed", "true"); e.currentTarget.lastChild.textContent = "Edit"; });
+    /* validation: blank rows are ignored; a row with an amount needs a description; a described row needs a quantity above 0 */
+    function validate() {
+      $$("#niLines [aria-invalid]", p).forEach((x) => x.removeAttribute("aria-invalid"));
+      if (!$("#ni-d", p).value) return { el: $("#ni-d", p), msg: "Choose an invoice date." };
+      for (let i = 0; i < draft.lines.length; i++) {
+        const l = draft.lines[i], blank = !l.desc.trim() && !(+l.price);
+        if (blank) continue;
+        if (!l.desc.trim()) return { el: $(`#nl-d${i}`, p), msg: `Line ${i + 1} needs a description.` };
+        if (!(+l.qty > 0)) return { el: $(`#nl-q${i}`, p), msg: `Line ${i + 1}: quantity must be more than 0.` };
+      }
+      const used = draft.lines.filter((l) => l.desc.trim());
+      if (!used.length) return { el: $("#nl-d0", p), msg: "Add at least one line with a description." };
+      if (!(invTotal(Object.assign({}, draft, { lines: used })) > 0)) return { el: $(`#nl-p${draft.lines.indexOf(used[0])}`, p), msg: "The invoice total is RM 0.00. Add a unit price." };
+      return null;
+    }
     function create(status) {
-      const valid = draft.lines.filter((l) => l.desc.trim() && l.qty > 0);
-      if (!valid.length) { $("#niPrev", p).hidden = true; $("#niForm", p).hidden = false; const d0 = $("#nl-d0", p); d0.focus(); d0.style.borderColor = "var(--crit)"; toast("Add at least one line with a description", { icon: "alert" }); return; }
-      draft.lines = valid; draft.status = status; draft.due = new Date(dt(draft.issued).getTime() + draft.terms * DAY).toISOString(); draft.einv = status === "draft" ? "Not ready" : "Not submitted";
+      const bad = validate();
+      if (bad) { showForm(); bad.el.setAttribute("aria-invalid", "true"); bad.el.setAttribute("aria-describedby", "niErr"); err(bad.msg); bad.el.focus(); return; }
+      draft.lines = draft.lines.filter((l) => l.desc.trim()).map((l) => ({ desc: l.desc.trim(), qty: +l.qty, price: sen(l.price) }));
+      draft.status = status; draft.due = due(); draft.einv = status === "draft" ? "Not ready" : "Not submitted";
       S.invoices.push(draft); save(); lay.close(); refreshBadges();
-      const view = () => openInvoice(draft.id);
-      if (current === "invoicing" && S._redrawInv) { if (UI.invFilter !== "all" && UI.invFilter !== status) UI.invFilter = "all"; S._redrawInv(draft.id); }
+      const view = () => (current === "invoicing" ? openInvoice(draft.id) : go("invoicing", () => openInvoice(draft.id)));
+      if (current === "invoicing" && S._redrawInv) { if (UI.invFilter !== "all" && UI.invFilter !== status) UI.invFilter = "all"; S._redrawInv(draft.id); } else refreshView();
       toast(`${draft.id} ${status === "draft" ? "saved as draft" : "created and sent"} · ${rm(invTotal(draft))}`, { icon: "invoice", action: { label: "View", fn: view } });
     }
     $("#niDraft", p).addEventListener("click", () => create("draft"));
@@ -778,24 +874,25 @@
   VIEWS.campaigns = function (el) {
     const seq = S.sequences, ads = S.ads;
     const meet = seq.reduce((s, x) => s + x.meetings, 0), sent = seq.reduce((s, x) => s + x.sent, 0), rep = seq.reduce((s, x) => s + x.replied, 0);
-    const spend = ads.reduce((s, a) => s + a.spend, 0), leads = ads.reduce((s, a) => s + a.leads, 0);
+    const spend = ads.reduce((s, a) => s + a.spend, 0), b2b = ads.filter((a) => !a.signups), sgn = ads.filter((a) => a.signups);
+    const b2bSpend = b2b.reduce((s, a) => s + a.spend, 0), leads = b2b.reduce((s, a) => s + a.leads, 0), sgnSpend = sgn.reduce((s, a) => s + a.spend, 0), signups = sgn.reduce((s, a) => s + a.leads, 0);
     const wl = L.WAITLIST; const todayIdx0 = 7 + (TODAY.getDay() + 6) % 7; const cal0 = new Date(TODAY.getTime() - todayIdx0 * DAY);
     el.innerHTML = `<div class="page-head"><div><h1>Campaigns</h1><p>Outbound sequences, paid ads and the Pina Boosta launch calendar in one place.</p></div><div class="actions"><button class="btn btn-p" id="cmNew">${ic("plus")}New sequence</button></div></div>
-      <div class="stat-row">${[["Meetings booked", meet, "From outbound, this month"], ["Reply rate", pct((rep / sent) * 100), num(rep) + " replies of " + num(sent)], ["Ad spend · MTD", rm0(spend), "Google + Meta"], ["Cost per lead", rm(spend / leads), num(leads) + " leads"]].map(([l, v, s]) => `<div class="card stat"><small>${l}</small><b>${v}</b><em>${s}</em></div>`).join("")}</div>
+      <div class="stat-row">${[["Meetings booked", meet, "From outbound, this month"], ["Reply rate", pct((rep / sent) * 100), num(rep) + " replies of " + num(sent)], ["Ad spend · 30 days", rm(spend), "Google + Meta"], ["Cost per lead", rm(b2bSpend / leads), num(leads) + " B2B leads · " + rm(sgnSpend / signups) + " per sign-up"]].map(([l, v, s]) => `<div class="card stat"><small>${l}</small><b>${v}</b><em>${s}</em></div>`).join("")}</div>
       <section class="card" aria-labelledby="seqH"><div class="card-h"><div><h2 id="seqH">Outbound sequences</h2><span class="sub">AI agents draft, a human approves, replies land in the pipeline</span></div></div><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Sequence</th><th>Channel</th><th class="r">Sent</th><th class="r">Opened</th><th class="r">Replied</th><th class="r">Meetings</th><th>Active</th></tr></thead><tbody>${seq.map((s) => `<tr><td class="first" data-l="Sequence"><b style="font-weight:600">${esc(s.name)}</b><div>${divTag(s.div)} <span class="faint" style="font-size:12px">· ${s.steps} steps</span></div></td><td data-l="Channel"><span class="ch">${ic(CH_IC[s.channel])}${s.channel}</span></td><td class="r" data-l="Sent">${num(s.sent)}</td><td class="r" data-l="Opened"><span>${num(s.opened)} <span class="faint">${pct((s.opened / s.sent) * 100, 0)}</span></span></td><td class="r" data-l="Replied"><span>${num(s.replied)} <span class="faint">${pct((s.replied / s.sent) * 100, 0)}</span></span></td><td class="r strong" data-l="Meetings">${s.meetings}</td><td data-l="Active">${s.status === "draft" ? `<span class="pill nodot">Draft</span>` : `<button class="switch" role="switch" aria-checked="${s.status === "active"}" data-seq="${s.id}" aria-label="${esc(s.name)} active"></button>`}</td></tr>`).join("")}</tbody></table></div></section>
       <div class="grid g-main mt">
-        <section class="card" aria-labelledby="adH"><div class="card-h"><div><h2 id="adH">Google & Meta ads</h2><span class="sub">Month to date</span></div></div><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Campaign</th><th class="r">Spend</th><th class="r">Clicks</th><th class="r">Leads</th><th class="r">CPL</th><th>On</th></tr></thead><tbody>${ads.map((a) => `<tr><td class="first" data-l="Campaign"><b style="font-weight:600">${esc(a.name)}</b><div><span class="ch faint" style="font-size:12px">${ic(a.platform === "Google" ? "search" : "fb", "sm")}${a.platform}</span><span style="margin-left:10px">${divTag(a.div)}</span></div></td><td class="r" data-l="Spend">${rm(a.spend)}</td><td class="r" data-l="Clicks">${num(a.clicks)}</td><td class="r" data-l="Leads">${num(a.leads)}</td><td class="r strong" data-l="CPL">${rm(a.spend / a.leads)}</td><td data-l="On"><button class="switch" role="switch" aria-checked="${a.status === "active"}" data-ad="${a.id}" aria-label="${esc(a.name)} running"></button></td></tr>`).join("")}</tbody></table></div></section>
+        <section class="card" aria-labelledby="adH"><div class="card-h"><div><h2 id="adH">Google & Meta ads</h2><span class="sub">Last 30 days · Pina Boosta ads count waitlist sign-ups</span></div></div><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Campaign</th><th class="r">Spend</th><th class="r hide-l">Clicks</th><th class="r">Results</th><th class="r">Cost / result</th><th>On</th></tr></thead><tbody>${ads.map((a) => `<tr><td class="first" data-l="Campaign"><b style="font-weight:600">${esc(a.name)}</b><div><span class="ch faint" style="font-size:12px">${ic(a.platform === "Google" ? "search" : "fb", "sm")}${a.platform}</span><span style="margin-left:10px">${divTag(a.div)}</span></div></td><td class="r" data-l="Spend">${rm(a.spend)}</td><td class="r hide-l" data-l="Clicks">${num(a.clicks)}</td><td class="r" data-l="Results">${num(a.leads)} <span class="faint">${a.signups ? "sign-ups" : "leads"}</span></td><td class="r strong" data-l="Cost / result">${rm(a.spend / a.leads)}</td><td data-l="On"><button class="switch" role="switch" aria-checked="${a.status === "active"}" data-ad="${a.id}" aria-label="${esc(a.name)} running"></button></td></tr>`).join("")}</tbody></table></div><div class="tfoot"><span>${ads.length} campaigns · ${num(ads.reduce((s, a) => s + a.clicks, 0))} clicks</span><span class="tnum">Spend ${rm(spend)}</span></div></section>
         <section class="card" aria-labelledby="wlH"><div class="card-h"><div><h2 id="wlH">Batch 001 waitlist</h2><span class="sub">Pina Boosta · pre-launch</span></div>${divTag("bev")}</div><div class="card-b">
           <div class="wl-hero"><span class="wl-can" aria-hidden="true"></span><div style="flex:1;min-width:160px"><div class="big-n">${num(wl.total)}</div><div class="muted" style="font-size:13px">sign-ups · goal ${num(wl.goal)} before launch</div><div class="bar lg" style="margin-top:10px" role="progressbar" aria-valuenow="${Math.round((wl.total / wl.goal) * 100)}" aria-valuemin="0" aria-valuemax="100" aria-label="Waitlist progress to goal"><i style="width:${(wl.total / wl.goal) * 100}%;background:var(--c-bev)"></i></div><small class="faint">${pct((wl.total / wl.goal) * 100, 0)} of goal · ${num(wl.daily.slice(-7).reduce((s, d) => s + d.v, 0))} this week</small></div></div>
-          <div id="wlChart" class="chart-box" style="margin-top:12px;min-height:150px"></div>
-          <div class="sec-h" style="margin-top:8px">Latest sign-ups</div><div class="list">${wl.recent.slice(0, 5).map((r) => `<div class="li" style="padding:7px 0">${av(r.name)}<div class="grow"><div class="t">${esc(r.name)} <span class="faint" style="font-weight:500">${esc(r.email)}</span></div><div class="s">${esc(r.state)} · via ${esc(r.src)}</div></div><span class="when">${relH(r.t / 1440)}</span></div>`).join("")}</div></div></section>
+          <div id="wlChart" class="chart-box" style="margin-top:12px;min-height:130px"></div>
+          <div class="sec-h" style="margin-top:8px">Latest sign-ups</div><div class="list">${wl.recent.slice(0, 3).map((r) => `<div class="li" style="padding:7px 0">${av(r.name)}<div class="grow"><div class="t">${esc(r.name)} <span class="faint" style="font-weight:500">${esc(r.email)}</span></div><div class="s">${esc(r.state)} · via ${esc(r.src)}</div></div><span class="when">${relH(r.t / 1440)}</span></div>`).join("")}</div></div></section>
       </div>
-      <section class="card mt" aria-labelledby="socH"><div class="card-h"><div><h2 id="socH">Pina Boosta social calendar</h2><span class="sub">${fdate(cal0.toISOString())} – ${fdateY(new Date(cal0.getTime() + 34 * DAY).toISOString())} · Instagram, TikTok, Facebook</span></div><div class="legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--surface))"></i>Published</span><span><i style="background:color-mix(in srgb,var(--gold) 40%,var(--surface))"></i>Scheduled</span><span><i style="background:var(--surface-3)"></i>Draft</span></div></div><div class="card-b"><div class="month" role="grid" aria-label="Social posts, five weeks">${["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => `<div class="dh" role="columnheader">${d}</div>`).join("")}${Array.from({ length: 35 }, (_, i) => { const day = new Date(cal0.getTime() + i * DAY); const posts = L.SOCIAL.filter((s) => s.d === i + 1); const past = day < TODAY; return `<div class="${+day === +TODAY ? "td" : ""}" role="gridcell"><span class="dn">${day.getDate()}${day.getDate() === 1 || i === 0 ? " " + MON[day.getMonth()] : ""}</span>${posts.map((s) => { s.status = s.status === "scheduled-user" ? "scheduled" : past ? "published" : i - todayIdx0 <= 7 ? "scheduled" : "draft"; s.date = day.toISOString(); return `<button class="post ${s.status}" data-post="${L.SOCIAL.indexOf(s)}" aria-label="${s.ch} post, ${esc(s.text)}, ${s.status}"><b>${s.ch}</b><span>${esc(s.text)}</span></button>`; }).join("")}</div>`; }).join("")}</div></div></section>`;
+      <section class="card mt" aria-labelledby="socH"><div class="card-h"><div><h2 id="socH">Pina Boosta social calendar</h2><span class="sub">${fdate(cal0.toISOString())} – ${fdateY(new Date(cal0.getTime() + 34 * DAY).toISOString())} · Instagram, TikTok, Facebook</span></div><div class="legend"><span><i style="background:color-mix(in srgb,var(--good) 30%,var(--surface))"></i>Published</span><span><i style="background:color-mix(in srgb,var(--gold) 40%,var(--surface))"></i>Scheduled</span><span><i style="background:var(--surface-3)"></i>Draft</span></div></div><div class="card-b"><div class="month" role="table" aria-label="Social posts, five weeks"><div class="mr" role="row">${["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => `<div class="dh" role="columnheader">${d}</div>`).join("")}</div>${Array.from({ length: 35 }, (_, i) => { const day = new Date(cal0.getTime() + i * DAY); const posts = L.SOCIAL.filter((s) => s.d === i + 1); const past = day < TODAY; return `${i % 7 === 0 ? '<div class="mr" role="row">' : ""}<div class="mc ${+day === +TODAY ? "td" : ""}" role="cell" ${+day === +TODAY ? 'aria-current="date"' : ""}><span class="dn">${day.getDate()}${day.getDate() === 1 || i === 0 ? " " + MON[day.getMonth()] : ""}</span>${posts.map((s) => { s.status = past ? "published" : i - todayIdx0 <= 7 || S.socialSched.includes(L.SOCIAL.indexOf(s)) ? "scheduled" : "draft"; s.date = day.toISOString(); return `<button class="post ${s.status}" data-post="${L.SOCIAL.indexOf(s)}" aria-label="${{ IG: "Instagram", TT: "TikTok", FB: "Facebook" }[s.ch]} post, ${fdate(day.toISOString())}: ${esc(s.text)}, ${s.status}"><b>${s.ch}</b><span>${esc(s.text)}</span></button>`; }).join("")}</div>${i % 7 === 6 ? "</div>" : ""}`; }).join("")}</div></div></section>`;
     let run = wl.total - wl.daily.reduce((s, d) => s + d.v, 0);
-    C.lines($("#wlChart", el), { labels: wl.daily.map((d) => d.d), height: 160, label: "Waitlist sign-ups, cumulative 30 days", series: [{ name: "Sign-ups", color: "var(--c-bev)", area: true, values: wl.daily.map((d) => (run += d.v)) }], format: num, axis: compact, xfmt: fdate, tipTitle: fdateY });
+    C.lines($("#wlChart", el), { labels: wl.daily.map((d) => d.d), height: 140, label: "Waitlist sign-ups, cumulative 30 days", series: [{ name: "Sign-ups", color: "var(--c-bev)", area: true, values: wl.daily.map((d) => (run += d.v)) }], format: num, axis: compact, xfmt: fdate, tipTitle: fdateY });
     $$("[data-seq]", el).forEach((b) => b.addEventListener("click", () => { const s = seq.find((x) => x.id === b.dataset.seq); s.status = s.status === "active" ? "paused" : "active"; b.setAttribute("aria-checked", String(s.status === "active")); save(); toast(`${esc(s.name)} ${s.status === "active" ? "resumed" : "paused"}`, { icon: "send" }); }));
     $$("[data-ad]", el).forEach((b) => b.addEventListener("click", () => { const a = ads.find((x) => x.id === b.dataset.ad); a.status = a.status === "active" ? "paused" : "active"; b.setAttribute("aria-checked", String(a.status === "active")); save(); toast(`${esc(a.name)} ${a.status === "active" ? "running" : "paused"}`, { icon: "megaphone" }); }));
-    $$("[data-post]", el).forEach((b) => b.addEventListener("click", () => { const s = L.SOCIAL[+b.dataset.post]; openLayer("modal", drawerShell({ title: esc(s.text), sub: `${{ IG: "Instagram", TT: "TikTok", FB: "Facebook" }[s.ch]} · ${dt(s.date).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}`, body: `<div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><span class="wl-can" aria-hidden="true"></span><div style="flex:1;min-width:200px"><p class="muted">Caption draft: “${esc(s.text)}. One can, one boost. Join the Batch 001 waitlist, link in bio.” #PinaBoosta #Batch001</p><div style="margin-top:12px">${s.status === "published" ? '<span class="pill good">Published</span>' : s.status !== "draft" ? '<span class="pill warn">Scheduled · 8:30 pm</span>' : '<span class="pill">Draft</span>'}</div></div></div>`, foot: `<button class="btn btn-g" data-close>Close</button>${s.status === "draft" ? `<button class="btn btn-p" data-close id="pSched">${ic("calendar")}Schedule post</button>` : ""}` }), { cls: "sm", label: "Social post" }); const ps = $("#pSched"); if (ps) ps.addEventListener("click", () => { s.status = "scheduled-user"; b.className = "post scheduled"; toast("Post scheduled for 8:30 pm (demo)", { icon: "calendar" }); }); }));
+    $$("[data-post]", el).forEach((b) => b.addEventListener("click", () => { const s = L.SOCIAL[+b.dataset.post]; openLayer("modal", drawerShell({ title: esc(s.text), sub: `${{ IG: "Instagram", TT: "TikTok", FB: "Facebook" }[s.ch]} · ${dt(s.date).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" })}`, body: `<div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap"><span class="wl-can" aria-hidden="true"></span><div style="flex:1;min-width:200px"><p class="muted">Caption draft: “${esc(s.text)}. One can, one boost. Join the Batch 001 waitlist, link in bio.” #PinaBoosta #Batch001</p><div style="margin-top:12px">${s.status === "published" ? '<span class="pill good">Published</span>' : s.status !== "draft" ? '<span class="pill warn">Scheduled · 8:30 pm</span>' : '<span class="pill">Draft</span>'}</div></div></div>`, foot: `<button class="btn btn-g" data-close>Close</button>${s.status === "draft" ? `<button class="btn btn-p" data-close id="pSched">${ic("calendar")}Schedule post</button>` : ""}` }), { cls: "sm", label: "Social post" }); const ps = $("#pSched"); if (ps) ps.addEventListener("click", () => { S.socialSched.push(+b.dataset.post); save(); s.status = "scheduled"; b.className = "post scheduled"; b.setAttribute("aria-label", b.getAttribute("aria-label").replace(/draft$/, "scheduled")); toast("Post scheduled for 8:30 pm (demo)", { icon: "calendar" }); }); }));
     $("#cmNew", el).addEventListener("click", () => toast("Sequence builder opens here in the full build", { icon: "send" }));
   };
 
@@ -803,13 +900,16 @@
   VIEWS.websites = function (el) {
     const block = (s) => {
       const done = S.siteTasks[s.id];
+      /* form submissions, last 30 days: corporate = CRM "Website form" leads (AgriTech + Estates);
+         Pina Boosta = waitlist sign-ups + stockist enquiry forms */
+      const forms = s.id === "corp" ? L.LEAD_SOURCES.agri["Website form"] + L.LEAD_SOURCES.estates["Website form"] : L.WAITLIST.daily.reduce((a, d) => a + d.v, 0) + L.LEAD_SOURCES.bev["Website form"];
       return `<div class="stack">
-        <section class="card site-card" aria-labelledby="st-${s.id}"><div class="site-h"><div style="display:flex;gap:12px;align-items:center;min-width:0"><span class="fav" style="background:${s.id === "corp" ? "color-mix(in srgb,var(--a-agri) 14%,var(--surface))" : "color-mix(in srgb,var(--gold) 30%,var(--surface))"}">${s.id === "corp" ? '<img src="assets/mark.png" alt="">' : `<b style="font-size:13px;color:var(--ink)">PB</b>`}</span><div style="min-width:0"><b id="st-${s.id}">${esc(s.name)}</b><small>${s.domain === "Domain TBC" ? `<span class="tag">Domain TBC</span>` : `<a class="link" href="https://${s.domain}" target="_blank" rel="noopener">${esc(s.domain)} ${ic("ext", "sm")}</a>`}</small></div></div><span class="pill good">Online</span></div>
+        <section class="card site-card" aria-labelledby="st-${s.id}"><div class="site-h"><div style="display:flex;gap:12px;align-items:center;min-width:0"><span class="fav" style="background:${s.id === "corp" ? "color-mix(in srgb,var(--a-agri) 14%,var(--surface))" : "color-mix(in srgb,var(--gold) 30%,var(--surface))"}">${s.id === "corp" ? '<img src="assets/mark.png" alt="">' : `<b style="font-size:13px;color:var(--ink)">PB</b>`}</span><div style="min-width:0"><h2 id="st-${s.id}">${esc(s.name)}</h2><small>${s.domain === "Domain TBC" ? `<span class="tag">Domain TBC</span>` : `<a class="link" href="https://${s.domain}" target="_blank" rel="noopener">${esc(s.domain)} ${ic("ext", "sm")}</a>`}</small></div></div><span class="pill good">Online</span></div>
           <div class="metrics"><div class="metric"><small>Uptime · 30 days</small><b>${s.uptime}%</b></div><div class="metric"><small>Mobile score</small><b>${s.speedM}</b></div><div class="metric"><small>Largest paint</small><b>${s.lcp} s</b></div><div class="metric"><small>Pages published</small><b>${s.pages}</b></div></div>
           <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px" class="faint"><span>Uptime, last 60 days</span><span>1 short incident</span></div><div class="uptime" aria-hidden="true">${Array.from({ length: 60 }, (_, i) => `<i class="${i === (s.id === "corp" ? 41 : 17) ? "w" : ""}" title="${i === (s.id === "corp" ? 41 : 17) ? "Degraded 4 min" : "Up"}"></i>`).join("")}</div></div>
-          <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span class="score" style="--v:${s.speedM}" aria-label="Mobile score ${s.speedM}"><span>${s.speedM}</span></span><span class="score" style="--v:${s.speedD}" aria-label="Desktop score ${s.speedD}"><span>${s.speedD}</span></span><div style="flex:1;min-width:150px"><b style="font-size:13.5px">${s.id === "corp" ? "Enquiry forms" : "Waitlist & stockist forms"}</b><div class="big-n" style="font-size:22px">${num(s.forms)} <span class="delta up" style="font-size:12px">${ic("trendUp", "sm")}${pct(((s.forms - s.formsPrev) / s.formsPrev) * 100, 0)}</span></div><small class="faint">Submissions this month vs last</small></div></div></section>
-        <section class="card" aria-labelledby="kw-${s.id}"><div class="card-h"><h3 id="kw-${s.id}">Top keywords</h3><span class="sub">Google Search Console · position</span></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Keyword</th><th class="r">Rank</th><th class="r">Change</th></tr></thead><tbody>${s.keywords.map(([k, r, prev]) => { const d = prev - r; return `<tr><td>${esc(k)}</td><td class="r"><span class="rank ${r <= 3 ? "top" : ""}">${r}</span></td><td class="r"><span class="mv ${d > 0 ? "up" : d < 0 ? "down" : "flat"}">${d > 0 ? ic("up") + d : d < 0 ? ic("down") + -d : "—"}</span><span class="sr-only">${d > 0 ? "up " + d : d < 0 ? "down " + -d : "no change"}</span></td></tr>`; }).join("")}</tbody></table></div></section>
-        <section class="card" aria-labelledby="tk-${s.id}"><div class="card-h"><div><h3 id="tk-${s.id}">SEO tasks this month</h3><span class="sub">2 new pages per site, plus fixes</span></div><span class="sub tnum" data-tc="${s.id}">${done.filter(Boolean).length}/${done.length}</span></div><div class="card-b flush"><div class="list">${s.tasks.map(([t], i) => `<div class="li task" role="checkbox" tabindex="0" aria-checked="${done[i]}" data-site="${s.id}" data-i="${i}"><span class="check">${ic("check")}</span><div class="grow"><div class="t" style="white-space:normal">${esc(t)}</div></div>${/^New page/.test(t) ? `<span class="tag">New page</span>` : ""}</div>`).join("")}</div></div>
+          <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap"><span class="score-w"><span class="score" style="--v:${s.speedM}" role="img" aria-label="Mobile speed score ${s.speedM} out of 100"><span aria-hidden="true">${s.speedM}</span></span><small aria-hidden="true">Mobile</small></span><span class="score-w"><span class="score" style="--v:${s.speedD}" role="img" aria-label="Desktop speed score ${s.speedD} out of 100"><span aria-hidden="true">${s.speedD}</span></span><small aria-hidden="true">Desktop</small></span><div style="flex:1;min-width:150px"><b style="font-size:13.5px">${s.id === "corp" ? "Enquiry forms" : "Waitlist & stockist forms"}</b><div class="big-n" style="font-size:22px">${num(forms)} <span class="delta up" style="font-size:12px">${ic("trendUp", "sm")}${pct(((forms - s.formsPrev) / s.formsPrev) * 100, 0)}</span></div><small class="faint">Submissions, last 30 days vs previous 30</small></div></div></section>
+        <section class="card" aria-label="Top keywords, ${esc(s.name)}"><div class="card-h"><h3 id="kw-${s.id}">Top keywords</h3><span class="sub">Google Search Console · position</span></div><div class="tbl-wrap"><table class="tbl kw"><thead><tr><th>Keyword</th><th class="r">Rank</th><th class="r">Change</th></tr></thead><tbody>${s.keywords.map(([k, r, prev]) => { const d = prev - r; return `<tr><td>${esc(k)}</td><td class="r"><span class="rank ${r <= 3 ? "top" : ""}">${r}</span></td><td class="r"><span class="mv ${d > 0 ? "up" : d < 0 ? "down" : "flat"}">${d > 0 ? ic("up") + d : d < 0 ? ic("down") + -d : "—"}</span><span class="sr-only">${d > 0 ? "up " + d : d < 0 ? "down " + -d : "no change"}</span></td></tr>`; }).join("")}</tbody></table></div></section>
+        <section class="card" aria-label="SEO tasks, ${esc(s.name)}"><div class="card-h"><div><h3 id="tk-${s.id}">SEO tasks this month</h3><span class="sub">2 new pages per site, plus fixes</span></div><span class="sub tnum" data-tc="${s.id}">${done.filter(Boolean).length}/${done.length}</span></div><div class="card-b flush"><div class="list">${s.tasks.map(([t], i) => `<div class="li task" role="checkbox" tabindex="0" aria-checked="${done[i]}" data-site="${s.id}" data-i="${i}"><span class="check">${ic("check")}</span><div class="grow"><div class="t" style="white-space:normal">${esc(t)}</div></div>${/^New page/.test(t) ? `<span class="tag">New page</span>` : ""}</div>`).join("")}</div></div>
           <div class="card-f" style="display:block"><b style="color:var(--ink);font-size:12.5px">Recent changes</b><div class="list" style="margin-top:6px">${s.changes.map(([d, t]) => `<div style="display:flex;justify-content:space-between;gap:10px;padding:4px 0"><span class="muted">${esc(t)}</span><span class="when">${relH(d)}</span></div>`).join("")}</div></div></section>
       </div>`;
     };
@@ -822,41 +922,58 @@
   VIEWS.analytics = function (el) {
     const CH = ["Organic search", "Paid social", "Direct", "Paid search", "Referral", "Email & outbound", "WhatsApp"];
     const SH = { corp: [0.44, 0.04, 0.18, 0.15, 0.08, 0.07, 0.04], pb: [0.12, 0.46, 0.16, 0.02, 0.06, 0.03, 0.15] };
-    el.innerHTML = `<div class="page-head"><div><h1>Analytics</h1><p>Traffic and conversions from GA4 and Search Console for both websites.</p></div>
-      <div class="actions"><div class="seg" role="group" aria-label="Website" id="aSite">${[["all", "All sites"], ["corp", "Corporate"], ["pb", "Pina Boosta"]].map(([k, l]) => `<button type="button" data-s="${k}" aria-pressed="${UI.site === k}">${l}</button>`).join("")}</div><div class="seg" role="group" aria-label="Date range" id="aRange">${[[7, "7 days"], [30, "30 days"], [90, "90 days"], [365, "12 months"]].map(([k, l]) => `<button type="button" data-r="${k}" aria-pressed="${UI.range === k}">${l}</button>`).join("")}</div></div></div>
+    const RANGES = [[7, "7 days"], [30, "30 days"], [90, "90 days"], [365, "12 months"]];
+    el.innerHTML = `<div class="page-head"><div><h1>Analytics</h1><p>Traffic and conversions from GA4 and Search Console for both websites, joined with the CRM.</p></div>
+      <div class="actions"><div class="seg" role="group" aria-label="Website" id="aSite">${[["all", "All sites"], ["corp", "Corporate"], ["pb", "Pina Boosta"]].map(([k, l]) => `<button type="button" data-s="${k}" aria-pressed="${UI.site === k}">${l}</button>`).join("")}</div><div class="seg" role="group" aria-label="Date range" id="aRange">${RANGES.map(([k, l]) => `<button type="button" data-r="${k}" aria-pressed="${UI.range === k}">${l}</button>`).join("")}</div></div></div>
       <div id="aBody"></div>`;
+    const sum = (a) => a.reduce((s, v) => s + v, 0);
+    /* CRM side of the funnel: deals that came in through a website, in this range */
+    function crm(range, site) {
+      const divOk = (d) => site === "all" || (site === "pb" ? d.div === "bev" : d.div !== "bev");
+      const web = S.deals.filter((d) => L.WEB_SOURCES.includes(d.src) && divOk(d));
+      const inRange = (iso) => daysFrom(iso) > -range && daysFrom(iso) <= 0;
+      const won = web.filter((d) => d.stage === "Won" && inRange(d.close));
+      const qual = web.filter((d) => d.stage !== "Lead" && d.stage !== "Lost" && (inRange(d.created) || won.includes(d)));
+      return { qual: qual.length, won: won.length };
+    }
     function draw() {
       $$("#aSite button", el).forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.s === UI.site)));
       $$("#aRange button", el).forEach((b) => b.setAttribute("aria-pressed", String(+b.dataset.r === UI.range)));
-      let pts = L.analytics(UI.range, UI.site), labels, corp, pb, conv;
+      if (!RANGES.some(([k]) => k === UI.range)) UI.range = 30;
+      let pts = L.analytics(UI.range, UI.site);
+      const all = { corp: sum(pts.map((p) => p.corp)), pb: sum(pts.map((p) => p.pb)), corpConv: sum(pts.map((p) => p.corpConv)), pbConv: sum(pts.map((p) => p.pbConv)) };
       if (UI.range === 365) {
-        const g = {}; pts.forEach((p) => { const k = p.d.slice(0, 7); (g[k] = g[k] || { d: p.d, corp: 0, pb: 0, conv: 0 }); g[k].corp += p.corp; g[k].pb += p.pb; g[k].conv += p.conv; }); pts = Object.values(g);
+        const g = {}; pts.forEach((p) => { const d0 = dt(p.d), k = d0.getFullYear() * 12 + d0.getMonth(); (g[k] = g[k] || { d: new Date(d0.getFullYear(), d0.getMonth(), 1).toISOString(), corp: 0, pb: 0, conv: 0 }); g[k].corp += p.corp; g[k].pb += p.pb; g[k].conv += p.conv; }); pts = Object.keys(g).sort((x, y) => x - y).map((k) => g[k]);
       }
-      labels = pts.map((p) => p.d); corp = pts.map((p) => p.corp); pb = pts.map((p) => p.pb); conv = pts.map((p) => p.conv);
-      const sum = (a) => a.reduce((s, v) => s + v, 0);
-      const sess = UI.site === "corp" ? sum(corp) : UI.site === "pb" ? sum(pb) : sum(corp) + sum(pb), cv = sum(conv);
-      const corpConv = UI.site === "pb" ? 0 : (UI.site === "corp" ? cv : Math.round(sum(corp) * 0.028));
-      const qual = Math.round(corpConv * 0.34 + (UI.site !== "corp" ? (cv - corpConv) * 0.012 : 0)), won = Math.max(UI.range >= 30 ? 1 : 0, Math.round(qual * 0.17));
+      const labels = pts.map((p) => p.d), corp = pts.map((p) => p.corp), pb = pts.map((p) => p.pb), conv = pts.map((p) => p.conv);
+      const sess = UI.site === "corp" ? all.corp : UI.site === "pb" ? all.pb : all.corp + all.pb;
+      const cv = UI.site === "corp" ? all.corpConv : UI.site === "pb" ? all.pbConv : all.corpConv + all.pbConv;
+      const prev = L.analyticsPrev(UI.range);
+      const prevSess = prev ? sum(prev.map((p) => (UI.site !== "pb" ? p.corp : 0) + (UI.site !== "corp" ? p.pb : 0))) : 0;
+      const sessNote = prev && prevSess ? `${sess >= prevSess ? "+" : "−"}${pct(Math.abs((sess - prevSess) / prevSess) * 100, 0)} vs previous ${UI.range} days` : UI.site === "corp" ? "Last 12 months" : "Since Pina Boosta went live";
+      const { qual, won } = crm(UI.range, UI.site);
       const xf = UI.range === 365 ? (d) => MON[dt(d).getMonth()] : fdate;
       const tt = UI.range === 365 ? (d) => dt(d).toLocaleDateString("en-GB", { month: "long", year: "numeric" }) : (d) => dt(d).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
-      const chan = CH.map((c, i) => ({ label: c, value: Math.round((UI.site !== "pb" ? sum(corp) * SH.corp[i] : 0) + (UI.site !== "corp" ? sum(pb) * SH.pb[i] : 0)) })).sort((a, b) => b.value - a.value);
-      $("#aBody", el).innerHTML = `<div class="stat-row">${[["Sessions", num(sess), "+18% vs previous period"], [UI.site === "pb" ? "Waitlist sign-ups" : "Conversions", num(cv), "Forms, WhatsApp clicks, sign-ups"], ["Conversion rate", pct((cv / sess) * 100, 2), "Sessions to conversion"], ["Won from web", won, "Deals attributed to the website"]].map(([l, v, s]) => `<div class="card stat"><small>${l}</small><b>${v}</b><em>${s}</em></div>`).join("")}</div>
+      const chan = CH.map((c, i) => ({ label: c, value: Math.round((UI.site !== "pb" ? all.corp * SH.corp[i] : 0) + (UI.site !== "corp" ? all.pb * SH.pb[i] : 0)) })).filter((x) => x.value > 0).sort((a, b) => b.value - a.value);
+      const rangeTxt = UI.range === 365 ? "last 12 months" : "last " + UI.range + " days";
+      const sites = [["corp", "Corporate · logs-agri.com", all.corp, all.corpConv, "Organic search"], ["pb", "Pina Boosta · domain TBC", all.pb, all.pbConv, "Paid social"]].filter((r) => UI.site === "all" || r[0] === UI.site);
+      $("#aBody", el).innerHTML = `<div class="stat-row">${[["Sessions", num(sess), sessNote], [UI.site === "pb" ? "Waitlist sign-ups" : "Conversions", num(cv), UI.site === "pb" ? "Batch 001 waitlist" : "Forms, WhatsApp clicks, sign-ups"], ["Conversion rate", pct(sess ? (cv / sess) * 100 : 0, 2), "Sessions to conversion"], ["Won from web", num(won), won === 1 ? "Deal won from a website lead" : "Deals won from website leads"]].map(([l, v, s]) => `<div class="card stat"><small>${l}</small><b>${v}</b><em>${s}</em></div>`).join("")}</div>
         <div class="grid g-2">
-          <section class="card" aria-labelledby="ssH"><div class="card-h"><div><h2 id="ssH">Sessions over time</h2><span class="sub">${UI.range === 365 ? "Monthly" : "Daily"}</span></div><div class="legend">${UI.site !== "pb" ? '<span><i style="background:var(--c-agri)"></i>Corporate</span>' : ""}${UI.site !== "corp" ? '<span><i style="background:var(--c-bev)"></i>Pina Boosta</span>' : ""}</div></div><div class="card-b"><div id="aSess" class="chart-box"></div></div></section>
-          <section class="card" aria-labelledby="cvH"><div class="card-h"><div><h2 id="cvH">Conversions over time</h2><span class="sub">Enquiries and sign-ups</span></div></div><div class="card-b"><div id="aConv" class="chart-box"></div></div></section>
+          <section class="card" aria-labelledby="ssH"><div class="card-h"><div><h2 id="ssH">Sessions over time</h2><span class="sub">${UI.range === 365 ? "Monthly" : "Daily"} · ${rangeTxt}</span></div><div class="legend">${UI.site !== "pb" ? '<span><i style="background:var(--c-agri)"></i>Corporate</span>' : ""}${UI.site !== "corp" ? '<span><i style="background:var(--c-bev)"></i>Pina Boosta</span>' : ""}</div></div><div class="card-b"><div id="aSess" class="chart-box"></div></div></section>
+          <section class="card" aria-labelledby="cvH"><div class="card-h"><div><h2 id="cvH">${UI.site === "pb" ? "Sign-ups over time" : "Conversions over time"}</h2><span class="sub">${UI.site === "pb" ? "Batch 001 waitlist" : "Enquiries and sign-ups"} · ${rangeTxt}</span></div></div><div class="card-b"><div id="aConv" class="chart-box"></div></div></section>
         </div>
         <div class="grid g-main mt">
-          <section class="card" aria-labelledby="fnH"><div class="card-h"><div><h2 id="fnH">Funnel</h2><span class="sub">Visit → enquiry → qualified → won</span></div></div><div class="card-b"><div class="funnel" id="aFun"></div></div></section>
-          <section class="card" aria-labelledby="chH"><div class="card-h"><div><h2 id="chH">Sessions by channel</h2><span class="sub">${UI.site === "all" ? "Both sites" : UI.site === "corp" ? "logs-agri.com" : "Pina Boosta"}</span></div></div><div class="card-b"><div id="aCh"></div></div></section>
-        </div>
-        <section class="card mt" aria-labelledby="bsH"><div class="card-h"><h2 id="bsH">By site</h2></div><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Site</th><th class="r">Sessions</th><th class="r">Conversions</th><th class="r">Conv. rate</th><th class="r">Top channel</th></tr></thead><tbody>${[["corp", "Corporate · logs-agri.com", sum(corp), UI.site === "pb" ? 0 : Math.round(sum(corp) * 0.028), "Organic search"], ["pb", "Pina Boosta · domain TBC", sum(pb), UI.site === "corp" ? 0 : Math.round(sum(pb) * 0.05), "Paid social"]].filter((r) => UI.site === "all" || r[0] === UI.site).map(([k, n, s, c, t]) => `<tr><td class="first" data-l="Site"><span class="div-tag ${k === "corp" ? "d-agri" : "d-bev"}">${n}</span></td><td class="r" data-l="Sessions">${num(s)}</td><td class="r" data-l="Conversions">${num(c)}</td><td class="r strong" data-l="Conv. rate">${pct((c / s) * 100, 2)}</td><td class="r" data-l="Top channel">${t}</td></tr>`).join("")}</tbody></table></div></section>`;
-      C.lines($("#aSess", el), { labels, height: 240, label: "Sessions over time", series: [UI.site !== "pb" && { name: "Corporate", color: "var(--c-agri)", values: corp }, UI.site !== "corp" && { name: "Pina Boosta", color: "var(--c-bev)", values: pb }].filter(Boolean), format: num, axis: compact, xfmt: xf, tipTitle: tt });
-      C.lines($("#aConv", el), { labels, height: 240, label: "Conversions over time", series: [{ name: "Conversions", color: "var(--c-mag)", area: true, values: conv }], format: num, axis: compact, xfmt: xf, tipTitle: tt });
-      C.hbars($("#aCh", el), { items: chan, color: "var(--c-mag)", format: num, unit: "Sessions", label: "Sessions by channel", labelWidth: 132, valueWidth: 54 });
-      const steps = [["Visits", sess], ["Enquiries", cv], ["Qualified", qual], ["Won", won]];
-      $("#aFun", el).innerHTML = `<div class="fun-grid">${steps.map(([l, v], i) => `<div class="fun-step"><small>${l}</small><b>${num(v)}</b><div class="bar"><i style="width:${Math.max(3, Math.sqrt(v / steps[0][1]) * 100)}%"></i></div>${i ? `<span class="fun-rate">${pct((v / steps[i - 1][1]) * 100, i === 1 ? 2 : 0)} of ${steps[i - 1][0].toLowerCase()}</span>` : `<span class="fun-rate">All sessions</span>`}</div>`).join(`<span class="fun-arrow" aria-hidden="true">${ic("chev")}</span>`)}</div><p class="faint" style="font-size:12px;margin-top:10px">Bar length uses a square-root scale so the small stages stay visible. Qualified and won come from the CRM, so the funnel joins website and sales data.</p>`;
+          <section class="card" aria-labelledby="fnH"><div class="card-h"><div><h2 id="fnH">Funnel</h2><span class="sub">Visit → ${UI.site === "pb" ? "sign-up" : "enquiry"} → qualified → won · ${rangeTxt}</span></div></div><div class="card-b"><div class="funnel" id="aFun"></div>
+            <div class="tbl-wrap mt"><table class="tbl cards by-site"><caption class="sr-only">By site</caption><thead><tr><th>Site</th><th class="r">Sessions</th><th class="r">${UI.site === "pb" ? "Sign-ups" : "Conversions"}</th><th class="r">Conv. rate</th><th class="r hide-l">Top channel</th></tr></thead><tbody>${sites.map(([k, n, s, c, t]) => `<tr><td class="first" data-l="Site"><span class="div-tag ${k === "corp" ? "d-agri" : "d-bev"}">${n}</span></td><td class="r" data-l="Sessions">${num(s)}</td><td class="r" data-l="Conversions">${num(c)}</td><td class="r strong" data-l="Conv. rate">${pct(s ? (c / s) * 100 : 0, 2)}</td><td class="r hide-l" data-l="Top channel">${s ? t : "—"}</td></tr>`).join("")}</tbody>${sites.length > 1 ? `<tfoot><tr><td class="first" data-l="Site"><b>Both sites</b></td><td class="r strong" data-l="Sessions">${num(sess)}</td><td class="r strong" data-l="Conversions">${num(cv)}</td><td class="r strong" data-l="Conv. rate">${pct(sess ? (cv / sess) * 100 : 0, 2)}</td><td class="r hide-l" data-l="Top channel">${chan[0] ? chan[0].label : "—"}</td></tr></tfoot>` : ""}</table></div></div></section>
+          <section class="card" aria-labelledby="chH"><div class="card-h"><div><h2 id="chH">Sessions by channel</h2><span class="sub">${UI.site === "all" ? "Both sites" : UI.site === "corp" ? "logs-agri.com" : "Pina Boosta"} · ${rangeTxt}</span></div></div><div class="card-b"><div id="aCh"></div></div></section>
+        </div>`;
+      C.lines($("#aSess", el), { labels, height: 240, label: `Sessions over time, ${rangeTxt}`, series: [UI.site !== "pb" && { name: "Corporate", color: "var(--c-agri)", values: corp }, UI.site !== "corp" && { name: "Pina Boosta", color: "var(--c-bev)", values: pb }].filter(Boolean), format: num, axis: compact, xfmt: xf, tipTitle: tt });
+      C.lines($("#aConv", el), { labels, height: 240, label: `${UI.site === "pb" ? "Waitlist sign-ups" : "Conversions"} over time, ${rangeTxt}`, series: [{ name: UI.site === "pb" ? "Sign-ups" : "Conversions", color: "var(--c-mag)", area: true, values: conv }], format: num, axis: compact, xfmt: xf, tipTitle: tt });
+      C.hbars($("#aCh", el), { items: chan, color: "var(--c-mag)", format: num, unit: "Sessions", label: `Sessions by channel, ${rangeTxt}`, rowHead: "Channel", labelWidth: 132, valueWidth: 60, rowH: window.innerWidth > 1100 ? 44 : 34 });
+      const steps = [["Visits", sess], [UI.site === "pb" ? "Sign-ups" : "Enquiries", cv], ["Qualified", qual], ["Won", won]];
+      $("#aFun", el).innerHTML = `<ol class="fun-grid" aria-label="Funnel, ${rangeTxt}">${steps.map(([l, v], i) => `<li class="fun-step"><small>${l}</small><b>${num(v)}</b><div class="bar" aria-hidden="true"><i style="width:${v ? Math.max(3, Math.sqrt(v / Math.max(1, steps[0][1])) * 100) : 0}%"></i></div>${i ? `<span class="fun-rate">${steps[i - 1][1] ? (() => { const r = (v / steps[i - 1][1]) * 100; return pct(r, r && r < 1 ? 2 : r < 10 ? 1 : 0); })() : "—"} of ${steps[i - 1][0].toLowerCase()}</span>` : `<span class="fun-rate">All sessions</span>`}</li>`).join(`<li class="fun-arrow" aria-hidden="true">${ic("chev")}</li>`)}</ol><p class="faint" style="font-size:12px;margin-top:10px">Qualified and won are deals in the pipeline that came from a website form or ad. Bars use a square-root scale so the small stages stay visible.</p>`;
     }
-    $$("#aSite button", el).forEach((b) => b.addEventListener("click", () => { UI.site = b.dataset.s; saveUI(); draw(); }));
+    $$("#aSite button", el).forEach((b) => b.addEventListener("click", () => { UI.site = b.dataset.s; saveUI(); draw(); announce("Showing " + b.textContent); }));
     $$("#aRange button", el).forEach((b) => b.addEventListener("click", () => { UI.range = +b.dataset.r; saveUI(); draw(); announce("Range " + b.textContent); }));
     draw();
   };
@@ -865,18 +982,20 @@
   VIEWS.estates = function (el) {
     const tours = S.tours, shop = S.shop;
     const cafe14 = L.CAFE.reduce((s, d) => s + d.v, 0);
+    const isWe = (d) => [0, 6].includes(dt(d.d).getDay()), avg = (a) => a.reduce((s, d) => s + d.v, 0) / Math.max(1, a.length);
+    const weAvg = avg(L.CAFE.filter(isWe)), wdAvg = avg(L.CAFE.filter((d) => !isWe(d))), best = L.CAFE.reduce((a, d) => (d.v > a.v ? d : a));
     const TS = { Confirmed: "good", Open: "info", "Deposit due": "warn", Tentative: "" };
     function draw() {
       el.innerHTML = `<div class="page-head"><div><div class="eyebrow">${divTag("estates")}</div><h1>Estates & café</h1><p>Pontian pineapple estate: tours, the farm café and the farm shop.</p></div><div class="actions"><button class="btn btn-p" id="eNew">${ic("plus")}New booking</button></div></div>
-        <div class="stat-row">${[["Tours · next 30 days", tours.length, tours.filter((t) => t.status === "Confirmed").length + " confirmed"], ["Visitors booked", num(tours.reduce((s, t) => s + t.pax, 0)), "Schools, agencies, families"], ["Café sales · 14 days", rm0(cafe14), "Weekends are ~2.5× weekdays"], ["Farm-shop stock alerts", shop.filter((s) => s.stock <= 15).length, "Low or out of stock"]].map(([l, v, s]) => `<div class="card stat"><small>${l}</small><b>${v}</b><em>${s}</em></div>`).join("")}</div>
+        <div class="stat-row">${[["Tours · next 30 days", tours.length, tours.filter((t) => t.status === "Confirmed").length + " confirmed"], ["Visitors booked", num(tours.reduce((s, t) => s + t.pax, 0)), "Schools, agencies, families"], ["Café sales · 14 days", rm0(cafe14), "Weekends are " + (weAvg / wdAvg).toFixed(1) + "× weekdays"], ["Farm-shop stock alerts", shop.filter((s) => s.stock <= 15).length, "Low or out of stock"]].map(([l, v, s]) => `<div class="card stat"><small>${l}</small><b>${v}</b><em>${s}</em></div>`).join("")}</div>
         <div class="grid g-main">
-          <section class="card" aria-labelledby="cfH"><div class="card-h"><div><h2 id="cfH">Café sales by day</h2><span class="sub">Last 14 days · POS sync</span></div></div><div class="card-b"><div id="cafeChart" class="chart-box"></div></div></section>
-          <section class="card" aria-labelledby="trH"><div class="card-h"><h2 id="trH">Tour bookings</h2><span class="sub">${rm0(tours.reduce((s, t) => s + t.value, 0))} booked</span></div><div class="list">${tours.map((t) => `<div class="li"><span class="date-tile"><small>${fday(t.date)}</small><b>${dt(t.date).getDate()}</b></span><div class="grow"><div class="t">${esc(t.group)}</div><div class="s">${t.pax} pax · ${esc(t.pkg)} · ${rm0(t.value)}</div></div>${t.status === "Confirmed" ? `<span class="pill good">Confirmed</span>` : `<button class="btn btn-s btn-xs" data-tour="${t.id}" title="Confirm booking">${esc(t.status)} ${ic("check", "sm")}</button>`}</div>`).join("")}</div></section>
+          <section class="card" aria-labelledby="cfH"><div class="card-h"><div><h2 id="cfH">Café sales by day</h2><span class="sub">Last 14 days · POS sync</span></div></div><div class="card-b"><div id="cafeChart" class="chart-box"></div><div class="mini-stats"><div><small>Weekday average</small><b>${rm(wdAvg)}</b></div><div><small>Weekend average</small><b>${rm(weAvg)}</b></div><div><small>Best day</small><b>${dt(best.d).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" })} · ${rm(best.v)}</b></div></div></div></section>
+          <section class="card" aria-labelledby="trH"><div class="card-h"><h2 id="trH">Tour bookings</h2><span class="sub">${rm0(tours.reduce((s, t) => s + t.value, 0))} booked</span></div><div class="list">${tours.map((t) => `<div class="li"><span class="date-tile"><small>${fday(t.date)}</small><b>${dt(t.date).getDate()}</b></span><div class="grow"><div class="t">${esc(t.group)}</div><div class="s">${t.pax} pax · ${esc(t.pkg)}</div><div class="s tour-v"><b class="tnum">${rm(t.value)}</b>${t.status !== "Confirmed" ? " · " + esc(t.status) : ""}</div></div>${t.status === "Confirmed" ? `<span class="pill good">Confirmed</span>` : `<button type="button" class="btn btn-s btn-xs" data-tour="${t.id}" aria-label="Confirm booking: ${esc(t.group)}">${ic("check", "sm")}Confirm</button>`}</div>`).join("")}</div></section>
         </div>
-        <section class="card mt" aria-labelledby="fsH"><div class="card-h"><div><h2 id="fsH">Farm-shop items</h2><span class="sub">Stock and sales this week</span></div></div><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Item</th><th class="r">Price</th><th class="r">Sold this week</th><th class="r">Revenue</th><th>Stock</th><th class="r"><span class="sr-only">Actions</span></th></tr></thead><tbody>${shop.map((s) => `<tr><td class="first" data-l="Item"><b style="font-weight:600">${esc(s.name)}</b> <span class="faint mono">${s.sku}</span></td><td class="r" data-l="Price">${rm(s.price)}</td><td class="r" data-l="Sold">${num(s.sold)}</td><td class="r strong" data-l="Revenue">${rm(s.price * s.sold)}</td><td data-l="Stock"><span class="pill ${s.stock === 0 ? "crit" : s.stock <= 15 ? "warn" : "good"}">${s.stock === 0 ? "Out of stock" : s.stock <= 15 ? "Low · " + s.stock : s.stock + " in stock"}</span></td><td class="r" data-l=""><button class="btn btn-s btn-xs" data-restock="${s.sku}">${ic("refresh", "sm")}Restock</button></td></tr>`).join("")}</tbody></table></div></section>`;
-      C.bars($("#cafeChart", el), { labels: L.CAFE.map((d) => dt(d.d).getDate() + ""), height: 230, label: "Café sales by day", series: [{ name: "Café sales", color: "var(--c-estates)", values: L.CAFE.map((d) => d.v) }], format: rm, axis: rmc, tipTitle: (i) => dt(L.CAFE[i].d).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" }) });
-      $$("[data-tour]", el).forEach((b) => b.addEventListener("click", () => { const t = tours.find((x) => x.id === b.dataset.tour); t.status = "Confirmed"; draw(); toast(`${esc(t.group)} confirmed · WhatsApp confirmation sent (demo)`); }));
-      $$("[data-restock]", el).forEach((b) => b.addEventListener("click", () => { const s = shop.find((x) => x.sku === b.dataset.restock); s.stock += 48; draw(); toast(`${esc(s.name)} restocked +48`, { icon: "box" }); }));
+        <section class="card mt" aria-labelledby="fsH"><div class="card-h"><div><h2 id="fsH">Farm-shop items</h2><span class="sub">Stock and sales this week</span></div></div><div class="tbl-wrap"><table class="tbl cards"><thead><tr><th>Item</th><th class="r">Price</th><th class="r">Sold · week</th><th class="r">Revenue</th><th>Stock</th><th class="r"><span class="sr-only">Actions</span></th></tr></thead><tbody>${shop.map((s) => `<tr><td class="first" data-l="Item"><b style="font-weight:600">${esc(s.name)}</b> <span class="faint mono">${s.sku}</span></td><td class="r" data-l="Price">${rm(s.price)}</td><td class="r" data-l="Sold">${num(s.sold)}</td><td class="r strong" data-l="Revenue">${rm(s.price * s.sold)}</td><td data-l="Stock"><span class="pill ${s.stock === 0 ? "crit" : s.stock <= 15 ? "warn" : "good"}">${s.stock === 0 ? "Out of stock" : s.stock <= 15 ? "Low · " + s.stock : s.stock + " in stock"}</span></td><td class="r" data-l=""><button class="btn btn-s btn-xs" data-restock="${s.sku}">${ic("refresh", "sm")}Restock</button></td></tr>`).join("")}</tbody></table></div></section>`;
+      C.bars($("#cafeChart", el), { labels: L.CAFE.map((d) => dt(d.d).getDate() + ""), height: 262, label: "Café sales by day, last 14 days", rowHead: "Day", series: [{ name: "Café sales", color: "var(--c-estates)", values: L.CAFE.map((d) => d.v) }], format: rm, axis: rmc, tipTitle: (i) => dt(L.CAFE[i].d).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short" }) });
+      $$("[data-tour]", el).forEach((b) => b.addEventListener("click", () => { const t = tours.find((x) => x.id === b.dataset.tour); t.status = "Confirmed"; save(); draw(); toast(`${esc(t.group)} confirmed · WhatsApp confirmation sent (demo)`); }));
+      $$("[data-restock]", el).forEach((b) => b.addEventListener("click", () => { const s = shop.find((x) => x.sku === b.dataset.restock); s.stock += 48; save(); draw(); toast(`${esc(s.name)} restocked +48`, { icon: "box" }); }));
       $("#eNew", el).addEventListener("click", () => toast("Booking form opens here; customers can also book on the website", { icon: "calendar" }));
     }
     draw();
@@ -884,7 +1003,7 @@
 
   /* ---------- Settings ---------- */
   VIEWS.settings = function (el) {
-    const LOGO = { wa: ["#1fa855", "WA"], gw: ["#3b78e7", "G"], gsc: ["#5f6368", "SC"], ga4: ["#e37400", "GA"], meta: ["#0866ff", "M"], myinv: ["#123a22", "MI"] };
+    const LOGO = { wa: ["#15803d", "WA"], gw: ["#2f6bd8", "G"], gsc: ["#5f6368", "SC"], ga4: ["#b35c00", "GA"], meta: ["#0866ff", "M"], myinv: ["#123a22", "MI"] };
     el.innerHTML = `<div class="page-head"><div><h1>Settings</h1><p>Company profile, users and roles, integrations and appearance.</p></div></div>
       <div class="grid g-main">
         <div class="stack">
@@ -892,7 +1011,7 @@
           <section class="card" aria-labelledby="inH"><div class="card-h"><div><h2 id="inH">Integrations</h2><span class="sub">Connect the tools Logsco already uses</span></div></div><div class="card-b"><div class="int-grid">${S.integrations.map((g) => `<div class="card int"><div class="int-h"><span class="lg" style="background:${LOGO[g.id][0]}">${LOGO[g.id][1]}</span><b>${esc(g.name)}</b></div><p>${esc(g.desc)}</p><div class="int-f"><span data-ist="${g.id}">${intState(g)}</span><button class="switch" role="switch" aria-checked="${g.on}" data-int="${g.id}" aria-label="Connect ${esc(g.name)}"></button></div></div>`).join("")}</div></div></section>
         </div>
         <div class="stack">
-          <section class="card" aria-labelledby="cpH"><div class="card-h"><h2 id="cpH">Company</h2></div><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:14px"><img src="assets/mark.png" alt="" style="width:30px"><div><b>Logsco Agri Technology Sdn. Bhd.</b><div class="faint" style="font-size:12.5px">Part of Logsco Sdn. Bhd. · est. 2025</div></div></div><dl class="kv"><div><dt>SSM</dt><dd class="mono">202501040607</dd></div><div><dt>Registration</dt><dd><span class="pill good">MOF registered</span></dd></div><div><dt>Address</dt><dd>Masai, Johor</dd></div><div><dt>Currency</dt><dd>RM (MYR)</dd></div><div><dt>Invoice prefix</dt><dd class="mono">LAT-INV-26-</dd></div><div><dt><label for="sstDef">Default SST</label></dt><dd><select class="select" id="sstDef" style="width:100%"><option>0%</option><option>6%</option><option selected>8%</option><option>10%</option></select></dd></div></dl><p class="faint" style="font-size:12px">SST rate and registration number are configurable. Confirm both with your tax adviser before going live.</p></div></section>
+          <section class="card" aria-labelledby="cpH"><div class="card-h"><h2 id="cpH">Company</h2></div><div class="card-b"><div style="display:flex;gap:12px;align-items:center;margin-bottom:14px"><img src="assets/mark.png" alt="" style="width:30px"><div><b>Logsco Agri Technology Sdn. Bhd.</b><div class="faint" style="font-size:12.5px">Part of Logsco Sdn. Bhd. · est. 2025</div></div></div><dl class="kv"><div><dt>SSM</dt><dd class="mono">202501040607</dd></div><div><dt>Registration</dt><dd><span class="pill good">MOF registered</span></dd></div><div><dt>Address</dt><dd>Masai, Johor</dd></div><div><dt>Currency</dt><dd>RM (MYR)</dd></div><div><dt>Invoice prefix</dt><dd class="mono">LAT-INV-26-</dd></div><div><dt><label for="sstDef">Default SST</label></dt><dd><select class="select" id="sstDef" style="width:100%">${SST_RATES.map((r) => `<option value="${r}" ${r === (UI.sst != null ? UI.sst : 8) ? "selected" : ""}>${r}%</option>`).join("")}</select></dd></div></dl><p class="faint" style="font-size:12px">SST rate and registration number are configurable. Confirm both with your tax adviser before going live.</p></div></section>
           <section class="card" aria-labelledby="apH"><div class="card-h"><h2 id="apH">Appearance</h2></div><div class="card-b" style="display:grid;gap:14px"><div class="seg" role="group" aria-label="Theme" id="thSeg">${[["", "System"], ["light", "Light"], ["dark", "Dark"]].map(([k, l]) => `<button type="button" data-th="${k}" aria-pressed="${(UI.theme || "") === k}">${l}</button>`).join("")}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><span>Compact sidebar</span><button class="switch" role="switch" aria-checked="${UI.collapsed}" id="colSw" aria-label="Compact sidebar"></button></div></div></section>
           <section class="card" aria-labelledby="dmH"><div class="card-h"><h2 id="dmH">Demo data</h2></div><div class="card-b"><p class="muted" style="font-size:13px;margin-bottom:12px">Everything in this demo is fictional sample data. Changes are kept in this browser only.</p><button class="btn btn-d" id="resetBtn">${ic("refresh")}Reset demo data</button></div></section>
         </div>
@@ -909,7 +1028,7 @@
     $$("[data-th]", el).forEach((b) => b.addEventListener("click", () => { setTheme(b.dataset.th || null); $$("[data-th]", el).forEach((x) => x.setAttribute("aria-pressed", String(x === b))); }));
     $("#colSw", el).addEventListener("click", (e) => { setCollapsed(!UI.collapsed); e.currentTarget.setAttribute("aria-checked", String(UI.collapsed)); });
     $("#resetBtn", el).addEventListener("click", resetDemo);
-    $("#sstDef", el).addEventListener("change", (e) => toast("Default SST set to " + e.target.value));
+    $("#sstDef", el).addEventListener("change", (e) => { UI.sst = +e.target.value; saveUI(); toast("Default SST for new invoices set to " + UI.sst + "%"); });
     $("#uInv", el).addEventListener("click", () => {
       const lay = openLayer("modal", drawerShell({ title: "Invite user", sub: "They get a Google Workspace sign-in link.", body: `<div class="form-grid" style="grid-template-columns:1fr"><div class="field"><label for="iu-n">Name</label><input class="input" id="iu-n" autofocus placeholder="Full name"></div><div class="field"><label for="iu-e">Work email</label><input class="input" id="iu-e" type="email" placeholder="name@logs-agri.example"></div><div class="field"><label for="iu-r">Role</label><select class="select" id="iu-r"><option>Sales</option><option>Technician</option><option>Finance</option><option>Manager</option><option>Viewer</option></select></div></div>`, foot: `<button class="btn btn-g" data-close>Cancel</button><button class="btn btn-p" id="iu-s">${ic("send")}Send invite</button>` }), { cls: "sm", label: "Invite user" });
       $("#iu-s", lay.panel).addEventListener("click", () => { const n = $("#iu-n", lay.panel).value.trim(); if (!n) { $("#iu-n", lay.panel).focus(); return; } S.users.push({ name: n, email: $("#iu-e", lay.panel).value || n.toLowerCase().split(" ")[0] + "@logs-agri.example", role: $("#iu-r", lay.panel).value }); save(); lay.close(); users(); toast(`Invite sent to ${esc(n)} (demo)`, { icon: "send" }); });
@@ -979,7 +1098,7 @@
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); return; }
     const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "");
     if (e.key === "/" && !typing && !layers.length) { e.preventDefault(); openPalette(); }
-    if (e.key === "Escape" && !layers.length) { closePops(); closeSide(); }
+    if (e.key === "Escape" && !layers.length) { const open = $$(".popover").find((x) => !x.hidden); closePops(); if (open) { const b = open.previousElementSibling; if (b) b.focus(); } closeSide(); }
   });
   side.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSide(); });
   window.addEventListener("hashchange", () => route());
