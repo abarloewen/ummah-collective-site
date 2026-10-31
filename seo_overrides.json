@@ -145,6 +145,10 @@
 "ar/article-values-economy-software-opportunity.html": {
 "description": "قرابة ملياري إنسان وإنفاق بالتريليونات، ومعظمه ما زال يُخدم بأدوات عامة. والخطوة الدائمة ليست حملة إعلانية أخرى، بل بناء البرمجيات."
 },
+"ar/article-website-relaunch-checklist.html": {
+"title": "قائمة تحقق إعادة إطلاق الموقع: حافظ على ترتيبك — Ummah Collective",
+"description": "لا ينبغي أن تعيد إعادة التصميم ظهورك في البحث إلى الصفر. قائمة تحقق للتحويلات والتتبع والمخطط والسرعة وتطابق المحتوى قبل الإطلاق وبعده."
+},
 "ar/article-website-that-sells.html": {
 "description": "معظم المواقع كتيبات جميلة المظهر لا تفعل شيئًا. وقلة منها محركات تلتقط العملاء وتؤهلهم وتحجز مواعيدهم، في كل ساعة من كل يوم."
 },
@@ -492,6 +496,10 @@
 "de/article-values-economy-software-opportunity.html": {
 "description": "Fast zwei Milliarden Menschen, Billionen an Ausgaben, meist mit generischen Tools bedient. Nachhaltig ist keine Werbekampagne, sondern eigene Software."
 },
+"de/article-website-relaunch-checklist.html": {
+"title": "Website-Relaunch-Checkliste: Rankings beim Redesign behalten",
+"description": "Ein Redesign darf Ihre Sichtbarkeit nicht zurücksetzen: die Relaunch-Checkliste zu Weiterleitungen, Tracking, Schema, Tempo und Inhalten."
+},
 "de/article-website-that-sells.html": {
 "description": "Die meisten Websites sind Broschüren: schön, aber wirkungslos. Wenige sind Systeme, die Anfragen erfassen, qualifizieren und Termine buchen, Tag und Nacht.",
 "title": "Ihre Website sollte Ihr bester Vertriebsmitarbeiter sein"
@@ -796,6 +804,10 @@
 "description": "Hampir dua bilion orang, perbelanjaan bertrilion, kebanyakannya masih dilayan alat generik. Langkah yang kekal bukan kempen iklan, tetapi membina perisian.",
 "title": "Ekonomi berteraskan nilai adalah peluang perisian"
 },
+"ms/article-website-relaunch-checklist.html": {
+"title": "Senarai semak pelancaran semula laman web: kekalkan kedudukan",
+"description": "Reka bentuk semula tidak patut menetapkan semula keterlihatan carian. Senarai semak ubah hala, penjejakan, skema, kelajuan dan kandungan."
+},
 "ms/article-website-that-sells.html": {
 "description": "Kebanyakan laman web ialah risalah cantik yang tidak berbuat apa-apa. Segelintir ialah enjin yang menangkap, menapis dan menempah, setiap jam setiap hari.",
 "title": "Laman web anda sepatutnya menjadi jurujual terbaik anda"
@@ -1097,6 +1109,10 @@
 },
 "tr/article-values-economy-software-opportunity.html": {
 "description": "Yaklaşık iki milyar insan, trilyonlarca harcama ve çoğu hâlâ jenerik araçlarla karşılanıyor. Kalıcı hamle yeni bir reklam kampanyası değil, yazılım inşası."
+},
+"tr/article-website-relaunch-checklist.html": {
+"title": "Web sitesi yeniden yayın kontrol listesi: sıralamaları koruyun",
+"description": "Yeniden tasarım arama görünürlüğünüzü sıfırlamamalı: yönlendirme, takip, şema, hız ve içerik uyumu için yayın öncesi ve sonrası kontrol listesi."
 },
 "tr/article-website-that-sells.html": {
 "description": "Çoğu site güzel görünen ama hiçbir şey yapmayan broşürlerdir. Bazıları ise günün her saati müşteri adayı yakalayan, niteleyen ve randevu alan motorlardır."
@@ -1410,6 +1426,10 @@
 },
 "zh/article-values-economy-software-opportunity.html": {
 "description": "近二十亿人口、数万亿消费，多数仍由通用工具服务。持久之道不是再投一轮广告，而是打造服务这一市场的软件。"
+},
+"zh/article-website-relaunch-checklist.html": {
+"title": "网站改版上线清单：重新设计时如何保住搜索排名 — Ummah Collective",
+"description": "改版不应让搜索可见度归零。这份清单涵盖上线前后的重定向、追踪、结构化数据、速度与内容一致性，帮助您在重新设计时保住排名。"
 },
 "zh/article-website-that-sells.html": {
 "description": "多数网站只是好看却毫无作用的宣传册，少数则是每天每时每刻都在获取、筛选并预约客户的销售引擎。"
