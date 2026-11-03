@@ -226,7 +226,11 @@
     document.body.setAttribute('lang',pageLang);
     var lc=document.getElementById('langCur'); if(lc) lc.textContent=pageLang.toUpperCase();
     if(window.UC_heroAnchor) window.UC_heroAnchor(pageLang);
+    // hreflang in the head is the source of truth (some articles exist only in en + ms); hide languages the page lacks
+    var alts=document.querySelectorAll('link[rel="alternate"][hreflang]');
+    function alt(code){ for(var i=0;i<alts.length;i++){ if(alts[i].getAttribute('hreflang')===code) return alts[i].getAttribute('href'); } return null; }
     function target(code){
+      var a=alt(code); if(a) return a.replace(/^https?:\/\/[^\/]+/,'');
       var p=location.pathname.replace(/^\/(de|ms|ar|zh|tr)(?=\/)/,'');
       if(p==='')p='/';
       return code==='en'? p : '/'+code+(p==='/'?'/':p);
@@ -234,7 +238,7 @@
     var box=document.getElementById('lang');
     if(box){var btn=box.querySelector('button');
       btn.onclick=function(e){e.stopPropagation();box.classList.toggle('open')};
-      box.querySelectorAll('.lang-menu button').forEach(function(b){b.onclick=function(){location.href=target(b.getAttribute('data-l'));}});
+      box.querySelectorAll('.lang-menu button').forEach(function(b){var c=b.getAttribute('data-l'); if(alts.length && !alt(c)){ b.style.display='none'; return; } b.onclick=function(){location.href=target(c);}});
       document.addEventListener('click',function(){box.classList.remove('open')});
     }
   }

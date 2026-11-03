@@ -1710,6 +1710,12 @@ def project_page(s,n,c,y,b,scope,url,im):
     return page(f"project-{s}.html",f"{n} — Ummah Collective",_meta_desc(b),body,aurora="work")
 
 # ---------------- ARTICLES (reuse 8) ----------------
+# Languages per article (besides English), for articles published from 4 Nov 2026 on.
+# Default for an article not listed here: all LOC_LANGS. New articles: ["ms"], plus "de"/"ar" when the topic targets DACH/Gulf.
+ARTICLE_LANGS={}
+# Last substantive update per article (refresh runs). Feeds dateModified and the sitemap <lastmod>.
+ARTICLE_UPDATED={}
+
 ARTICLES=[
   ("ai-agency-malaysia-pricing","AI Agents","2026-11-04","AI agency Malaysia pricing: models, scope and a fair first quote","How an AI agency in Malaysia prices its work, what each pricing model includes, and the proposal red flags to catch before you sign anything.","1620712943543-bcc4688e7485",
   [
@@ -2126,7 +2132,7 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
   <div class="reveal">{''.join(blocks).replace("<strong>","").replace("</strong>","")}</div>
   <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap"><a href="booking.html?service=ai-agents" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="insights.html" class="btn btn-ghost">All insights</a></div>
 </div></div></section>'''+cta()
-    ald=_ld({"@context":"https://schema.org","@type":"BlogPosting","headline":_plain(title),"description":_plain(lede),"image":U(imgid),"datePublished":str(date),"dateModified":str(date),"inLanguage":"en","author":{"@type":"Organization","name":"Ummah Collective"},"publisher":{"@id":SITE+"/#org"},"mainEntityOfPage":SITE+"/article-"+slug+".html"})
+    ald=_ld({"@context":"https://schema.org","@type":"BlogPosting","headline":_plain(title),"description":_plain(lede),"image":U(imgid),"datePublished":str(date),"dateModified":str(ARTICLE_UPDATED.get(slug,date)),"inLanguage":"en","author":{"@type":"Organization","name":"Ummah Collective"},"publisher":{"@id":SITE+"/#org"},"mainEntityOfPage":SITE+"/article-"+slug+".html"})
     # AEO: emit FAQPage schema from the article's FAQ list (li text "Question? &mdash; Answer")
     _faq=[]
     for _li in _re.findall(r"<li>([^<]*\?[^<]*&mdash;[^<]*)</li>","".join(blocks)):
@@ -2618,8 +2624,15 @@ def _escvariant(t):
     for a,b in _ENT: t=t.replace(a,b)
     return t
 
+def _alangs(f):
+    """Languages (besides en) a page exists in. Articles can be restricted via ARTICLE_LANGS."""
+    if f.startswith("article-") and f.endswith(".html"):
+        sl=f[len("article-"):-len(".html")]
+        if sl in ARTICLE_LANGS: return [l for l in LOC_LANGS if l in ARTICLE_LANGS[sl]]
+    return LOC_LANGS
+
 def _hreflinks(path):
-    ls=''.join(f'<link rel="alternate" hreflang="{l}" href="{SITE}/{l}/{path}">' for l in LOC_LANGS)
+    ls=''.join(f'<link rel="alternate" hreflang="{l}" href="{SITE}/{l}/{path}">' for l in _alangs(path))
     ls+=f'<link rel="alternate" hreflang="en" href="{SITE}/{path}"><link rel="alternate" hreflang="x-default" href="{SITE}/{path}">'
     return ls
 
@@ -2688,6 +2701,7 @@ def localize(pages):
         cd=core.get(l,{}); ce=core.get('en',{})
         n=0
         for f in tree_pages:
+            if l not in _alangs(f): continue
             h=open(os.path.join(OUT,f),encoding='utf-8').read()
             path='' if f=='index.html' else f
             # lang + locale + canonical/og
@@ -2740,6 +2754,8 @@ def localize(pages):
             # localized structured data for articles (2026-11-04): BlogPosting language/headline + translated FAQPage
             if f.startswith('article-'):
                 h=_localize_article_ld(h,open(os.path.join(OUT,f),encoding='utf-8').read(),tr,l,path)
+            # links to articles that have no version in this language go to the English page
+            h=_re.sub(r'href="(article-[a-z0-9-]+\.html)"',lambda m5: m5.group(0) if l in _alangs(m5.group(1)) else 'href="/'+m5.group(1)+'"',h)
             # absolute asset paths (page lives one level down)
             for a in ['uc.css','uc.js','translations.js','favicon.ico','favicon.svg','apple-touch-icon.png','site.webmanifest','orbit-lottie.json','pulse-lottie.json']:
                 h=h.replace('href="'+a+'"','href="/'+a+'"').replace('src="'+a+'"','src="/'+a+'"').replace('data-src="'+a+'"','data-src="/'+a+'"')
@@ -2765,8 +2781,8 @@ def main():
     print("Localized trees:",_loc)
     print("SEO overrides applied:",_apply_seo_overrides())
     urls=[SITE+"/"+("" if f=="index.html" else f) for f in m if f not in EXCLUDE]
-    urls+= [SITE+"/"+l+"/"+("" if f=="index.html" else f) for l in LOC_LANGS for f in m if f not in EXCLUDE]
-    _lm={"article-"+a[0]+".html":str(a[2]) for a in ARTICLES}
+    urls+= [SITE+"/"+l+"/"+("" if f=="index.html" else f) for l in LOC_LANGS for f in m if f not in EXCLUDE and l in _alangs(f)]
+    _lm={"article-"+a[0]+".html":str(ARTICLE_UPDATED.get(a[0],a[2])) for a in ARTICLES}
     _lm["insights.html"]=max(_lm.values())
     def _lmod(u):
         d=_lm.get(u.rsplit("/",1)[-1])

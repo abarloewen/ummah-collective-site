@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guard for publishing a new Insights article.
+"""Guard for publishing (or refreshing) an Insights article.
 
 Run from the repo root AFTER `python3 build.py`:
     python3 tools/verify_publish.py <slug> [--also old-slug-1,old-slug-2]
@@ -32,22 +32,25 @@ def main(slug, also=()):
     if extra:
         problems.append(f"build changed {len(extra)} unexpected file(s), e.g. {extra[:8]}")
     sm = open("sitemap.xml", encoding="utf-8").read()
-    for l in LANGS:
+    present = [l for l in LANGS if os.path.exists(l + art)]
+    for need in ("", "ms/"):
+        if need not in present: problems.append(f"missing {need}{art} (English and Bahasa Melayu are required)")
+    for l in present:
         p = l + art
-        if not os.path.exists(p):
-            problems.append(f"missing {p}"); continue
         h = open(p, encoding="utf-8").read()
-        if len(re.findall(r'rel="alternate" hreflang', h)) != 7: problems.append(f"{p}: hreflang links != 7")
+        n = len(re.findall(r'rel="alternate" hreflang', h))
+        if n != len(present) + 1: problems.append(f"{p}: {n} hreflang links, expected {len(present) + 1}")
         if "FAQPage" not in h: problems.append(f"{p}: no FAQPage schema")
         if "og-image-2026.png" not in h: problems.append(f"{p}: old social card")
         if "G-HWF39V3XM0" not in h: problems.append(f"{p}: GA tag missing")
         if len(re.findall(r"<h1[ >]", h)) != 1: problems.append(f"{p}: not exactly one h1")
         if f"<loc>{SITE}{p}</loc>" not in sm: problems.append(f"sitemap.xml lacks {p}")
+    for l in LANGS:
         ins = open(l + "insights.html", encoding="utf-8").read()
-        if f'href="{art}"' not in ins: problems.append(f"{l}insights.html does not list the article")
+        if f'href="{art}"' not in ins and f'href="/{art}"' not in ins: problems.append(f"{l}insights.html does not list the article")
     if problems:
         print("FAIL"); [print(" -", x) for x in problems]; sys.exit(1)
-    print(f"OK: {art} in 6 languages; changed files: {len(changed)}")
+    print(f"OK: {art} in {len(present)} languages ({', '.join(l.strip('/') or 'en' for l in present)}); changed files: {len(changed)}")
 
 if __name__ == "__main__":
     args = sys.argv[1:]
