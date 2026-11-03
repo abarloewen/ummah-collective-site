@@ -19,7 +19,7 @@ SITE = "https://ummah-collective.com/"
 
 def main(slug, also=()):
     art = f"article-{slug}.html"
-    allowed = {"build.py", "i18n_data.py", "seo_overrides.json", "sitemap.xml"}
+    allowed = {"build.py", "i18n_data.py", "seo_overrides.json", "sitemap.xml", "content/blog-queue.md"}
     for l in LANGS:
         allowed |= {l + art, l + "insights.html"}
         allowed |= {l + f"article-{o}.html" for o in also}
