@@ -2633,6 +2633,31 @@ def _apply_seo_overrides():
         if h!=o: open(p,"w",encoding="utf-8").write(h); n+=1
     return n
 
+def _localize_article_ld(h,h_en,tr,l,path):
+    import html as _hm
+    pm={}
+    for k,v in tr.items(): pm.setdefault(_plain(k),_plain(v))
+    def P(x): return pm.get(_plain(x),x)
+    faq=[]
+    for li in _re.findall(r"<li>([^<]*\?[^<]*&mdash;[^<]*)</li>",h_en):
+        v=tr.get(li) or tr.get(_hm.unescape(li))
+        if not v: faq=None; break
+        parts=_re.split(r"&mdash;|\u2014",v,maxsplit=1)
+        if len(parts)!=2 or not parts[0].strip() or not parts[1].strip(): faq=None; break
+        faq.append((parts[0].strip(),parts[1].strip()))
+    def _rep(m):
+        try: o=json.loads(m.group(1))
+        except Exception: return m.group(0)
+        t=o.get("@type")
+        if t=="BlogPosting":
+            o["headline"]=P(o.get("headline","")); o["description"]=P(o.get("description",""))
+            o["inLanguage"]=l; o["mainEntityOfPage"]=SITE+"/"+l+"/"+path
+            return _ld(o)
+        if t=="FAQPage" and faq:
+            return faq_ld(faq[:6])
+        return m.group(0)
+    return _re.sub(r'<script type="application/ld\+json">(.*?)</script>',_rep,h,flags=_re.S)
+
 def localize(pages):
     core=_parse_i18n_core()
     tree_pages=[f for f in pages if f not in ('liquid-preview.html','404.html')]
@@ -2702,6 +2727,9 @@ def localize(pages):
                     if ke in d1: d1=d1.replace(ke,tr[k])
                     elif k in d1: d1=d1.replace(k,tr[k])
                 if d1!=d0: h=h.replace('name="description" content="'+d0+'"','name="description" content="'+d1+'"',1)
+            # localized structured data for articles (2026-11-04): BlogPosting language/headline + translated FAQPage
+            if f.startswith('article-'):
+                h=_localize_article_ld(h,open(os.path.join(OUT,f),encoding='utf-8').read(),tr,l,path)
             # absolute asset paths (page lives one level down)
             for a in ['uc.css','uc.js','translations.js','favicon.ico','favicon.svg','apple-touch-icon.png','site.webmanifest','orbit-lottie.json','pulse-lottie.json']:
                 h=h.replace('href="'+a+'"','href="/'+a+'"').replace('src="'+a+'"','src="/'+a+'"').replace('data-src="'+a+'"','data-src="/'+a+'"')
@@ -2728,7 +2756,12 @@ def main():
     print("SEO overrides applied:",_apply_seo_overrides())
     urls=[SITE+"/"+("" if f=="index.html" else f) for f in m if f not in EXCLUDE]
     urls+= [SITE+"/"+l+"/"+("" if f=="index.html" else f) for l in LOC_LANGS for f in m if f not in EXCLUDE]
-    sm='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join('  <url><loc>'+u+'</loc></url>\n' for u in urls)+'</urlset>\n'
+    _lm={"article-"+a[0]+".html":str(a[2]) for a in ARTICLES}
+    _lm["insights.html"]=max(_lm.values())
+    def _lmod(u):
+        d=_lm.get(u.rsplit("/",1)[-1])
+        return '<lastmod>'+d+'</lastmod>' if d else ''
+    sm='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join('  <url><loc>'+u+'</loc>'+_lmod(u)+'</url>\n' for u in urls)+'</urlset>\n'
     open(os.path.join(OUT,"sitemap.xml"),"w",encoding="utf-8").write(sm)
     open(os.path.join(OUT,"robots.txt"),"w",encoding="utf-8").write("User-agent: *\nAllow: /\nDisallow: /liquid-preview.html\n\nSitemap: "+SITE+"/sitemap.xml\n")
     # PWA manifest (app-like mobile experience, 2026-07-05)
