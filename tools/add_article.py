@@ -127,7 +127,8 @@ def insert(spec, src):
     li = '<li><a href=\\"article-%s.html\\">%s</a></li>' % (slug, spec["title"])
     for o in spec.get("link_from", []):
         start = re.search(r'^\s*\("%s",' % re.escape(o), src, re.M).start()
-        end = src.index("  ]),\n", start)
+        nxt = re.compile(r'^\s*\("[a-z0-9-]+",', re.M).search(src, start + 1)
+        end = nxt.start() if nxt else src.index("\n]", start)
         chunk = src[start:end]
         k = chunk.rfind("<h2>Keep reading</h2><ul>")
         if k < 0: raise SystemExit(f"{o} has no Keep reading list")
@@ -148,7 +149,8 @@ def main():
         print("SPEC INVALID"); [print(" -", e) for e in errs]; sys.exit(1)
     if "--check" in sys.argv:
         print("spec OK"); return
-    open("build.py", "w", encoding="utf-8").write(insert(spec, src))
+    new_src = insert(spec, src)  # compute first so a failure never truncates build.py
+    open("build.py", "w", encoding="utf-8").write(new_src)
     rows = []
     segs = [spec["title"], spec["lede"]] + segments(spec["blocks"])
     seen = set()
