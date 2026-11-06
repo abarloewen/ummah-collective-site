@@ -12,9 +12,11 @@ clients (halal brands, Muslim-owned SMEs, academies, travel, clinics).
 Columns: slug | EN primary keyword | localized keyword hints (use in that
 language's title/first H2 when natural) | angle | link target | evidence
 
-LANGUAGES (from 4 Nov 2026): every article is published in English + Bahasa
-Melayu. Add German only when the row has a de: hint, Arabic only when it has an
-ar: hint (DACH- or Gulf-targeted topics). No new Turkish or Chinese versions.
+LANGUAGES (from 7 Nov 2026): every article is published in English, Bahasa
+Melayu and Arabic (langs ["ms","ar"]). Add German only when the row has a de:
+hint (DACH-targeted topics). No new Turkish or Chinese versions. ar: hints give
+the Arabic keyword to use in the Arabic title and first H2; without one, use the
+most natural Gulf business Arabic phrasing of the EN keyword.
 
 1. ai-agency-malaysia-pricing | "AI agency Malaysia" | ms: "agensi AI Malaysia" | How AI agencies in Malaysia price work (fixed build, retainer, per-conversation), what is included, what a fair first project looks like, red flags in proposals. Different from the existing buyer's guide (choose-ai-automation-agency-malaysia): this one is about money and scope. | service-ai-agents | GSC: "ai agency malaysia" 77 impr pos 25; "ai development agency malaysia" pos 20; "ai automation agency malaysia" 128 impr pos 13
 2. whatsapp-marketing-malaysia | "WhatsApp marketing Malaysia" | ms: "pemasaran WhatsApp" | Broadcasts vs automation vs click-to-WhatsApp ads; opt-in and PDPA; template rules; what to measure. Link to the existing whatsapp-automation-malaysia article. | service-lead-generation | GSC: 123 impr pos 53; "whatsapp marketing software malaysia", "whatsapp business tips malaysia"

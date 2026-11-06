@@ -1712,7 +1712,7 @@ def project_page(s,n,c,y,b,scope,url,im):
 # ---------------- ARTICLES (reuse 8) ----------------
 # Languages per article (besides English), for articles published from 4 Nov 2026 on.
 # Default for an article not listed here: all LOC_LANGS. New articles: ["ms"], plus "de"/"ar" when the topic targets DACH/Gulf.
-ARTICLE_LANGS={"whatsapp-marketing-malaysia":["ms"]}
+ARTICLE_LANGS={"whatsapp-marketing-malaysia":["ms","ar"]}
 # Last substantive update per article (refresh runs). Feeds dateModified and the sitemap <lastmod>.
 ARTICLE_UPDATED={}
 
