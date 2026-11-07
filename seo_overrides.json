@@ -1,6 +1,7 @@
 {
 "ar/about.html": {
-"description": "أسس Attila von Barloewen شركة Ummah Collective عام 2022. تعرّف على الفريق والمبادئ التي نعمل بها والأسواق التي نخدمها، من كوالالمبور إلى برلين."
+"description": "أسس Attila von Barloewen شركة Ummah Collective عام 2022. تعرّف على الفريق والمبادئ التي نعمل بها والأسواق التي نخدمها، من كوالالمبور إلى برلين.",
+"title": "من نحن: استوديو AI وويب في كوالالمبور | Ummah Collective"
 },
 "ar/article-ai-chatbot-vs-ai-agent.html": {
 "description": "روبوت الدردشة يجيب، والوكيل ينفّذ. والفجوة بين هذين الفعلين تحدد ما ينبغي أن تدفعه، فيما يُباع لمعظم الشركات ذات العشرة موظفين الخيار الخطأ."
@@ -162,7 +163,8 @@
 "description": "احجز مكالمة مجانية لتحديد النطاق مع Ummah Collective. اختر موعدًا، وحدّثنا عن مشروعك، واحصل على خطوة تالية واضحة في الذكاء الاصطناعي والأتمتة والويب وCRM."
 },
 "ar/contact.html": {
-"description": "تواصل مع Ummah Collective في كوالالمبور: احجز مكالمة مجانية، أو أرسل موجز مشروعك، أو راسلنا عبر WhatsApp بشأن الذكاء الاصطناعي والأتمتة والويب وCRM."
+"description": "تواصل مع Ummah Collective في كوالالمبور: احجز مكالمة مجانية، أو أرسل موجز مشروعك، أو راسلنا عبر WhatsApp بشأن الذكاء الاصطناعي والأتمتة والويب وCRM.",
+"title": "تواصل مع وكالة AI وويب في كوالالمبور | Ummah Collective"
 },
 "ar/founders-club.html": {
 "description": "مجتمع لرواد الأعمال المسلمين ومن يشاركونهم القيم، عبر الإنترنت وفي كوالالمبور. الانضمام مجاني، مع دورات متقدمة ولقاءات تعارف وفعاليات مميزة."
@@ -182,7 +184,8 @@
 "title": "حزمة الإطلاق — إطلاق حصري لشركات قطاع الحلال"
 },
 "ar/noon-os.html": {
-"description": "Noon OS هو نظام CRM حلال ونظام تشغيل للأعمال موجّه لروّاد الأعمال المسلمين: المبيعات والمشاريع والمالية والمجتمع في لوحة واحدة."
+"description": "Noon OS هو نظام CRM حلال ونظام تشغيل للأعمال موجّه لروّاد الأعمال المسلمين: المبيعات والمشاريع والمالية والمجتمع في لوحة واحدة.",
+"title": "Noon OS: CRM حلال وأنظمة مخصصة | Ummah Collective"
 },
 "ar/privacy.html": {
 "description": "كيف تتعامل Ummah Collective مع البيانات الشخصية وفق قانون PDPA 2010 الماليزي: جمع بالحد الأدنى، دون بيع، مع مراعاة GDPR، وإشعار بلغة الملايو."
@@ -243,36 +246,41 @@
 "title": "مجموعة شوراكا — موقع تكنولوجيا مالية متوافق مع الشريعة"
 },
 "ar/service-ai-agents.html": {
-"title": "وكلاء AI جاهزون وأتمتة واتساب بالذكاء الاصطناعي"
+"title": "وكلاء AI لواتساب والمبيعات والدعم | Ummah Collective"
 },
 "ar/service-app-development.html": {
-"title": "تطوير التطبيقات والبرمجيات — متوافقة مع الشريعة تصميمًا"
+"title": "تطوير تطبيقات وبرمجيات مخصصة | Ummah Collective"
 },
 "ar/service-automation.html": {
 "description": "نربط أدواتك ونزيل العمل اليدوي بينها عبر أتمتة العمليات، لتحقيق وفورات متراكمة في التكاليف التشغيلية ونفقات الموارد البشرية دون المساس بالإنتاجية.",
-"title": "أتمتة العمليات — خفّض التكاليف وحافظ على الإنتاجية"
+"title": "أتمتة العمليات التجارية في ماليزيا | Ummah Collective"
 },
 "ar/service-branding.html": {
-"description": "تموضع فاخر وهوية متماسكة وخارطة طريق استراتيجية توحّد العلامة والموقع والمحتوى والنمو، ثم تقودك إلى أسواق جديدة في أوروبا وآسيا والشرق الأوسط."
+"description": "تموضع فاخر وهوية متماسكة وخارطة طريق استراتيجية توحّد العلامة والموقع والمحتوى والنمو، ثم تقودك إلى أسواق جديدة في أوروبا وآسيا والشرق الأوسط.",
+"title": "وكالة هوية واستراتيجية علامات تجارية | Ummah Collective"
 },
 "ar/service-lead-generation.html": {
 "description": "التواصل الخارجي والإعلانات المدفوعة وتحسين التحويل في منظومة واحدة، ومنها تسويق النمو للعلامات الحلال المعتمدة الداخلة إلى ماليزيا وأوروبا وأمريكا.",
-"title": "توليد العملاء والنمو للعلامات التجارية الحاصلة على شهادة الحلال"
+"title": "توليد العملاء والتسويق بالأداء | Ummah Collective"
 },
 "ar/service-seo-content.html": {
-"description": "تحسين تقني لمحركات البحث SEO ومحرّك محتوى لتتصدر نتائج Google وتظهر في إجابات الذكاء الاصطناعي، وتبني سلطة تتراكم: ظهور دائم لا نقرات مستأجرة."
+"description": "تحسين تقني لمحركات البحث SEO ومحرّك محتوى لتتصدر نتائج Google وتظهر في إجابات الذكاء الاصطناعي، وتبني سلطة تتراكم: ظهور دائم لا نقرات مستأجرة.",
+"title": "SEO ومحتوى لجوجل وبحث AI | Ummah Collective"
 },
 "ar/service-shariah-audit.html": {
-"description": "تدقيق خارجي يقوده علماء شرعيون لتمويلك الإسلامي وحالة الحلال والامتثال الشرعي لديك، يمنحك صورة واضحة عن وضعك الحالي قبل دخول السوق."
+"description": "تدقيق خارجي يقوده علماء شرعيون لتمويلك الإسلامي وحالة الحلال والامتثال الشرعي لديك، يمنحك صورة واضحة عن وضعك الحالي قبل دخول السوق.",
+"title": "تدقيق الامتثال الشرعي والحلال | Ummah Collective"
 },
 "ar/service-social-media-automation.html": {
-"description": "نظام قوالب للعلامة ومحرّك محتوى بالذكاء الاصطناعي وأتمتة للنشر: محتوى اجتماعي متّسق مع هويتك يُنتَج ويُعتمد ويُنشر تلقائيًا وبانتظام دون عناء."
+"description": "نظام قوالب للعلامة ومحرّك محتوى بالذكاء الاصطناعي وأتمتة للنشر: محتوى اجتماعي متّسق مع هويتك يُنتَج ويُعتمد ويُنشر تلقائيًا وبانتظام دون عناء.",
+"title": "أتمتة وسائل التواصل للعلامات التجارية | Ummah Collective"
 },
 "ar/service-web-design.html": {
-"title": "وكالة تصميم مواقع في كوالالمبور — مواقع فاخرة متعددة اللغات"
+"title": "وكالة تصميم مواقع في كوالالمبور | Ummah Collective"
 },
 "ar/services.html": {
-"description": "14 خدمة: وكلاء الذكاء الاصطناعي، الأتمتة، CRM، المواقع الإلكترونية، التطبيقات، توليد العملاء، SEO، بناء العلامة التجارية، الإعلانات المدفوعة والاستراتيجية."
+"description": "14 خدمة: وكلاء الذكاء الاصطناعي، الأتمتة، CRM، المواقع الإلكترونية، التطبيقات، توليد العملاء، SEO، بناء العلامة التجارية، الإعلانات المدفوعة والاستراتيجية.",
+"title": "خدماتنا: وكلاء AI والويب وCRM والنمو | Ummah Collective"
 },
 "ar/terms.html": {
 "description": "شروط استخدام موقع ummah-collective.com وشروط التعاقد مع Ummah Collective Sdn. Bhd.، بلغة واضحة وبموجب القانون الماليزي."
@@ -281,7 +289,8 @@
 "description": "WeBuildAI وniyya. (الكولا الخاصة بالأمة) وMobistro والتمويل الأصغر التكافلي والعملات الرقمية: مشاريع تبنيها Ummah Collective إلى جانب عملها مع العملاء."
 },
 "ar/work.html": {
-"description": "أعمال مختارة من Ummah Collective: علامات تجارية ومواقع إلكترونية وأنظمة CRM وأنظمة ذكاء اصطناعي لـ ANAAKA وShoraka وMatcha Köln وAlmaruf وARJU وغيرها."
+"description": "أعمال مختارة من Ummah Collective: علامات تجارية ومواقع إلكترونية وأنظمة CRM وأنظمة ذكاء اصطناعي لـ ANAAKA وShoraka وMatcha Köln وAlmaruf وARJU وغيرها.",
+"title": "دراسات حالة: مواقع وCRM وأنظمة AI | Ummah Collective"
 },
 "article-ai-chatbot-vs-ai-agent.html": {
 "description": "Chatbot vs AI agent: a chatbot answers from a script, an agent looks things up and acts in your systems. What each costs, and which one to buy."
@@ -348,7 +357,8 @@
 "title": "WhatsApp marketing in Malaysia: a WhatsApp automation guide"
 },
 "de/about.html": {
-"description": "Ummah Collective wurde 2022 von Attila von Barloewen gegründet. Lernen Sie Team, Prinzipien und Märkte kennen, von Kuala Lumpur bis Berlin."
+"description": "Ummah Collective wurde 2022 von Attila von Barloewen gegründet. Lernen Sie Team, Prinzipien und Märkte kennen, von Kuala Lumpur bis Berlin.",
+"title": "Über uns: KI- &amp; Webstudio in Kuala Lumpur | Ummah Collective"
 },
 "de/article-ai-chatbot-vs-ai-agent.html": {
 "description": "Ein Chatbot antwortet. Ein Agent handelt. Dieser Unterschied bestimmt, was Sie zahlen sollten, und Firmen mit zehn Leuten wird meist das Falsche verkauft."
@@ -514,7 +524,8 @@
 "description": "Kostenloses Erstgespräch mit Ummah Collective: Termin wählen, Projekt schildern, klaren nächsten Schritt für KI, Automatisierung, Web oder CRM erhalten."
 },
 "de/contact.html": {
-"description": "Ummah Collective in Kuala Lumpur: kostenloses Gespräch buchen, Projektbriefing senden oder per WhatsApp schreiben, zu KI, Automatisierung, Web oder CRM."
+"description": "Ummah Collective in Kuala Lumpur: kostenloses Gespräch buchen, Projektbriefing senden oder per WhatsApp schreiben, zu KI, Automatisierung, Web oder CRM.",
+"title": "Kontakt: KI- &amp; Webagentur in Kuala Lumpur | Ummah Collective"
 },
 "de/founders-club.html": {
 "description": "Eine Community muslimischer und wertorientierter Gründer – online und in Kuala Lumpur. Kostenlos beitreten; Premium-Masterclasses, Networking und Events."
@@ -535,7 +546,8 @@
 "title": "Launch-Paket — Exklusiv für Unternehmen der Halal-Branche"
 },
 "de/noon-os.html": {
-"description": "Noon OS ist das Halal-CRM und Business-Betriebssystem für muslimische Gründer: Vertrieb, Projekte, Finanzen und Community in einem einzigen Panel."
+"description": "Noon OS ist das Halal-CRM und Business-Betriebssystem für muslimische Gründer: Vertrieb, Projekte, Finanzen und Community in einem einzigen Panel.",
+"title": "Noon OS: Halal-CRM &amp; individuelle Systeme | Ummah Collective"
 },
 "de/privacy.html": {
 "description": "Wie Ummah Collective Personendaten nach Malaysias PDPA 2010 verarbeitet: minimale Erhebung, kein Verkauf, DSGVO-bewusst, mit Hinweis in Bahasa Malaysia."
@@ -597,38 +609,41 @@
 },
 "de/service-ai-agents.html": {
 "description": "Schlüsselfertige KI-Agenten und WhatsApp-Automatisierung, die rund um die Uhr verkaufen und betreuen. KI-Agentur für Malaysia, Europa, Golf und USA.",
-"title": "KI-Agenten &amp; WhatsApp-KI — schlüsselfertig für Ihr Unternehmen"
+"title": "KI-Agenten: WhatsApp, Vertrieb &amp; Support | Ummah Collective"
 },
 "de/service-app-development.html": {
-"title": "App- & Softwareentwicklung — Shariah-konform by Entwerfen"
+"title": "Individuelle App- &amp; Softwareentwicklung | Ummah Collective"
 },
 "de/service-automation.html": {
 "description": "Wir verbinden Ihre Tools und beseitigen die Handarbeit dazwischen: Einsparungen bei Betriebs- und Personalkosten, die sich stetig aufsummieren.",
-"title": "Prozessautomatisierung — Kosten senken, Leistung halten"
+"title": "Prozessautomatisierung für Unternehmen | Ummah Collective"
 },
 "de/service-branding.html": {
-"description": "Premium-Positionierung, eine stimmige Identität und eine strategische Roadmap, die Marke, Web, Content und Wachstum vereint und Sie in neue Märkte führt."
+"description": "Premium-Positionierung, eine stimmige Identität und eine strategische Roadmap, die Marke, Web, Content und Wachstum vereint und Sie in neue Märkte führt.",
+"title": "Branding &amp; Markenstrategie | Ummah Collective"
 },
 "de/service-lead-generation.html": {
-"title": "Leadgenerierung & Wachstum für Halal-zertifizierte Marken"
+"title": "Leadgenerierung &amp; Performance-Marketing | Ummah Collective"
 },
 "de/service-seo-content.html": {
 "description": "Technisches SEO und Content-Engine: Ranking bei Google, Präsenz in KI-Antworten und wachsende Autorität – dauerhafte Sichtbarkeit statt gekaufter Klicks.",
-"title": "SEO &amp; Content für Google und KI-Suche — Ummah Collective"
+"title": "SEO &amp; Content für Google und KI-Suche | Ummah Collective"
 },
 "de/service-shariah-audit.html": {
-"description": "Externes, von Gelehrten geleitetes Audit Ihrer Finanzierung, Ihres Halal-Status und Ihrer Scharia-Konformität – Klarheit, bevor Sie in den Markt gehen."
+"description": "Externes, von Gelehrten geleitetes Audit Ihrer Finanzierung, Ihres Halal-Status und Ihrer Scharia-Konformität – Klarheit, bevor Sie in den Markt gehen.",
+"title": "Schariakonformität &amp; Halal-Audit | Ummah Collective"
 },
 "de/service-social-media-automation.html": {
 "description": "Markenvorlagen, KI-Content-Engine und automatisiertes Publishing: markengerechte Social-Posts, erstellt, freigegeben und automatisch veröffentlicht.",
-"title": "Social-Media-Automatisierung — Ummah Collective"
+"title": "Social-Media-Automatisierung für Marken | Ummah Collective"
 },
 "de/service-web-design.html": {
 "description": "Aus Kuala Lumpur: konversionsstarke, mehrsprachige Premium-Websites (EN/BM/DE/AR) für moderne und Halal-Firmen. Europäischer Standard, lokal versiert.",
-"title": "WebDesign-Agentur Kuala Lumpur — Premium-Websites, mehrsprachig"
+"title": "Webdesign-Agentur Kuala Lumpur | Ummah Collective"
 },
 "de/services.html": {
-"description": "14 Leistungen unter einem Dach: KI-Agenten, Automatisierung, CRM, Webdesign, Apps, Leadgenerierung, SEO, Branding, Paid Media und Strategie."
+"description": "14 Leistungen unter einem Dach: KI-Agenten, Automatisierung, CRM, Webdesign, Apps, Leadgenerierung, SEO, Branding, Paid Media und Strategie.",
+"title": "KI-Agenten, Web, CRM &amp; Wachstum | Ummah Collective"
 },
 "de/terms.html": {
 "description": "Nutzungsbedingungen für ummah-collective.com und für die Beauftragung der Ummah Collective Sdn. Bhd.: in klarer Sprache, nach malaysischem Recht."
@@ -641,7 +656,8 @@
 "title": "Unternehmen &amp; Beteiligungen — Ummah Collective"
 },
 "de/work.html": {
-"description": "Ausgewählte Projekte von Ummah Collective: Marken, Websites, CRM-Systeme und KI-Lösungen für ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU und weitere."
+"description": "Ausgewählte Projekte von Ummah Collective: Marken, Websites, CRM-Systeme und KI-Lösungen für ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU und weitere.",
+"title": "Referenzen: Websites, CRM &amp; KI-Projekte | Ummah Collective"
 },
 "index.html": {
 "description": "AI automation agency in Kuala Lumpur: done-for-you AI agents, WhatsApp automation, premium websites and custom CRM for businesses in Malaysia, the Gulf and Europe.",
@@ -649,7 +665,7 @@
 },
 "ms/about.html": {
 "description": "Ummah Collective diasaskan pada 2022 oleh Attila von Barloewen. Kenali pasukan, prinsip kerja dan pasaran yang kami layani, dari Kuala Lumpur ke Berlin.",
-"title": "Tentang — Ummah Collective"
+"title": "Tentang Kami: Studio AI &amp; Web, KL | Ummah Collective"
 },
 "ms/article-ai-agents-new-employees.html": {
 "description": "Rakan sepasukan berbilang bahasa yang tidak kenal penat, menjawab dalam saat dan berkos sebahagian kecil gaji pekerja. Itu suku ini, bukan masa depan."
@@ -822,7 +838,8 @@
 "description": "Tempah panggilan skop percuma dengan Ummah Collective. Pilih masa, ceritakan projek anda dan dapatkan langkah seterusnya untuk AI, automasi, web atau CRM."
 },
 "ms/contact.html": {
-"description": "Hubungi Ummah Collective di Kuala Lumpur: tempah panggilan percuma, hantar ringkasan projek atau mesej kami di WhatsApp tentang AI, automasi, web atau CRM."
+"description": "Hubungi Ummah Collective di Kuala Lumpur: tempah panggilan percuma, hantar ringkasan projek atau mesej kami di WhatsApp tentang AI, automasi, web atau CRM.",
+"title": "Hubungi Agensi AI &amp; Web di Kuala Lumpur | Ummah Collective"
 },
 "ms/founders-club.html": {
 "description": "Komuniti pengasas Muslim dan berteraskan nilai, dalam talian dan di Kuala Lumpur. Percuma disertai, dengan kelas induk premium, sesi jaringan dan acara."
@@ -842,7 +859,8 @@
 "title": "Pakej Pelancaran — Eksklusif untuk Perniagaan Industri Halal"
 },
 "ms/noon-os.html": {
-"description": "Noon OS ialah CRM halal dan sistem pengendalian perniagaan untuk pengasas Muslim: jualan, projek, kewangan dan komuniti dalam satu panel."
+"description": "Noon OS ialah CRM halal dan sistem pengendalian perniagaan untuk pengasas Muslim: jualan, projek, kewangan dan komuniti dalam satu panel.",
+"title": "Noon OS: CRM Halal &amp; Sistem Tersuai | Ummah Collective"
 },
 "ms/privacy.html": {
 "description": "Cara Ummah Collective mengendalikan data peribadi di bawah PDPA 2010 Malaysia: pengumpulan minimum, tiada penjualan, peka GDPR, notis Bahasa Malaysia."
@@ -904,36 +922,41 @@
 "title": "Shoraka Group — Laman Web Fintech Patuh Syariah"
 },
 "ms/service-ai-agents.html": {
-"title": "Agensi Automasi AI — Ejen AI Siap-Guna & AI WhatsApp"
+"title": "Ejen AI untuk WhatsApp, Jualan &amp; Sokongan | Ummah Collective"
 },
 "ms/service-app-development.html": {
-"title": "Pembangunan Aplikasi &amp; Perisian Patuh Syariah"
+"title": "Pembangunan Aplikasi &amp; Perisian Tersuai | Ummah Collective"
 },
 "ms/service-automation.html": {
 "description": "Kami menghubungkan alat anda dan menghapuskan kerja manual di antaranya, menghasilkan penjimatan berganda pada kos operasi dan sumber manusia.",
-"title": "Automasi Proses Perniagaan — Kurangkan Overhed, Kekalkan Output"
+"title": "Automasi Proses Perniagaan Malaysia | Ummah Collective"
 },
 "ms/service-branding.html": {
-"description": "Kedudukan premium, identiti yang padu dan pelan hala tuju strategik yang menyelaras jenama, web, kandungan dan pertumbuhan, lalu ke pasaran baharu."
+"description": "Kedudukan premium, identiti yang padu dan pelan hala tuju strategik yang menyelaras jenama, web, kandungan dan pertumbuhan, lalu ke pasaran baharu.",
+"title": "Agensi Penjenamaan &amp; Strategi Jenama | Ummah Collective"
 },
 "ms/service-lead-generation.html": {
-"title": "Penjanaan Petunjuk & Pertumbuhan untuk Jenama Bertauliah Halal"
+"title": "Penjanaan Prospek &amp; Pemasaran Prestasi | Ummah Collective"
 },
 "ms/service-seo-content.html": {
-"description": "SEO teknikal dan enjin kandungan supaya anda di kedudukan atas Google, muncul dalam jawapan AI dan membina autoriti berkekalan, bukan klik yang disewa."
+"description": "SEO teknikal dan enjin kandungan supaya anda di kedudukan atas Google, muncul dalam jawapan AI dan membina autoriti berkekalan, bukan klik yang disewa.",
+"title": "SEO &amp; Kandungan untuk Google &amp; Carian AI | Ummah Collective"
 },
 "ms/service-shariah-audit.html": {
-"description": "Audit luaran dipimpin ulama bagi kewangan Islam, status halal dan pematuhan Syariah anda: gambaran jelas kedudukan semasa sebelum anda memasuki pasaran."
+"description": "Audit luaran dipimpin ulama bagi kewangan Islam, status halal dan pematuhan Syariah anda: gambaran jelas kedudukan semasa sebelum anda memasuki pasaran.",
+"title": "Audit Pematuhan Syariah &amp; Halal | Ummah Collective"
 },
 "ms/service-social-media-automation.html": {
-"description": "Templat jenama, enjin kandungan AI dan automasi penerbitan: kandungan media sosial selaras jenama dihasilkan, diluluskan dan disiarkan secara automatik."
+"description": "Templat jenama, enjin kandungan AI dan automasi penerbitan: kandungan media sosial selaras jenama dihasilkan, diluluskan dan disiarkan secara automatik.",
+"title": "Automasi Media Sosial untuk Jenama | Ummah Collective"
 },
 "ms/service-web-design.html": {
 "description": "Reka bentuk web premium dari Kuala Lumpur: laman berbilang bahasa (EN/BM/DE/AR) yang memacu penukaran untuk perniagaan moden dan halal. Piawaian Eropah.",
-"title": "Agensi Reka Bentuk Web KL — Laman Premium Berbilang Bahasa"
+"title": "Agensi Reka Bentuk Web Kuala Lumpur | Ummah Collective"
 },
 "ms/services.html": {
-"description": "14 perkhidmatan: ejen AI, automasi, CRM, laman web, aplikasi, penjanaan prospek, SEO, penjenamaan, media berbayar dan strategi."
+"description": "14 perkhidmatan: ejen AI, automasi, CRM, laman web, aplikasi, penjanaan prospek, SEO, penjenamaan, media berbayar dan strategi.",
+"title": "Ejen AI, Web, CRM &amp; Pertumbuhan | Ummah Collective"
 },
 "ms/terms.html": {
 "description": "Terma penggunaan ummah-collective.com dan untuk melantik Ummah Collective Sdn. Bhd.: bahasa yang mudah difahami, tertakluk kepada undang-undang Malaysia."
@@ -942,7 +965,8 @@
 "description": "WeBuildAI, niyya. (kola milik Ummah sendiri), Mobistro, pembiayaan mikro Takaful dan kripto: usaha niaga yang dibina dan disokong oleh Ummah Collective."
 },
 "ms/work.html": {
-"description": "Hasil kerja terpilih Ummah Collective: jenama, laman web, CRM dan sistem AI untuk ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU dan banyak lagi."
+"description": "Hasil kerja terpilih Ummah Collective: jenama, laman web, CRM dan sistem AI untuk ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU dan banyak lagi.",
+"title": "Kajian Kes: Laman Web, CRM &amp; Sistem AI | Ummah Collective"
 },
 "project-arju.html": {
 "description": "How Ummah Collective designed and prototyped ARJU, a Netflix-style Islamic learning platform for Imam Maged Al-Berlini - brand, product and strategy."
@@ -951,19 +975,24 @@
 "description": "How Ummah Collective built Optima Limited from scratch - brand, CI, UX, dark fintech UI, website and SEO for a digital invoice-financing platform for SMEs."
 },
 "service-branding.html": {
-"description": "Branding and strategy from Kuala Lumpur: positioning, visual identity, messaging and a phased roadmap, plus market entry across SEA, Europe and the Gulf."
+"description": "Branding and strategy from Kuala Lumpur: positioning, visual identity, messaging and a phased roadmap, plus market entry across SEA, Europe and the Gulf.",
+"title": "Branding &amp; Brand Strategy Agency, KL | Ummah Collective"
 },
 "service-shariah-audit.html": {
-"description": "A scholar-led Shariah compliance and halal audit of your products, finance and marketing, with a gap report and certification readiness before you apply."
+"description": "A scholar-led Shariah compliance and halal audit of your products, finance and marketing, with a gap report and certification readiness before you apply.",
+"title": "Shariah Compliance &amp; Halal Audit | Ummah Collective"
 },
 "service-social-media-automation.html": {
-"description": "Social media automation: a brand template system, an AI content engine and publishing automation that drafts, schedules and posts on-brand content."
+"description": "Social media automation: a brand template system, an AI content engine and publishing automation that drafts, schedules and posts on-brand content.",
+"title": "Social Media Automation for Brands | Ummah Collective"
 },
 "service-web-design.html": {
-"description": "Web design agency in Kuala Lumpur building fast, multilingual websites in EN, BM, DE, AR and ZH, with right-to-left support, built to convert and be found."
+"description": "Web design agency in Kuala Lumpur building fast, multilingual websites in EN, BM, DE, AR and ZH, with right-to-left support, built to convert and be found.",
+"title": "Web Design Agency Kuala Lumpur | Ummah Collective"
 },
 "tr/about.html": {
-"description": "Ummah Collective, 2022'de Attila von Barloewen tarafından kuruldu. Ekibimizi, ilkelerimizi ve Kuala Lumpur'dan Berlin'e uzanan pazarlarımızı tanıyın."
+"description": "Ummah Collective, 2022'de Attila von Barloewen tarafından kuruldu. Ekibimizi, ilkelerimizi ve Kuala Lumpur'dan Berlin'e uzanan pazarlarımızı tanıyın.",
+"title": "Hakkımızda: Kuala Lumpur AI Stüdyosu | Ummah Collective"
 },
 "tr/article-ai-chatbot-vs-ai-agent.html": {
 "description": "Chatbot yanıtlar, ajan harekete geçer. Bu iki fiil arasındaki fark ne ödemeniz gerektiğini belirler ve on kişilik şirketlerin çoğuna yanlış olan satılıyor."
@@ -1127,7 +1156,8 @@
 "description": "Ummah Collective ile ücretsiz bir kapsam görüşmesi ayarlayın. Saat seçin, projenizi anlatın; yapay zeka, otomasyon, web veya CRM için net bir sonraki adım."
 },
 "tr/contact.html": {
-"description": "Ummah Collective'e Kuala Lumpur'dan ulaşın: ücretsiz görüşme ayarlayın, brif gönderin ya da yapay zeka, otomasyon, web veya CRM için WhatsApp'tan yazın."
+"description": "Ummah Collective'e Kuala Lumpur'dan ulaşın: ücretsiz görüşme ayarlayın, brif gönderin ya da yapay zeka, otomasyon, web veya CRM için WhatsApp'tan yazın.",
+"title": "İletişim: Kuala Lumpur AI ve Web Ajansı | Ummah Collective"
 },
 "tr/founders-club.html": {
 "description": "Müslüman ve aynı değerleri paylaşan kurucuların topluluğu, çevrimiçi ve Kuala Lumpur'da. Üyelik ücretsiz; premium masterclass, buluşma ve etkinlikler."
@@ -1147,7 +1177,8 @@
 "title": "Lansman Paketi — Helal Sektörü İşletmelerine Özel Lansman"
 },
 "tr/noon-os.html": {
-"description": "Noon OS, Müslüman girişimciler için helal CRM ve iş işletim sistemidir: satış, projeler, finans ve topluluk, hepsi tek bir panelde bir arada."
+"description": "Noon OS, Müslüman girişimciler için helal CRM ve iş işletim sistemidir: satış, projeler, finans ve topluluk, hepsi tek bir panelde bir arada.",
+"title": "Noon OS: Helal CRM ve Özel Sistemler | Ummah Collective"
 },
 "tr/privacy.html": {
 "description": "Ummah Collective'in kişisel verileri Malezya PDPA 2010 kapsamında nasıl işlediği: asgari veri toplama, satış yok, GDPR bilinci, Bahasa Malaysia bildirimi."
@@ -1210,35 +1241,40 @@
 },
 "tr/service-ai-agents.html": {
 "description": "7/24 satış ve destek sağlayan anahtar teslim AI ajanları ve WhatsApp otomasyonu. Malezya, Avrupa, Körfez ve ABD'ye hizmet veren uygulamalı AI ajansı.",
-"title": "Yapay Zeka Satış Ajanı ve WhatsApp AI — Ummah Collective"
+"title": "AI Ajanları: WhatsApp, Satış ve Destek | Ummah Collective"
 },
 "tr/service-app-development.html": {
-"title": "Uygulama & Yazılım Geliştirme — Tasarımdan İtibaren Şeriata Uygun"
+"title": "Özel Uygulama ve Yazılım Geliştirme | Ummah Collective"
 },
 "tr/service-automation.html": {
 "description": "Araçlarınızı birbirine bağlıyor, aradaki manuel işi ortadan kaldırıyoruz. İş süreçleri otomasyonu ile operasyon ve İK giderlerinde katlanan tasarruf.",
-"title": "İş Süreçleri Otomasyonu — Maliyeti Düşürün, Çıktıyı Koruyun"
+"title": "İş Süreçleri Otomasyonu | Ummah Collective"
 },
 "tr/service-branding.html": {
-"description": "Premium konumlandırma, tutarlı bir kimlik ve marka, web, içerik ile büyümeyi hizalayan stratejik yol haritası; ardından sizi yeni pazarlara taşıyoruz."
+"description": "Premium konumlandırma, tutarlı bir kimlik ve marka, web, içerik ile büyümeyi hizalayan stratejik yol haritası; ardından sizi yeni pazarlara taşıyoruz.",
+"title": "Marka Kimliği ve Marka Stratejisi | Ummah Collective"
 },
 "tr/service-lead-generation.html": {
-"title": "Helal Sertifikalı Markalar için Müşteri Kazanımı & Büyüme"
+"title": "Müşteri Kazanımı ve Performans Pazarlama | Ummah Collective"
 },
 "tr/service-seo-content.html": {
-"description": "Teknik SEO ve içerik motoru ile Google'da yükselin, yapay zeka yanıtlarında görünün ve büyüyen bir otorite kurun: kiralık tıklama değil, kalıcı görünürlük."
+"description": "Teknik SEO ve içerik motoru ile Google'da yükselin, yapay zeka yanıtlarında görünün ve büyüyen bir otorite kurun: kiralık tıklama değil, kalıcı görünürlük.",
+"title": "Google ve AI Arama için SEO ve İçerik | Ummah Collective"
 },
 "tr/service-shariah-audit.html": {
-"description": "İslami finansınızın, helal durumunuzun ve Şeriat uyumunuzun alimler önderliğinde bağımsız denetimi: pazara girmeden önce mevcut durumunuzun net bir resmi."
+"description": "İslami finansınızın, helal durumunuzun ve Şeriat uyumunuzun alimler önderliğinde bağımsız denetimi: pazara girmeden önce mevcut durumunuzun net bir resmi.",
+"title": "Şeriat Uyumu ve Helal Denetimi | Ummah Collective"
 },
 "tr/service-social-media-automation.html": {
-"description": "Marka şablon sistemi, yapay zeka içerik motoru ve yayın otomasyonu: markanıza uygun sosyal medya içeriği otomatik üretilir, onaylanır ve yayınlanır."
+"description": "Marka şablon sistemi, yapay zeka içerik motoru ve yayın otomasyonu: markanıza uygun sosyal medya içeriği otomatik üretilir, onaylanır ve yayınlanır.",
+"title": "Markalar için Sosyal Medya Otomasyonu | Ummah Collective"
 },
 "tr/service-web-design.html": {
-"title": "Kuala Lumpur Web Tasarım Ajansı — Premium Çok Dilli Web Siteleri"
+"title": "Kuala Lumpur Web Tasarım Ajansı | Ummah Collective"
 },
 "tr/services.html": {
-"description": "Ummah Collective'in 14 hizmeti: AI ajanları, otomasyon, CRM, web siteleri, uygulamalar, potansiyel müşteri üretimi, SEO, marka, ücretli medya ve strateji."
+"description": "Ummah Collective'in 14 hizmeti: AI ajanları, otomasyon, CRM, web siteleri, uygulamalar, potansiyel müşteri üretimi, SEO, marka, ücretli medya ve strateji.",
+"title": "AI Ajanları, Web, CRM ve Büyüme | Ummah Collective"
 },
 "tr/terms.html": {
 "description": "ummah-collective.com'un kullanımı ve Ummah Collective Sdn. Bhd. ile çalışma koşulları: sade bir dille yazılmış, Malezya hukukuna tabi kullanım koşulları."
@@ -1247,14 +1283,15 @@
 "description": "WeBuildAI, niyya. (Ümmetin kendi kolası), Mobistro, Tekafül mikrofinans ve kripto: Ummah Collective'in müşteri işlerinin yanında kurduğu girişimler."
 },
 "tr/work.html": {
-"description": "Ummah Collective'den seçme işler: ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU ve diğerleri için markalar, web siteleri, CRM'ler ve yapay zeka sistemleri."
+"description": "Ummah Collective'den seçme işler: ANAAKA, Shoraka, Matcha Köln, Almaruf, ARJU ve diğerleri için markalar, web siteleri, CRM'ler ve yapay zeka sistemleri.",
+"title": "Vaka Çalışmaları: Web, CRM ve AI | Ummah Collective"
 },
 "ummah-hub.html": {
 "description": "Ummah Hub is a coworking space built on Islamic values at Oval Damansara, TTDI, Kuala Lumpur. Private offices, desks and memberships from RM 148 a month."
 },
 "zh/about.html": {
 "description": "Ummah Collective 由 Attila von Barloewen 于 2022 年创立。了解我们的团队、工作原则，以及从吉隆坡到柏林所服务的市场。",
-"title": "关于 — Ummah Collective"
+"title": "关于我们：吉隆坡 AI 与网站工作室 | Ummah Collective"
 },
 "zh/article-10-mistakes-muslim-brands-make-online.html": {
 "description": "线上形象就是第一印象。对价值观驱动的品牌而言，它既应体现道德操守，也应体现卓越品质。本文梳理常见错误及修正方法。",
@@ -1445,7 +1482,8 @@
 "description": "与 Ummah Collective 预约免费的需求评估通话。选择时间、介绍你的项目，即可获得 AI、自动化、网站或 CRM 的明确下一步。"
 },
 "zh/contact.html": {
-"description": "联系吉隆坡的 Ummah Collective：预约免费通话、发送项目简介，或通过 WhatsApp 咨询 AI、自动化、网站或 CRM。"
+"description": "联系吉隆坡的 Ummah Collective：预约免费通话、发送项目简介，或通过 WhatsApp 咨询 AI、自动化、网站或 CRM。",
+"title": "联系吉隆坡 AI 与网站代理公司 | Ummah Collective"
 },
 "zh/founders-club.html": {
 "description": "面向穆斯林及价值观相契合的创始人社群，线上与吉隆坡线下同步进行。免费加入，另设高端大师课、交流聚会与专属活动。"
@@ -1465,7 +1503,8 @@
 "title": "上线套餐 — 清真产业企业专属上线方案"
 },
 "zh/noon-os.html": {
-"description": "Noon OS是面向穆斯林创业者与清真经济品牌的清真CRM与商业操作系统——销售、项目、财务与社区尽在一个面板。我们也为您打造完全归您所有的定制CRM。"
+"description": "Noon OS是面向穆斯林创业者与清真经济品牌的清真CRM与商业操作系统——销售、项目、财务与社区尽在一个面板。我们也为您打造完全归您所有的定制CRM。",
+"title": "Noon OS：清真 CRM 与定制系统 | Ummah Collective"
 },
 "zh/privacy.html": {
 "description": "Ummah Collective 如何依据马来西亚 PDPA 2010 处理个人数据：最少收集、绝不出售、兼顾 GDPR，并附马来语声明。"
@@ -1527,38 +1566,43 @@
 },
 "zh/service-ai-agents.html": {
 "description": "交付即用的 AI 智能体与 WhatsApp 自动化，全天候负责销售与客户支持。一家服务马来西亚、欧洲、海湾地区与美国的应用型 AI 自动化机构。",
-"title": "AI自动化代理机构 — 交付即用的AI智能体与WhatsApp AI"
+"title": "用于 WhatsApp、销售与客服的 AI 智能体 | Ummah Collective"
 },
 "zh/service-app-development.html": {
 "description": "定制应用、API 与支付系统，亦为伊斯兰金融科技及清真经济初创企业提供符合伊斯兰教法的软件开发。",
-"title": "应用与软件开发 — 从设计之初即符合伊斯兰教法 — Ummah Collective"
+"title": "定制应用与软件开发 | Ummah Collective"
 },
 "zh/service-automation.html": {
 "description": "Ummah Collective 提供业务流程自动化服务：打通您的各类工具，消除其间的重复手工操作，让运营与人力成本的节省持续累积。",
-"title": "业务流程自动化 — 削减开销，保持产出 — Ummah Collective"
+"title": "马来西亚业务流程自动化 | Ummah Collective"
 },
 "zh/service-branding.html": {
-"description": "高端定位、统一的品牌形象，以及协调品牌、网站、内容与增长的战略路线图，并助您稳步拓展跨区域的新市场。"
+"description": "高端定位、统一的品牌形象，以及协调品牌、网站、内容与增长的战略路线图，并助您稳步拓展跨区域的新市场。",
+"title": "品牌塑造与品牌战略 | Ummah Collective"
 },
 "zh/service-lead-generation.html": {
 "description": "外拓、付费投放与转化率优化融为一体，亦为进军马来西亚、欧洲与美国的清真认证品牌提供增长营销。",
-"title": "面向清真认证品牌的潜客获取与增长 — Ummah Collective"
+"title": "潜客获取与效果营销 | Ummah Collective"
 },
 "zh/service-seo-content.html": {
-"description": "技术 SEO 与内容引擎相结合，让您在 Google 排名靠前、出现在 AI 答案中，并建立持续累积的权威，获得长久可见度，而非租来的流量。"
+"description": "技术 SEO 与内容引擎相结合，让您在 Google 排名靠前、出现在 AI 答案中，并建立持续累积的权威，获得长久可见度，而非租来的流量。",
+"title": "面向 Google 与 AI 搜索的 SEO 与内容 | Ummah Collective"
 },
 "zh/service-shariah-audit.html": {
-"description": "由学者主导的外部审计，全面检视您的伊斯兰金融、清真资质与伊斯兰教法合规情况，让您在进入新市场之前清晰掌握自身现状。"
+"description": "由学者主导的外部审计，全面检视您的伊斯兰金融、清真资质与伊斯兰教法合规情况，让您在进入新市场之前清晰掌握自身现状。",
+"title": "伊斯兰教法合规与清真审计 | Ummah Collective"
 },
 "zh/service-social-media-automation.html": {
-"description": "品牌模板系统、AI 内容引擎与自动发布流程相结合，让符合品牌调性的社交媒体内容自动生成、审批并发布，省时又稳定。"
+"description": "品牌模板系统、AI 内容引擎与自动发布流程相结合，让符合品牌调性的社交媒体内容自动生成、审批并发布，省时又稳定。",
+"title": "品牌社交媒体自动化 | Ummah Collective"
 },
 "zh/service-web-design.html": {
 "description": "来自吉隆坡的高端网站设计：为现代企业与清真企业打造以转化为导向的多语言网站（EN/BM/DE/AR）。欧洲标准，本地通达。",
-"title": "吉隆坡网站设计公司 — 高端多语言网站 — Ummah Collective"
+"title": "吉隆坡网站设计公司 | Ummah Collective"
 },
 "zh/services.html": {
-"description": "Ummah Collective 提供 14 项服务：AI 智能体、自动化、CRM、网站、应用开发、潜客获取、SEO、品牌建设、付费媒体与战略咨询。"
+"description": "Ummah Collective 提供 14 项服务：AI 智能体、自动化、CRM、网站、应用开发、潜客获取、SEO、品牌建设、付费媒体与战略咨询。",
+"title": "服务：AI 智能体、网站、CRM 与增长 | Ummah Collective"
 },
 "zh/terms.html": {
 "description": "ummah-collective.com 的使用条款，以及与 Ummah Collective Sdn. Bhd. 合作的条款：语言平实，适用马来西亚法律。"
@@ -1567,7 +1611,8 @@
 "description": "Ummah Collective 旗下自有业务：WeBuildAI、niyya.（Ummah 自己的可乐）、Mobistro、Takaful 小额金融以及加密货币项目。"
 },
 "zh/work.html": {
-"description": "精选作品：为 ANAAKA、Shoraka、Matcha Köln、Almaruf、ARJU 等客户打造的品牌、网站、CRM 与 AI 系统。"
+"description": "精选作品：为 ANAAKA、Shoraka、Matcha Köln、Almaruf、ARJU 等客户打造的品牌、网站、CRM 与 AI 系统。",
+"title": "案例研究：网站、CRM 与 AI 项目 | Ummah Collective"
 },
 "de/article-coworking-muslim-professionals-kl.html": {
 "title": "Coworking in Kuala Lumpur: den passenden Arbeitsplatz wählen",
@@ -1616,5 +1661,35 @@
 "ar/article-whatsapp-marketing-malaysia.html": {
 "title": "تسويق واتساب في ماليزيا: الرسائل الجماعية والأتمتة والإعلانات",
 "description": "دليل تسويق واتساب في ماليزيا: الرسائل الجماعية والأتمتة وإعلانات النقر إلى واتساب، والموافقة وفق قانون حماية البيانات، وتسعير Meta وما يجب قياسه."
+},
+"services.html": {
+"title": "Services: AI Agents, Web, CRM &amp; Growth | Ummah Collective"
+},
+"work.html": {
+"title": "Case Studies: Websites, CRM &amp; AI Builds | Ummah Collective"
+},
+"about.html": {
+"title": "About Us: AI &amp; Web Studio in Kuala Lumpur | Ummah Collective"
+},
+"contact.html": {
+"title": "Contact a Kuala Lumpur AI &amp; Web Agency | Ummah Collective"
+},
+"service-ai-agents.html": {
+"title": "AI Agents for WhatsApp, Sales &amp; Support | Ummah Collective"
+},
+"service-automation.html": {
+"title": "Business Process Automation Malaysia | Ummah Collective"
+},
+"service-app-development.html": {
+"title": "Custom App &amp; Software Development | Ummah Collective"
+},
+"service-lead-generation.html": {
+"title": "Lead Generation &amp; Performance Marketing | Ummah Collective"
+},
+"service-seo-content.html": {
+"title": "SEO &amp; Content for Google and AI Search | Ummah Collective"
+},
+"noon-os.html": {
+"title": "Noon OS: Halal CRM &amp; Custom Systems | Ummah Collective"
 }
 }

@@ -57,7 +57,7 @@ def _ld(obj): return '<script type="application/ld+json">'+json.dumps(obj,ensure
 def faq_ld(faq): return _ld({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":_plain(q),"acceptedAnswer":{"@type":"Answer","text":_plain(a)}} for q,a in faq]})
 GLOBAL_LD=json.dumps({"@context":"https://schema.org","@graph":[
  {"@type":["Organization","ProfessionalService"],"@id":SITE+"/#org","name":"Ummah Collective","legalName":"Ummah Collective Sdn. Bhd.","url":SITE+"/","logo":SITE+"/assets/logo-square.png","image":SITE+"/assets/logo-square.png","email":"info@ummah-collective.com","telephone":"+60 11 3326 2709","foundingDate":"2022","founder":{"@type":"Person","name":"Attila von Barloewen"},"address":{"@type":"PostalAddress","streetAddress":"Oval Damansara, Taman Tun Dr Ismail","addressLocality":"Kuala Lumpur","postalCode":"60000","addressRegion":"Wilayah Persekutuan Kuala Lumpur","addressCountry":"MY"},"geo":{"@type":"GeoCoordinates","latitude":3.1316938,"longitude":101.6309275},"hasMap":"https://www.google.com/maps?cid=5094825734493406137","priceRange":"$$","areaServed":["MY","DE","AE","SA","SG"],"description":"Applied-AI studio — the software, AI agents, CRMs and growth systems modern companies run on. Kuala Lumpur, Berlin, borderless.","sameAs":["https://www.linkedin.com/company/ummah-collective/","https://www.instagram.com/ummahcollective/","https://www.google.com/maps?cid=5094825734493406137"]},
- {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Ummah Collective","inLanguage":"en","publisher":{"@id":SITE+"/#org"}}
+ {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Ummah Collective","inLanguage":["en","de","ms","ar","zh","tr"],"publisher":{"@id":SITE+"/#org"}}
 ]},ensure_ascii=False)
 FXMAP={'default':'aurora','services':'mesh','work':'particles','ventures':'grid','insights':'grid','contact':'aurora','about':'particles','market':'mesh'}
 WA='https://wa.me/601133262709'
@@ -339,8 +339,25 @@ def _seo_title(t):
     import re as _re
     s=_re.sub(r' (?:—|\||-) Ummah Collective$','',t)
     return s if len(t)>65 and len(s)>=20 else t
+def _crumb_ld(fname,body):
+    """2026-11-07 (S25): BreadcrumbList mirroring the visible .crumb trail (service, project, article pages)."""
+    if not (fname.startswith(("service-","project-","article-")) or fname=="noon-os.html"): return ""
+    m=re.search(r'<div class="crumb[^"]*">(.*?)</div>',body,re.S)
+    h1=re.search(r'<h1[^>]*>(.*?)</h1>',body,re.S)
+    if not m or not h1: return ""
+    parts=[x.strip() for x in m.group(1).split(" / ")]
+    items=[]
+    for k,pt in enumerate(parts[:-1]):
+        a=re.search(r'href="([^"]+)"[^>]*>(.*?)</a>',pt)
+        if not a: continue
+        u=SITE+"/"+("" if a.group(1)=="index.html" else a.group(1))
+        items.append({"@type":"ListItem","position":len(items)+1,"name":_plain(a.group(2)),"item":u})
+    name=_plain(re.sub(r"<br\s*/?>"," ",h1.group(1))) if fname.startswith(("project-","article-")) else _plain(parts[-1])
+    items.append({"@type":"ListItem","position":len(items)+1,"name":re.sub(r"\s+"," ",name),"item":SITE+"/"+fname})
+    return _ld({"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":items})
 def page(fname,title,desc,body,aurora="default",bg="",ld="",og="website"):
     canon=SITE+"/"+("" if fname=="index.html" else fname)
+    ld=ld+_crumb_ld(fname,body)
     title=_seo_title(title)
     html=f'''<!DOCTYPE html>
 <html lang="en" dir="ltr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -537,7 +554,7 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
 '''+audit()+cta()
     _SEOT={'ai-agents':'AI Automation Agency — Done-for-You AI Agents & WhatsApp AI','web-design':'Web Design Agency Kuala Lumpur — Premium Multilingual Websites','lead-generation':'Lead Generation & Growth for Halal-Certified Brands','automation':'Business Process Automation — Cut Overhead, Keep Output','custom-crm':'Custom CRM Development Malaysia — Systems You Own','app-development':'App & Software Development — Shariah-Compliant by Design'}
     _SEOD={'ai-agents':'Done-for-you AI agents and WhatsApp automation that sell and support 24/7. An applied-AI automation agency serving Malaysia, Europe, the Gulf and the US.','web-design':'Premium web design from Kuala Lumpur: conversion-focused, multilingual (EN/BM/DE/AR) websites for modern and halal businesses. European standards, local fluency.','lead-generation':'Outbound, paid and CRO in one engine — including growth marketing for halal-certified brands entering Malaysia, Europe and the US.','custom-crm':'Custom CRM development in Malaysia: your workflow, WhatsApp-native, and you own the system. From audit to daily-driver.','app-development':'Custom apps, APIs and payment systems — including shariah-compliant software development for islamic fintech and halal-economy startups.'}
-    sld=_ld({"@context":"https://schema.org","@type":"Service","name":_plain(title),"description":_plain(intro),"serviceType":_plain(title),"provider":{"@id":SITE+"/#org"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/service-"+slug+".html"})
+    sld=_ld({"@context":"https://schema.org","@type":"Service","name":_plain(title),"description":_plain(intro),"serviceType":_plain(title),"provider":{"@id":SITE+"/#org"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/service-"+slug+".html","inLanguage":"en"})
     return page(f"service-{slug}.html",_SEOT.get(slug,title)+" — Ummah Collective",_SEOD.get(slug,_meta_desc(intro)),body,aurora="services",ld=sld)
 
 # ---------------- PROJECTS ----------------
@@ -2164,7 +2181,7 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
   <div class="reveal">{''.join(blocks).replace("<strong>","").replace("</strong>","")}</div>
   <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="insights.html" class="btn btn-ghost">All insights</a></div>
 </div></div></section>'''+cta()
-    ald=_ld({"@context":"https://schema.org","@type":"BlogPosting","headline":_plain(title),"description":_plain(lede),"image":U(imgid),"datePublished":str(date),"dateModified":str(ARTICLE_UPDATED.get(slug,date)),"inLanguage":"en","author":{"@type":"Organization","name":"Ummah Collective"},"publisher":{"@id":SITE+"/#org"},"mainEntityOfPage":SITE+"/article-"+slug+".html"})
+    ald=_ld({"@context":"https://schema.org","@type":"BlogPosting","headline":_plain(title),"description":_plain(lede),"image":U(imgid),"datePublished":str(date),"dateModified":str(ARTICLE_UPDATED.get(slug,date)),"inLanguage":"en","author":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"mainEntityOfPage":SITE+"/article-"+slug+".html"})
     # AEO: emit FAQPage schema from the article's FAQ list (li text "Question? &mdash; Answer")
     _faq=[]
     for _li in _re.findall(r"<li>([^<]*\?[^<]*&mdash;[^<]*)</li>","".join(blocks)):
@@ -2573,7 +2590,7 @@ def noon_os_page():
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">How it works</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Idea to live in weeks</span></div></div><div class="grid g3" style="gap:14px">{stc}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Custom systems, answered</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
 '''+cta('Book a<br><em>CRM audit.</em>')
-    return page("noon-os.html","Noon OS — Halal CRM & Business Software for Muslim Founders","Noon OS is the halal CRM and business operating system for Muslim founders: sales, projects, finance and community in one panel.",body,aurora="services",ld=faq_ld(faq))
+    return page("noon-os.html","Noon OS — Halal CRM & Business Software for Muslim Founders","Noon OS is the halal CRM and business operating system for Muslim founders: sales, projects, finance and community in one panel.",body,aurora="services",ld=_ld({"@context":"https://schema.org","@type":"Service","name":"Custom CRM & Business Systems","description":"Bespoke CRM and internal systems built around how a business sells and operates, with WhatsApp, accounting and AI agents connected. Delivered as Noon OS or a white-label build.","serviceType":"Custom CRM development","provider":{"@id":SITE+"/#org"},"brand":{"@type":"Brand","name":"Noon OS"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/noon-os.html","inLanguage":"en"})+faq_ld(faq))
 
 def launch_bundle_page():
     incl=[("Premium website &mdash; new or redesign","A conversion-built, multilingual site, designed and developed by us &mdash; built fresh, or your existing one rebuilt and modernised. Fast, secure and structured to turn visitors into real enquiries, not just views."),
@@ -2693,6 +2710,7 @@ def _apply_seo_overrides():
         h=open(p,encoding="utf-8").read(); o=h
         if v.get("title"):
             h=re.sub(r"<title>.*?</title>",lambda m:"<title>"+v["title"]+"</title>",h,count=1,flags=re.S)
+            h=re.sub(r'(<meta property="og:title" content=")[^"]*(")',lambda m:m.group(1)+v["title"].replace('"',"&quot;")+m.group(2),h,count=1)
         if v.get("description"):
             d=v["description"]
             for pat in (r'(<meta name="description" content=")[^"]*(")',r'(<meta property="og:description" content=")[^"]*(")',r'(<meta name="twitter:description" content=")[^"]*(")'):
@@ -2722,6 +2740,37 @@ def _localize_article_ld(h,h_en,tr,l,path):
             return _ld(o)
         if t=="FAQPage" and faq:
             return faq_ld(faq[:6])
+        return m.group(0)
+    return _re.sub(r'<script type="application/ld\+json">(.*?)</script>',_rep,h,flags=_re.S)
+
+def _localize_ld(h,tr,l):
+    """2026-11-07 (S25): per-tree JSON-LD: inLanguage, localised Service/CreativeWork/Breadcrumb names and tree URLs.
+    The Organization/WebSite @graph stays global and is referenced by @id."""
+    pm={}
+    for k,v in tr.items(): pm.setdefault(_plain(k),_plain(v))
+    def P(x): return pm.get(_plain(x),x) if isinstance(x,str) else x
+    def U(u):
+        if not isinstance(u,str) or not u.startswith(SITE+"/") or "#" in u: return u
+        rest=u[len(SITE)+1:]
+        if rest.split("/")[0] in LOC_LANGS: return u
+        if rest and (rest.endswith((".png",".jpg",".pdf",".svg")) or l not in _alangs(rest)): return u
+        return SITE+"/"+l+"/"+rest
+    def _rep(m):
+        try: o=json.loads(m.group(1))
+        except Exception: return m.group(0)
+        t=o.get("@type")
+        if t in ("Service","CreativeWork"):
+            for k in ("name","description","serviceType","about"): 
+                if k in o: o[k]=P(o[k])
+            if "url" in o: o["url"]=U(o["url"])
+            o["inLanguage"]=l
+            return _ld(o)
+        if t=="BreadcrumbList":
+            for it in o.get("itemListElement",[]): it["name"]=P(it["name"]); it["item"]=U(it["item"])
+            return _ld(o)
+        if t=="BlogPosting":
+            if "inLanguage" in o: o["inLanguage"]=l
+            return _ld(o)
         return m.group(0)
     return _re.sub(r'<script type="application/ld\+json">(.*?)</script>',_rep,h,flags=_re.S)
 
@@ -2789,6 +2838,9 @@ def localize(pages):
                     if ke in t1: t1=t1.replace(ke,tr[k])
                     elif k in t1: t1=t1.replace(k,tr[k])
                 if t1!=t0: h=h.replace('<title>'+t0+'</title>','<title>'+t1+'</title>',1)
+            # S23 (2026-11-07): og:title always mirrors the localised <title>
+            _tm2=_re.search(r'<title>(.*?)</title>',h)
+            if _tm2: h=_re.sub(r'(<meta property="og:title" content=")[^"]*(")',lambda m7:m7.group(1)+_tm2.group(1).replace('"','&quot;')+m7.group(2),h,count=1)
             dm=_re.search(r'name="description" content="(.*?)"',h)
             if dm:
                 d0=dm.group(1); d1=d0
@@ -2801,6 +2853,7 @@ def localize(pages):
             # localized structured data for articles (2026-11-04): BlogPosting language/headline + translated FAQPage
             if f.startswith('article-'):
                 h=_localize_article_ld(h,open(os.path.join(OUT,f),encoding='utf-8').read(),tr,l,path)
+            h=_localize_ld(h,tr,l)
             # links to articles that have no version in this language go to the English page
             h=_re.sub(r'href="(article-[a-z0-9-]+\.html)"',lambda m5: m5.group(0) if l in _alangs(m5.group(1)) else 'href="/'+m5.group(1)+'"',h)
             # absolute asset paths (page lives one level down)
