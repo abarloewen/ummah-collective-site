@@ -2810,6 +2810,62 @@ def localize(pages):
         counts[l]=n
     return counts
 
+# ---------------- HAND-WRITTEN PAGES (2026-11-07) ----------------
+# audit.html, meet.html and ummah-hub.html (+ de/) are maintained by hand, not generated. This pass keeps their
+# shared chrome, SEO head and a11y in line with the generated pages. Idempotent: running it twice changes nothing.
+STATIC_PAGES=['audit.html','meet.html','ummah-hub.html','de/ummah-hub.html']
+def _fix_static_pages():
+    import re as _r
+    n=0
+    for rel in STATIC_PAGES:
+        fp=os.path.join(OUT,rel)
+        if not os.path.exists(fp): continue
+        h=open(fp,encoding='utf-8').read(); o=h
+        lang='de' if rel.startswith('de/') else 'en'
+        menu_lbl='Menü' if lang=='de' else 'Menu'; close_lbl='Menü schließen' if lang=='de' else 'Close menu'
+        skip_lbl='Zum Inhalt springen' if lang=='de' else 'Skip to content'
+        # chrome / a11y (M11, S21, M12)
+        h=h.replace('<html lang="'+lang+'">','<html lang="'+lang+'" dir="ltr">',1)
+        h=_r.sub(r'<span class="menu-btn" id="menuOpen" data-i18n="menu">([^<]*)</span>',lambda m:'<button type="button" class="menu-btn" id="menuOpen" aria-controls="overlay" aria-expanded="false" aria-label="'+menu_lbl+'" data-i18n="menu">'+m.group(1)+'</button>',h)
+        h=h.replace('<span class="ov-close" id="menuClose" aria-label="Close">&#10005;</span>','<button type="button" class="ov-close" id="menuClose" aria-label="'+close_lbl+'">&#10005;</button>')
+        h=h.replace('<div class="has-mega"><a href="services.html" data-i18n="solutions">','<div class="has-mega"><a href="services.html" aria-haspopup="true" aria-expanded="false" data-i18n="solutions">')
+        h=h.replace('<div class="has-sub"><a href="about.html" data-i18n="company">','<div class="has-sub"><a href="about.html" aria-haspopup="true" aria-expanded="false" data-i18n="company">')
+        h=h.replace('title="WhatsApp" target="_blank" rel="noopener">','title="WhatsApp" aria-label="WhatsApp" target="_blank" rel="noopener">',1) if 'aria-label="WhatsApp" target' not in h else h
+        h=h.replace('<a class="bk" href="booking.html" title="Book a call">','<a class="bk" href="booking.html" title="Book a call" aria-label="Book a call">')
+        h=h.replace('<img class="logo" src="/assets/logo-white.png" alt="Ummah Collective">','<img class="logo" src="/assets/logo-white.png" alt="Ummah Collective" width="400" height="377">')
+        if 'class="skip"' not in h:
+            h=_r.sub(r'(<body[^>]*>)',lambda m:m.group(1)+'<a class="skip" href="#main">'+skip_lbl+'</a>',h,count=1)
+        h=h.replace('<main class="page">','<main class="page" id="main">',1)
+        # links (M20, M5)
+        h=h.replace('service-custom-crm.html','noon-os.html')
+        h=h.replace('href="booking.html?service=ai-agents" class="btn btn-fill" data-i18n="audit"','href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit"')
+        # libraries (M18): lottie only where a lottie box exists
+        if 'lottie-box' not in h.split('</main>')[0]:
+            h=h.replace('<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>','')
+        # hreflang: none of these pages have a booking alternate; drop the wrong ones (M6, M20, N12)
+        h=_r.sub(r'<link rel="alternate" hreflang="[^"]+" href="https://ummah-collective\.com/(?:[a-z]{2}/)?booking\.html">','',h)
+        if rel.endswith('ummah-hub.html'):
+            canon=SITE+('/de' if lang=='de' else '')+'/ummah-hub/'
+            h=_r.sub(r'(<link rel="canonical" href=")[^"]*(")',lambda m:m.group(1)+canon+m.group(2),h,count=1)
+            h=_r.sub(r'(<meta property="og:url" content=")[^"]*(")',lambda m:m.group(1)+canon+m.group(2),h,count=1)
+            alts=('<link rel="alternate" hreflang="en" href="'+SITE+'/ummah-hub/"><link rel="alternate" hreflang="de" href="'+SITE+'/de/ummah-hub/">'
+                  '<link rel="alternate" hreflang="x-default" href="'+SITE+'/ummah-hub/">')
+            if 'hreflang="de" href="'+SITE+'/de/ummah-hub/"' not in h: h=h.replace('</head>',alts+'</head>',1)
+        if rel=='audit.html':
+            h=h.replace('<meta name="robots" content="noindex,nofollow">','<meta name="robots" content="index,follow">',1)
+            alts='<link rel="alternate" hreflang="en" href="'+SITE+'/audit.html"><link rel="alternate" hreflang="x-default" href="'+SITE+'/audit.html">'
+            if 'hreflang="en" href="'+SITE+'/audit.html"' not in h: h=h.replace('</head>',alts+'</head>',1)
+            # M7: no "–" rings when PageSpeed fails or is rate-limited; the human audit follows instead
+            h=h.replace("var r=await fetch(api);var j=await r.json();","var r=await fetch(api);if(!r.ok)throw new Error('psi '+r.status);var j=await r.json();",1)
+            old="document.getElementById('uxScores').innerHTML=ring('Performance',S.perf)+ring('SEO',S.seo)+ring('Best practices',S.bp)+ring('Accessibility',S.a11y);"
+            new=("if(S.perf==null&&S.seo==null){document.getElementById('uxScores').style.display='none';document.getElementById('uxCwv').style.display='none';}"
+                 "else{document.getElementById('uxScores').innerHTML=ring('Performance',S.perf)+ring('SEO',S.seo)+ring('Best practices',S.bp)+ring('Accessibility',S.a11y);}")
+            h=h.replace(old,new,1)
+            h=h.replace("if(S.perf==null)F.push(find('\\u26A0','<b>Live performance data was not available for this URL right now.</b> We will include the full technical audit in our follow-up.'));",
+                        "if(S.perf==null)F.push(find('\\u2713','<b>Your written findings follow within 48 hours.</b> Live speed scores were not available for this URL just now, so our team runs the full technical audit by hand.'));",1)
+        if h!=o: open(fp,'w',encoding='utf-8').write(h); n+=1
+    return n
+
 def main():
     open(os.path.join(OUT,"pulse-lottie.json"),"w",encoding="utf-8").write(LOTTIE)
     ORBIT='{"v":"5.7.4","fr":30,"ip":0,"op":90,"w":200,"h":200,"nm":"orbit","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"o","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":0,"s":[0]},{"t":90,"s":[360]}]},"p":{"a":0,"k":[100,100,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"shapes":[{"ty":"gr","it":[{"ty":"el","s":{"a":0,"k":[24,24]},"p":{"a":0,"k":[0,-58]}},{"ty":"fl","c":{"a":0,"k":[0.12,0.85,0.54,1]},"o":{"a":0,"k":100}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","it":[{"ty":"el","s":{"a":0,"k":[16,16]},"p":{"a":0,"k":[50,30]}},{"ty":"fl","c":{"a":0,"k":[0.36,0.88,0.74,1]},"o":{"a":0,"k":100}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]},{"ty":"gr","it":[{"ty":"el","s":{"a":0,"k":[16,16]},"p":{"a":0,"k":[-50,30]}},{"ty":"fl","c":{"a":0,"k":[0.36,0.88,0.75,1]},"o":{"a":0,"k":100}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":90,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"core","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":0,"k":0},"p":{"a":0,"k":[100,100,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"shapes":[{"ty":"gr","it":[{"ty":"el","s":{"a":0,"k":[20,20]},"p":{"a":0,"k":[0,0]}},{"ty":"st","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":80},"w":{"a":0,"k":2}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100}}]}],"ip":0,"op":90,"st":0,"bm":0}]}'
@@ -2827,8 +2883,10 @@ def main():
     _loc=localize(m)
     print("Localized trees:",_loc)
     print("SEO overrides applied:",_apply_seo_overrides())
+    print("Hand-written pages synced:",_fix_static_pages())
     urls=[SITE+"/"+("" if f=="index.html" else f) for f in m if f not in EXCLUDE]
     urls+= [SITE+"/"+l+"/"+("" if f=="index.html" else f) for l in LOC_LANGS for f in m if f not in EXCLUDE and l in _alangs(f)]
+    urls.append(SITE+"/audit.html")  # 2026-11-07 (M6): hand-written, EN only, now indexable
     _lm={"article-"+a[0]+".html":str(ARTICLE_UPDATED.get(a[0],a[2])) for a in ARTICLES}
     _lm["insights.html"]=max(_lm.values())
     def _lmod(u):
