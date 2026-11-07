@@ -107,6 +107,8 @@ EX={
 <g transform="translate(60,150)"><rect x="0" y="-30" width="20" height="30" rx="3" class="ex-rise ex-fill" style="animation-delay:0s"/><rect x="30" y="-46" width="20" height="46" rx="3" class="ex-rise ex-fill2" style="animation-delay:.2s"/><rect x="60" y="-58" width="20" height="58" rx="3" class="ex-rise ex-fill" style="animation-delay:.4s"/><rect x="90" y="-40" width="20" height="40" rx="3" class="ex-rise ex-fill2" style="animation-delay:.6s"/></g>
 <g class="ex-cursor"><circle r="13" fill="none" class="ex-stroke" stroke-width="3"/><line x1="9" y1="9" x2="18" y2="18" class="ex-stroke" stroke-width="3" stroke-linecap="round"/></g>'''
 }
+# 2026-11-07 (M14): every demo panel carries an honest caption
+DEMO_TAG='<small class="mono demo-tag" style="opacity:.62;font-size:10.5px">Illustrative demo</small>'
 def explain(kind,cap):
     if kind=='chat':
         inner=('<div class="lpanel"><div class="lp-top"><span class="ld"></span><span class="ld"></span><span class="ld"></span>'
@@ -132,7 +134,7 @@ def explain(kind,cap):
           '<div class="lp-row"><span class="av"></span><span class="rt">47 leads scored overnight</span><span class="pill">AI</span></div>'
           '<div class="lp-row"><span class="av"></span><span class="rt">Contract + invoice auto-sent</span><span class="pill">Done</span></div>'
           '</div></div></div>')
-    return '<div class="demo reveal">'+inner+'<span class="cap">'+cap+'</span></div>'
+    return '<div class="demo reveal">'+inner+'<span class="cap">'+cap+'</span>'+DEMO_TAG+'</div>'
 
 def agent_chat(ttl,cap,msgs):
     rows="";mi=0
@@ -142,7 +144,7 @@ def agent_chat(ttl,cap,msgs):
             mi+=1; rows+='<div class="lp-msg '+k+' m'+str(mi)+'">'+t+'</div>'
     return ('<div class="demo reveal"><div class="lpanel"><div class="lp-top"><span class="ld"></span><span class="ld"></span><span class="ld"></span>'
       '<span class="lp-ttl">'+ttl+'</span><span class="lp-liv"><i></i> Online</span></div>'
-      '<div class="lp-chat">'+rows+'</div></div><span class="cap">'+cap+'</span></div>')
+      '<div class="lp-chat">'+rows+'</div></div><span class="cap">'+cap+'</span>'+DEMO_TAG+'</div>')
 
 # ---- animated automation flow component ----
 FICON={
@@ -213,7 +215,7 @@ DESC['shariah-audit']='Scholar-led external audit'  # kept to ONE line for menu 
 DESC['branding']='Identity, positioning &amp; market entry'; DESC['lead-generation']='Outbound, paid &amp; CRO &mdash; one engine'
 DESC['social-media-automation']='On-brand content, on autopilot'
 def _ic(s): return '<span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+ICN.get(s,'<path d="M12 2 22 12 12 22 2 12z"/>')+'</svg></span>'
-_SPECIAL={'noon-os':'noon-os.html','launch-bundle':'launch-bundle.html','ventures':'ventures.html','market-entry':'service-branding.html','noonos-p':'https://www.noon-os.com','deengen':'https://www.deengen.com','rayhan-kids':'https://www.rayhan-kids.com','niyya':'https://niyya.my'}
+_SPECIAL={'noon-os':'noon-os.html','custom-crm':'noon-os.html','launch-bundle':'launch-bundle.html','ventures':'ventures.html','market-entry':'service-branding.html','noonos-p':'https://www.noon-os.com','deengen':'https://www.deengen.com','rayhan-kids':'https://www.rayhan-kids.com','niyya':'https://niyya.my'}
 ICN['noonos-p']='<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>'
 ICN['deengen']='<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>'
 ICN['rayhan-kids']='<path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L3.8 8.7l5.4-.8z"/>'
@@ -244,21 +246,22 @@ def nav():
       '<span class="lab">Tell us what&rsquo;s slowing your growth.</span>'
       '<span class="dsc">A free 30-minute teardown &mdash; no pitch, just the map.</span>'
       '<div class="mega-btns"><a class="mb1" href="booking.html">Book a call &rarr;</a><a class="mb2" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div>'
+      '<a class="alink mega-audit" href="audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a>'
       '<div class="mega-soc">'
       '<a href="'+WA+'" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.9c0 1.76.46 3.45 1.32 4.95L2 22l5.3-1.39a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.16 8.16 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.48-1.38-1.73-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31s-.86.84-.86 2.05c0 1.21.88 2.38 1 2.54.12.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a>'
       '<a href="https://www.linkedin.com/company/ummah-collective/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9.5 9H13v1.65h.05c.49-.93 1.7-1.9 3.5-1.9 3.74 0 4.43 2.46 4.43 5.66V21h-4v-5.3c0-1.26-.02-2.89-1.76-2.89-1.76 0-2.03 1.38-2.03 2.8V21h-4z"/></svg></a>'
       '<a href="mailto:info@ummah-collective.com" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 7.5l8.5 5.5 8.5-5.5"/></svg></a>'
       '</div></div></div>')
     mega='<div class="mega"><div class="mega-in">'+cols+prev+'</div></div>'
-    sol='<div class="has-mega"><a href="services.html" data-i18n="solutions">Solutions</a>'+mega+'</div>'
-    company=('<div class="has-sub"><a href="about.html" data-i18n="company">Company</a><div class="subnav">'
+    sol='<div class="has-mega"><a href="services.html" aria-haspopup="true" aria-expanded="false" data-i18n="solutions">Solutions</a>'+mega+'</div>'
+    company=('<div class="has-sub"><a href="about.html" aria-haspopup="true" aria-expanded="false" data-i18n="company">Company</a><div class="subnav">'
       '<a href="about.html">About</a><a href="ventures.html">Ventures</a><a href="founders-club.html" data-i18n="club">Founders Club</a><a href="insights.html">Insights</a><a href="process.html">How we work</a></div></div>')
     links=sol+'<a href="work.html" data-i18n="work">Work</a>'+company
     langs="".join('<button data-l="'+c+'">'+n+'</button>' for c,n in LANGS)
     return ('<nav id="nav"><div class="nav-in">'+BRAND+'<div class="nav-links">'+links+'</div>'+
       '<div class="nav-cta"><button class="kbd" data-cmdk type="button"><span>Search</span><kbd>&#8984;K</kbd></button>'+
       '<div class="lang" id="lang"><button><span id="langCur">EN</span> &#9662;</button><div class="lang-menu">'+langs+'</div></div>'+
-      '<a href="booking.html" class="btn btn-fill" data-i18n="book">Book a call</a><span class="menu-btn" id="menuOpen" data-i18n="menu">Menu</span></div></div></nav>')
+      '<a href="booking.html" class="btn btn-fill" data-i18n="book">Book a call</a><button type="button" class="menu-btn" id="menuOpen" aria-controls="overlay" aria-expanded="false" aria-label="Menu" data-i18n="menu">Menu</button></div></div></nav>')
 
 def overlay():
     # Compact app-style mobile menu (Attila 2026-07-05): collapsible Solutions groups
@@ -277,14 +280,15 @@ def overlay():
     compsec='<section class="ov-sec" style="margin-top:18px"><div class="ov-k" data-i18n="company">Company</div><div class="ov-comp">'+compitems+'</div></section>'
     cta_card=('<div class="ov-cta"><span class="ov-cta-k">Start here</span>'
       '<span class="ov-cta-h">Tell us what&rsquo;s slowing your growth.</span>'
-      '<div class="ov-cta-btns"><a class="btn btn-fill" href="booking.html" data-i18n="book">Book a call</a><a class="btn btn-ghost" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div></div>')
-    return f'''<div class="overlay" id="overlay"><div class="ov-top">{BRAND}<span class="ov-close" id="menuClose" aria-label="Close">&#10005;</span></div>
+      '<div class="ov-cta-btns"><a class="btn btn-fill" href="booking.html" data-i18n="book">Book a call</a><a class="btn btn-ghost" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div>'
+      '<a class="alink" href="audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a></div>')
+    return f'''<div class="overlay" id="overlay"><div class="ov-top">{BRAND}<button type="button" class="ov-close" id="menuClose" aria-label="Close menu">&#10005;</button></div>
   <div class="ov-body">{sol}{work}{compsec}<div class="ov-ctawrap">{cta_card}</div></div></div>'''
 
 def fab():
     wa='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-1-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.3 0 .5l-.4.6-.3.3c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.5-.1l.7-.9c.2-.2.4-.2.6-.1l1.8.9c.3.1.4.2.5.3.1.3.1.6-.1 1z"/></svg>'
     cal='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>'
-    return f'<div class="fab"><a class="wa" href="{WA}" title="WhatsApp" target="_blank" rel="noopener">{wa}</a><a class="bk" href="booking.html" title="Book a call">{cal}</a></div>'
+    return f'<div class="fab"><a class="wa" href="{WA}" title="WhatsApp" aria-label="WhatsApp" target="_blank" rel="noopener">{wa}</a><a class="bk" href="booking.html" title="Book a call" aria-label="Book a call">{cal}</a></div>'
 
 def footer():
     # Symmetric 5-column footer (Attila 2026-07-04): brand | Services | Products | Company | Connect
@@ -349,7 +353,7 @@ def audit():
     return '''<section><div class="wrap"><div class="audit reveal"><span class="badge" data-i18n="abadge">No-risk front door</span>
   <h2 data-i18n="audith2">Get a <em>free AI audit</em> of your business</h2>
   <p style="margin:0 auto 26px" data-i18n="auditp">A 30-minute teardown: where AI agents, automation and a better site would save you the most time and money. No pitch, just the map.</p>
-  <a href="booking.html?service=ai-agents" class="btn btn-fill" data-i18n="audit">Free AI audit</a></div></div></section>'''
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="audit.html" class="alink">Take the 60-second audit <span class="ar">&rarr;</span></a></div></div></div></section>'''
 
 # ---------------- SERVICES (14 granular) ----------------
 SERVICES=[
@@ -628,18 +632,18 @@ def _ltop(ttl,liv):
 def fdemo_funnel(cap):
     rows=[("Visitors","12,480","100"),("Leads","3,210","72"),("Qualified","880","50"),("Customers","214","36")]
     bars="".join('<div class="fnl s'+str(i+1)+'" style="--w:'+w+'%"><span class="fl">'+l+'</span><span class="fv">'+v+'</span></div>' for i,(l,v,w) in enumerate(rows))
-    return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Pipeline','Live')+'<div class="funnel">'+bars+'</div></div><span class="cap">'+cap+'</span></div>')
+    return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Pipeline','Live')+'<div class="funnel">'+bars+'</div></div><span class="cap">'+cap+'</span>'+DEMO_TAG+'</div>')
 def fdemo_rank(cap):
     serp=('<div class="serp">'
       '<div class="srow you"><span class="sfav"></span><span class="stx"><b>your-brand.com</b><span>#1 &middot; featured snippet</span></span><span class="sup">&uarr;</span></div>'
       '<div class="srow"><span class="sfav"></span><span class="stx"><b>competitor-a.com</b><span>#2</span></span></div>'
       '<div class="srow"><span class="sfav"></span><span class="stx"><b>competitor-b.com</b><span>#3</span></span></div></div>')
     bars='<div class="rankbars">'+"".join('<span class="rb b'+str(i+1)+'"></span>' for i in range(8))+'</div>'
-    return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Organic search','Climbing')+'<div class="rankwrap">'+serp+bars+'</div></div><span class="cap">'+cap+'</span></div>')
+    return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Organic search','Climbing')+'<div class="rankwrap">'+serp+bars+'</div></div><span class="cap">'+cap+'</span>'+DEMO_TAG+'</div>')
 def fdemo_road(cap):
     steps=[("Audit","Where you are"),("Position","Brand &amp; message"),("Build","Web, app &amp; systems"),("Launch","Go to market"),("Grow","Scale what works")]
     rs="".join('<div class="rstep r'+str(i+1)+'"><span class="rdot"></span><b>'+t+'</b><span>'+s+'</span></div>' for i,(t,s) in enumerate(steps))
-    return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Roadmap','Aligned')+'<div class="road">'+rs+'</div></div><span class="cap">'+cap+'</span></div>')
+    return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Roadmap','Aligned')+'<div class="road">'+rs+'</div></div><span class="cap">'+cap+'</span>'+DEMO_TAG+'</div>')
 DEPTH={
  'ai-agents':("The silent leak","Every unanswered message is a customer walking out.",
    "Buyers expect an answer now &mdash; at midnight, in their language, on WhatsApp. A human team can&rsquo;t be everywhere at once, so the leads you paid for go cold while they wait.",
@@ -757,7 +761,7 @@ def crm_pipeline():
         ch+='<div class="kbcol'+(' won' if c=="Won" else '')+'"><div class="kbh">'+c+'</div><div class="kbcard ghost"><b>'+nm+'</b><span>'+vv+'</span></div></div>'
     return ('<div class="demo reveal span2"><div class="lpanel">'+_ltop('Workflow board','Live')+
       '<div class="crmkb"><div class="kbcols">'+ch+'</div><div class="kbmove"><b>Acme Foods</b><span>MYR 142K</span></div></div></div>'
-      '<span class="cap">Any process &mdash; sales, orders, approvals, fulfilment &mdash; moving stage to stage, automatically</span></div>')
+      '<span class="cap">Any process &mdash; sales, orders, approvals, fulfilment &mdash; moving stage to stage, automatically</span>'+DEMO_TAG+'</div>')
 def crm_contact():
     tl=[("Call logged &mdash; 12 min","t1"),("Email sent &mdash; quote PDF","t2"),("Deal created &mdash; MYR 142K","t3"),("Next: follow-up Thu 11am","t4 next")]
     tlh="".join('<div class="tlrow '+c+'"><span class="tldot"></span><span>'+t+'</span></div>' for t,c in tl)
@@ -765,7 +769,7 @@ def crm_contact():
       '<div class="crmc"><div class="crmc-head"><span class="crmc-av">SA</span><div class="crmc-id"><b>Sarah Aziz</b><span>Head of Procurement &middot; Acme Foods</span></div></div>'
       '<div class="crmc-tags"><span>Customer</span><span>KSA</span><span>VIP</span></div>'
       '<div class="crmc-tl">'+tlh+'</div></div></div>'
-      '<span class="cap">Customers, suppliers, anything &mdash; every interaction on one timeline</span></div>')
+      '<span class="cap">Customers, suppliers, anything &mdash; every interaction on one timeline</span>'+DEMO_TAG+'</div>')
 def crm_dash():
     inner=('<div class="lpanel">'+_ltop('Dashboard','Live')+
       '<div class="lp-dash"><div class="lp-kpis">'
@@ -778,12 +782,12 @@ def crm_dash():
       '<div class="lp-row"><span class="av"></span><span class="rt">12 leads captured today</span><span class="pill">WhatsApp</span></div>'
       '<div class="lp-row"><span class="av"></span><span class="rt">3 invoices auto-sent</span><span class="pill">Done</span></div>'
       '</div></div></div>')
-    return '<div class="demo reveal">'+inner+'<span class="cap">Your whole operation, live &mdash; sales, ops and finance in one place</span></div>'
+    return '<div class="demo reveal">'+inner+'<span class="cap">Your whole operation, live &mdash; sales, ops and finance in one place</span>'+DEMO_TAG+'</div>'
 def crm_auto():
     steps=[('badge','Deal marked Won','Dar Retail &middot; MYR 210K'),('doc','Invoice generated','Sent to the client'),('bolt','Finance notified','Posted to accounting'),('cal','Onboarding scheduled','Kickoff booked'),('send','Welcome pack sent','In their language')]
     rows="".join('<div class="fstep s'+str(i+1)+'"><span class="fic"><svg viewBox="0 0 24 24">'+FICON.get(ic,'')+'</svg></span><span class="ftx"><b>'+b+'</b><span>'+s+'</span></span><span class="fchk"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></div>' for i,(ic,b,s) in enumerate(steps))
     return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Automation','Running')+'<div class="flow-steps" style="margin-top:6px">'+rows+'</div></div>'
-      '<span class="cap">When something happens, the busywork handles itself</span></div>')
+      '<span class="cap">When something happens, the busywork handles itself</span>'+DEMO_TAG+'</div>')
 def crm_savings():
     items=[("5&ndash;8 &rarr; 1","tools replaced","One system instead of paying for a CRM plus email, scheduling, invoicing and chat tools."),
       ("up to &minus;40%","software + ops cost","Versus a stack of per-seat SaaS subscriptions that grow with every hire."),
@@ -2141,7 +2145,7 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
   <div class="art-hero reveal"><img src="{U(imgid)}" class="ld" alt="{_plain(title)}" loading="lazy"></div>
   <p class="lede reveal">{lede}</p>
   <div class="reveal">{''.join(blocks).replace("<strong>","").replace("</strong>","")}</div>
-  <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap"><a href="booking.html?service=ai-agents" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="insights.html" class="btn btn-ghost">All insights</a></div>
+  <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="insights.html" class="btn btn-ghost">All insights</a></div>
 </div></div></section>'''+cta()
     ald=_ld({"@context":"https://schema.org","@type":"BlogPosting","headline":_plain(title),"description":_plain(lede),"image":U(imgid),"datePublished":str(date),"dateModified":str(ARTICLE_UPDATED.get(slug,date)),"inLanguage":"en","author":{"@type":"Organization","name":"Ummah Collective"},"publisher":{"@id":SITE+"/#org"},"mainEntityOfPage":SITE+"/article-"+slug+".html"})
     # AEO: emit FAQPage schema from the article's FAQ list (li text "Question? &mdash; Answer")
@@ -2171,10 +2175,9 @@ def home():
     <p class="lead reveal" data-i18n="herosub" style="margin-top:26px">We build the software, AI agents and systems modern companies run on — engineered fast, grounded in a decade of trust.</p>
     <div class="hero-cta reveal" style="margin-top:24px"><a href="booking.html" class="btn btn-fill" data-i18n="book">Book a call</a><a href="services.html" class="btn btn-ghost" data-i18n="services">Services</a></div>
     <div class="hero-stats reveal">
-      <div class="s"><b><span class="count" data-to="100">0</span>+</b><span data-i18n="st_proj">Projects</span></div>
-      <div class="s"><b><span class="count" data-to="60">0</span>+</b><span data-i18n="st_cli">Clients</span></div>
-      <div class="s"><b><span class="count" data-to="12">0</span>+</b><span data-i18n="st_yrs">Years</span></div>
-      <div class="s"><b>5</b><span data-i18n="st_lang">Languages</span></div></div>
+      <div class="s"><b><span class="count" data-to="100">100</span>+</b><span data-i18n="st_proj">Projects</span></div>
+      <div class="s"><b><span class="count" data-to="60">60</span>+</b><span data-i18n="st_cli">Clients</span></div>
+      <div class="s"><b>6</b><span data-i18n="st_lang">Languages</span></div></div>
   </div>
 </div></header>
 
@@ -2187,7 +2190,7 @@ def home():
   <div class="reveal" style="margin-top:24px"><a href="services.html" class="alink" data-i18n="services">All services <span class="ar">&rarr;</span></a></div></div></section>
 
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">See the systems in motion</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">(02b) &mdash; Live &amp; animated</span></div></div>
-  <div class="grid g2" style="gap:18px">{explain('dashboard','A live CRM dashboard we built for clients')}{explain('chat','An AI agent closing a complex export order')}</div>
+  <div class="grid g2" style="gap:18px">{explain('dashboard','The kind of CRM dashboard we build for clients')}{explain('chat','An AI agent closing a complex export order')}</div>
   <div class="reveal" style="display:flex;justify-content:center;margin-top:10px"><div class="lottie-box" data-src="pulse-lottie.json"></div></div>
 </div></section>
 
@@ -2223,9 +2226,9 @@ def home():
 {audit()}
 
 <section><div class="wrap"><div class="stats">
-  <div class="stat reveal"><div class="n"><span class="count" data-to="100">0</span>+</div><div class="k">Projects delivered</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="60">0</span>+</div><div class="k">Clients worldwide</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="12">0</span>+</div><div class="k">Years of craft</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="100">100</span>+</div><div class="k">Projects delivered</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="60">60</span>+</div><div class="k">Clients worldwide</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="12">12</span>+</div><div class="k">Years of craft</div></div>
   <div class="stat reveal"><div class="n">3</div><div class="k">Regions &mdash; SEA &middot; EU &middot; MENA</div></div></div></div></section>
 
 <section><div class="wrap" style="text-align:center"><div class="quote reveal" data-i18n="homequote" style="margin:0 auto">&ldquo;They built our entire ecosystem &mdash; brand, site, tracking and a flagship store. <em>Not a campaign. An asset.</em>&rdquo;</div>
@@ -2254,8 +2257,8 @@ def about_page():
         "Founded in 2022 in Kuala Lumpur, Ummah Collective blends European quality standards with traditional values and Islamic ethics &mdash; now running on applied AI. The team behind it has built brands, sites and software for 12+ years; we grew into AI, we didn&rsquo;t appear with it. We bridge Europe, Southeast Asia and the Muslim economy.")+f'''
 <section style="padding-top:0"><div class="wrap"><div class="stats">
   <div class="stat reveal"><div class="n">2022</div><div class="k">Founded &middot; KL</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="100">0</span>+</div><div class="k">Projects</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="60">0</span>+</div><div class="k">Clients</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="100">100</span>+</div><div class="k">Projects</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="60">60</span>+</div><div class="k">Clients</div></div>
   <div class="stat reveal"><div class="n">3</div><div class="k">Regions</div></div></div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Our team</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">The people</span></div></div><div class="grid g3">{tcards}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">What we believe</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Principles</span></div></div><div class="grid g3">
