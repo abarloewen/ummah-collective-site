@@ -2913,7 +2913,7 @@ def _fix_static_pages():
             old="document.getElementById('uxScores').innerHTML=ring('Performance',S.perf)+ring('SEO',S.seo)+ring('Best practices',S.bp)+ring('Accessibility',S.a11y);"
             new=("if(S.perf==null&&S.seo==null){document.getElementById('uxScores').style.display='none';document.getElementById('uxCwv').style.display='none';}"
                  "else{document.getElementById('uxScores').innerHTML=ring('Performance',S.perf)+ring('SEO',S.seo)+ring('Best practices',S.bp)+ring('Accessibility',S.a11y);}")
-            h=h.replace(old,new,1)
+            if new not in h: h=h.replace(old,new,1)
             h=h.replace("if(S.perf==null)F.push(find('\\u26A0','<b>Live performance data was not available for this URL right now.</b> We will include the full technical audit in our follow-up.'));",
                         "if(S.perf==null)F.push(find('\\u2713','<b>Your written findings follow within 48 hours.</b> Live speed scores were not available for this URL just now, so our team runs the full technical audit by hand.'));",1)
         if h!=o: open(fp,'w',encoding='utf-8').write(h); n+=1
