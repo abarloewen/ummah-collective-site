@@ -2360,15 +2360,28 @@ def insights_page():
     return page("insights.html","Insights — Ummah Collective","Insights from Ummah Collective on applied AI, automation, positioning and digital growth for the values economy and halal-industry businesses.",body,aurora="insights")
 
 def contact_page():
-    opts="".join(f'<option>{t}</option>' for t in ["Start a project"]+[t for _,_,t,*_ in SERVICES]+["Free AI audit","Something else"])
+    # 2026-11-07 (M1): the brief form really sends (Formsubmit AJAX). XHR on purpose: uc.js wraps fetch() for
+    # Formsubmit and would count the lead a second time; this script fires generate_lead itself on a confirmed send.
+    opts="".join(f'<option value="{_plain(t)}">{t}</option>' for t in ["Start a project"]+[t for _,_,t,*_ in SERVICES]+["Free AI audit","Something else"])
     body=phero('<a href="index.html">Home</a> / Contact',"Let's build","Tell us what's<br>slowing you <em>down.</em>","Book a call, send a brief, or message us on WhatsApp. Direct, white-label or referral.")+f'''
 <section style="padding-top:24px"><div class="wrap"><div class="grid g2" style="align-items:start">
-  <form class="form reveal" onsubmit="event.preventDefault(); this.querySelector('.ok').style.display='block';">
-    <div class="row"><div><label>Name</label><input required placeholder="Your name"></div><div><label>Company</label><input placeholder="Company"></div></div>
-    <div class="row"><div><label>Email</label><input type="email" required placeholder="you@company.com"></div><div><label>Interested in</label><select>{opts}</select></div></div>
-    <div><label>What are you trying to build?</label><textarea required placeholder="A custom CRM, an AI agent, a new site..."></textarea></div>
-    <div><button class="btn btn-fill" type="submit" data-i18n="brief">Send a brief</button></div>
-    <p class="ok" style="display:none;color:var(--acc)">Thanks &mdash; we'll reply within one business day. (Demo form: also email info@ummah-collective.com.)</p></form>
+  <form class="form reveal" id="briefForm" action="https://formsubmit.co/info@ummah-collective.com" method="POST">
+    <div class="row"><div><label for="bfName">Name</label><input id="bfName" name="name" autocomplete="name" required placeholder="Your name"></div><div><label for="bfCompany">Company</label><input id="bfCompany" name="company" autocomplete="organization" placeholder="Company"></div></div>
+    <div class="row"><div><label for="bfEmail">Email</label><input id="bfEmail" name="email" type="email" autocomplete="email" dir="ltr" required placeholder="you@company.com"></div><div><label for="bfWebsite">Website</label><input id="bfWebsite" name="website" type="text" inputmode="url" autocomplete="url" dir="ltr" placeholder="yourcompany.com"></div></div>
+    <div><label for="bfService">Interested in</label><select id="bfService" name="service">{opts}</select></div>
+    <div><label for="bfMessage">What are you trying to build?</label><textarea id="bfMessage" name="message" required placeholder="A custom CRM, an AI agent, a new site..."></textarea></div>
+    <div><button class="btn btn-fill" type="submit" data-i18n="brief">Send a brief</button><span id="briefSending" hidden>Sending&hellip;</span></div>
+    <p class="ok" id="briefOk" role="status" hidden style="color:var(--acc)">Thank you. Your brief has reached us and we will reply within one business day.</p>
+    <div id="briefFail" role="alert" hidden style="color:#ff8c7a"><p>Your brief could not be sent. Please email us or message us on WhatsApp.</p><p style="margin-top:8px"><a href="mailto:info@ummah-collective.com" dir="ltr">info@ummah-collective.com</a> &middot; <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a></p></div></form>
+<script>(function(){{var f=document.getElementById('briefForm');if(!f)return;var ok=document.getElementById('briefOk'),bad=document.getElementById('briefFail'),btn=f.querySelector('button[type=submit]'),lbl=btn.innerHTML,snd=document.getElementById('briefSending').textContent;
+function v(n){{var e=f.querySelector('[name='+n+']');return e?e.value.trim():'';}}
+f.addEventListener('submit',function(e){{e.preventDefault();if(f.checkValidity&&!f.checkValidity()){{f.reportValidity&&f.reportValidity();return;}}
+ok.hidden=true;bad.hidden=true;btn.disabled=true;btn.textContent=snd;
+var d={{_subject:'New brief \u2014 ummah-collective.com',_template:'table',name:v('name'),email:v('email'),company:v('company'),website:v('website'),service:v('service'),message:v('message'),page:location.pathname,lang:document.documentElement.lang}};
+function done(good){{btn.disabled=false;btn.innerHTML=lbl;if(good){{ok.hidden=false;f.reset();if(window.ucEv)window.ucEv('generate_lead',{{lead_type:'brief'}});}}else bad.hidden=false;}}
+try{{var x=new XMLHttpRequest();x.open('POST','https://formsubmit.co/ajax/info@ummah-collective.com');x.setRequestHeader('Content-Type','application/json');x.setRequestHeader('Accept','application/json');
+x.onload=function(){{var j=null;try{{j=JSON.parse(x.responseText);}}catch(_){{}}done(x.status>=200&&x.status<300&&!!j&&(j.success===true||j.success==='true'));}};
+x.onerror=x.ontimeout=function(){{done(false);}};x.timeout=20000;x.send(JSON.stringify(d));}}catch(_){{done(false);}}}});}})();</script>
   <div class="reveal">
     <div class="eyebrow"><span class="t"></span><span class="mono">Direct</span></div>
     <p style="margin-bottom:18px"><a class="alink" href="booking.html" data-i18n="book">Book a call</a></p>
@@ -2747,6 +2760,8 @@ def localize(pages):
                 for kk in ({k,_escvariant(k)}):
                     h=h.replace('<title>'+kk+'</title>','<title>'+v+'</title>')
                     h=h.replace('content="'+kk+'"','content="'+v+'"')
+            # 2026-11-07: aria-labels (menu, close, FAB) follow the page language
+            h=_re.sub(r'aria-label="([^"]+)"',lambda m6:'aria-label="'+(tr.get(m6.group(1)) or tr.get(_htmlmod.unescape(m6.group(1))) or m6.group(1))+'"',h)
             # translate inside <title> and meta description (substring-level)
             tm=_re.search(r'<title>(.*?)</title>',h)
             if tm:
