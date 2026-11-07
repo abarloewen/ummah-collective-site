@@ -326,11 +326,11 @@ def page(fname,title,desc,body,aurora="default",bg="",ld="",og="website"):
     canon=SITE+"/"+("" if fname=="index.html" else fname)
     title=_seo_title(title)
     html=f'''<!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" dir="ltr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title><meta name="description" content="{desc}"><link rel="canonical" href="{canon}"><meta name="robots" content="index,follow"><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta property="og:title" content="{title}"><meta property="og:description" content="{desc}"><meta property="og:type" content="{og}"><meta property="og:url" content="{canon}"><meta property="og:image" content="{SITE}/og-image-2026.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:locale" content="en_US"><meta property="og:site_name" content="Ummah Collective"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{SITE}/og-image-2026.png">{PERF}<link rel="stylesheet" href="uc.css"><script type="application/ld+json">{GLOBAL_LD}</script>{ld}</head>
-<body data-aurora="{aurora}" data-fx="{FXMAP.get(aurora,'aurora')}" data-bg="{bg}"><canvas id="gl"></canvas><div class="veil"></div>
+<body data-aurora="{aurora}" data-fx="{FXMAP.get(aurora,'aurora')}" data-bg="{bg}"><a class="skip" href="#main">Skip to content</a><canvas id="gl"></canvas><div class="veil"></div>
 {nav()}{overlay()}{fab()}
-<main class="page">
+<main class="page" id="main">
 {body}
 </main>{footer()}{CDN}<script defer src="uc.js"></script></body></html>'''
     open(os.path.join(OUT,fname),"w",encoding="utf-8").write(html); return fname
@@ -2719,7 +2719,8 @@ def localize(pages):
             h=open(os.path.join(OUT,f),encoding='utf-8').read()
             path='' if f=='index.html' else f
             # lang + locale + canonical/og
-            h=h.replace('<html lang="en"','<html lang="'+l+'"',1)
+            h=h.replace('<html lang="en" dir="ltr"','<html lang="'+l+'" dir="'+('rtl' if l=='ar' else 'ltr')+'"',1)
+            if l=='ar': h=h.replace('<body data-aurora=','<body dir="rtl" data-aurora=',1)
             h=h.replace('content="en_US"','content="'+OGLOC[l]+'"',1)
             h=h.replace(f'rel="canonical" href="{SITE}/{path}"',f'rel="canonical" href="{SITE}/{l}/{path}"',1)
             h=h.replace(f'property="og:url" content="{SITE}/{path}"',f'property="og:url" content="{SITE}/{l}/{path}"',1)
