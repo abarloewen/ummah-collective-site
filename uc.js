@@ -6,6 +6,24 @@
   'use strict';
   /* GA4 conversion events (2026-10-14). Safe no-op when gtag is absent or consent denied (Consent Mode handles it). */
   function ucEv(n,p){try{if(typeof window.gtag==='function')window.gtag('event',n,p||{});}catch(e){}}
+  window.ucEv=ucEv;  /* 2026-11-07: global so page scripts (contact #briefForm, audit.html, meet.html) can fire GA4 events */
+  /* Lead measurement for forms we don't own: any formsubmit.co AJAX POST that really succeeds fires generate_lead once.
+     uc.js's own sends set UC_SELF so they are not double-counted (they fire their own event). */
+  var UC_SELF=false;
+  function ucLeadType(){ var p=location.pathname; return /audit\.html/.test(p)?'free-audit':/meet\.html/.test(p)?'meet':/contact\.html/.test(p)?'contact':/founders-club/.test(p)?'founders-club':/ummah-hub/.test(p)?'hub':'form'; }
+  (function(){ if(!window.fetch) return; var of=window.fetch;
+    window.fetch=function(u,o){ var self=UC_SELF, pr=of.apply(this,arguments);
+      try{ var url=typeof u==='string'?u:((u&&u.url)||''), meth=(o&&o.method)||(u&&u.method)||'GET';
+        if(!self&&/formsubmit\.co\/ajax\//i.test(url)&&/post/i.test(meth)){
+          pr.then(function(r){ if(!r.ok) return; var fire=function(){ ucEv('generate_lead',{lead_type:ucLeadType(),page:location.pathname}); };
+            r.clone().json().then(function(j){ if(j&&(j.success===false||j.success==='false')) return; fire(); },fire); },function(){});
+        } }catch(e){}
+      return pr; };
+  })();
+  /* POST JSON and resolve true only when the endpoint really accepted it (Formsubmit answers 200 + success:"false" before activation) */
+  function ucPost(url,payload){ var pr; UC_SELF=true;
+    try{ pr=fetch(url,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(payload)}); }catch(e){ pr=Promise.reject(e); } finally{ UC_SELF=false; }
+    return pr.then(function(r){ if(!r.ok) return false; return r.json().then(function(j){ return !(j&&(j.success===false||j.success==='false')); },function(){ return true; }); }).catch(function(){ return false; }); }
   document.addEventListener('click',function(e){
     var a=e.target&&e.target.closest?e.target.closest('a[href]'):null; if(!a) return;
     var h=a.getAttribute('href')||'';
@@ -15,6 +33,7 @@
   },true);
   var hasG=window.gsap&&window.ScrollTrigger; if(hasG) gsap.registerPlugin(ScrollTrigger);
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.UC_REDUCE=reduce; if(reduce) document.documentElement.classList.add('uc-reduce');
   var softGL=(function(){ /* skip WebGL on software renderers (Lighthouse/SwiftShader, GPU-less devices) */
     try{var c=document.createElement('canvas');var gl=c.getContext('webgl')||c.getContext('experimental-webgl');
       if(!gl)return true;var x=gl.getExtension('WEBGL_debug_renderer_info');
@@ -69,6 +88,7 @@
     ' col+=uC3*pow(f,4.0)*0.18;',
     ' col*=1.0+uBoost*0.4;',
     ' col=pow(col,vec3(0.92));',
+    ' col=min(col,vec3(0.56));',   /* 2026-11-07 M19: cap the brightest hue so body copy keeps >=4.5:1 under the .veil */
     ' col*=1.0-0.48*distance(uv,vec2(0.5,0.5));',
     ' col+=(hash(uv*uRes+vec2(uTime))-0.5)*0.02;',
     ' gl_FragColor=vec4(col,1.0);}'
@@ -237,9 +257,13 @@
     }
     var box=document.getElementById('lang');
     if(box){var btn=box.querySelector('button');
-      btn.onclick=function(e){e.stopPropagation();box.classList.toggle('open')};
-      box.querySelectorAll('.lang-menu button').forEach(function(b){var c=b.getAttribute('data-l'); if(alts.length && !alt(c)){ b.style.display='none'; return; } b.onclick=function(){location.href=target(c);}});
-      document.addEventListener('click',function(){box.classList.remove('open')});
+      btn.setAttribute('aria-haspopup','true'); btn.setAttribute('aria-expanded','false'); if(!btn.getAttribute('aria-label')) btn.setAttribute('aria-label','Language');
+      function lset(on){ box.classList.toggle('open',on); btn.setAttribute('aria-expanded',on?'true':'false'); }
+      btn.onclick=function(e){e.stopPropagation();lset(!box.classList.contains('open'))};
+      box.addEventListener('keydown',function(e){ if(e.key==='Escape'&&box.classList.contains('open')){ e.preventDefault(); lset(false); btn.focus(); } });
+      box.addEventListener('focusout',function(){ setTimeout(function(){ if(!box.contains(document.activeElement)) lset(false); },0); });
+      box.querySelectorAll('.lang-menu button').forEach(function(b){var c=b.getAttribute('data-l'); b.setAttribute('lang',c); if(c===pageLang) b.setAttribute('aria-current','true'); if(alts.length && !alt(c)){ b.style.display='none'; return; } b.onclick=function(){location.href=target(c);}});
+      document.addEventListener('click',function(){lset(false)});
     }
   }
 
@@ -248,7 +272,7 @@
     if(!window.gtag){
       window.dataLayer=window.dataLayer||[];
       window.gtag=function(){dataLayer.push(arguments);};
-      gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied'});
+      gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});
       try{if(localStorage.getItem('uc_consent')==='granted')gtag('consent','update',{analytics_storage:'granted'});}catch(e){}
       gtag('js',new Date()); gtag('config','G-HWF39V3XM0');
       var s=document.createElement('script'); s.async=true;
@@ -282,24 +306,31 @@
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',show);else show();
   })();
 
-  /* ---------- hero title: cycle languages every 3s ---------- */
+  /* ---------- hero title: one pass through the six languages, starting and ending on the page language (2026-11-07) ---------- */
   function initHeroCycle(){
+    var order=['en','de','ms','ar','zh','tr'];
+    var pl=(document.documentElement.getAttribute('lang')||'en').slice(0,2);
+    window.UC_heroAnchor=function(){};   /* defined up front so initLang/setLang never hit undefined */
     var h1=document.querySelector('header.hero h1.hero-cycle'); if(!h1) return;
     var t1=h1.querySelector('.ht1'), t2=h1.querySelector('.ht2'); if(!t1||!t2) return;
-    var order=['en','de','ms','ar','zh','tr'];
-    function apply(l){ var d=I18N[l]; if(!d) return; if(d.tag1!=null) t1.innerHTML=d.tag1; if(d.tag2!=null) t2.innerHTML=d.tag2; h1.setAttribute('dir', l==='ar'?'rtl':'ltr'); }
-    var i=0; /* always open on English, then cycle in menu order (Attila 2026-07-05) */
-    apply(order[i]);                                   // begin on the language the user has selected
-    window.UC_heroAnchor=function(l){ var k=order.indexOf(l); if(k<0) return; i=k; apply(l); };  // re-anchor when the user switches language
-    if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-    h1.style.transition='opacity .55s ease, filter .55s ease, transform .55s ease';
+    var base=order.indexOf(pl); if(base<0) base=0;
+    var i=base, own1=t1.innerHTML, own2=t2.innerHTML;   /* the baked page-language wording (build.py) wins over the I18N copy */
+    function apply(l){ var d=I18N[l]; if(!d) return; if(l===pl){ t1.innerHTML=own1; t2.innerHTML=own2; } else { if(d.tag1!=null) t1.innerHTML=d.tag1; if(d.tag2!=null) t2.innerHTML=d.tag2; }
+      [t1,t2].forEach(function(t){ t.setAttribute('lang',l); }); h1.setAttribute('dir', l==='ar'?'rtl':'ltr'); }
+    [t1,t2].forEach(function(t){ if(!t.getAttribute('lang')) t.setAttribute('lang',pl); });
+    /* the baked page-language H1 stays untouched on load (no apply) so LCP text and the page language are right from first paint */
+    window.UC_heroAnchor=function(l){ var k=order.indexOf(l); if(k<0) return; i=k; apply(l); };
+    if(reduce) return;
+    h1.style.transition='opacity .55s cubic-bezier(.16,1,.3,1), filter .55s ease, transform .55s cubic-bezier(.16,1,.3,1)';
+    var n=0, timer=null;
     var tick=function(){
-      i=(i+1)%order.length;
-      h1.style.opacity='0'; h1.style.filter='blur(7px)'; h1.style.transform='translateY(12px)';
+      n++; i=(base+n)%order.length;
+      h1.style.opacity='.001'; h1.style.filter='blur(7px)'; h1.style.transform='translateY(12px)';
       setTimeout(function(){ apply(order[i]); h1.style.opacity='1'; h1.style.filter='none'; h1.style.transform='none'; },560);
+      if(n>=order.length){ clearInterval(timer); }   /* full loop done: we are back on the page language */
     };
     var started=false;
-    function startCycle(){ if(started)return; started=true; setTimeout(function(){ tick(); setInterval(tick,3000); },1200); }
+    function startCycle(){ if(started)return; started=true; setTimeout(function(){ tick(); timer=setInterval(tick,3000); },1200); }
     ['scroll','pointerdown','pointermove','keydown','touchstart'].forEach(function(ev){ addEventListener(ev,startCycle,{once:true,passive:true}); }); /* humans move; lab runs don't — keeps LCP stable */
   }
 
@@ -315,27 +346,58 @@
         if(d.imprint) imp.innerHTML=d.imprint;
       }
     })();
-    var ov=document.getElementById('overlay'),ob=document.getElementById('menuOpen'),oc=document.getElementById('menuClose');
+    document.querySelectorAll('.fab a').forEach(function(x){ if(!x.getAttribute('aria-label')) x.setAttribute('aria-label',x.getAttribute('title')||(x.classList.contains('wa')?'WhatsApp':'Book a call')); });  /* S5 */
+    var ov=document.getElementById('overlay'),ob=document.getElementById('menuOpen'),oc=document.getElementById('menuClose'),ovOpener=null;
     addEventListener('pageshow',function(){ if(ov){ ov.classList.remove('open'); try{ if(window.__lenis) window.__lenis.start(); }catch(e){} document.documentElement.style.overflow=''; } });
     function ovLock(on){ try{ if(window.__lenis){ on?window.__lenis.stop():window.__lenis.start(); } }catch(e){} document.documentElement.style.overflow=on?'hidden':''; }
-    if(ob&&ov) ob.onclick=function(e){ if(e)e.preventDefault(); ov.__t=Date.now(); ov.classList.add('open'); ovLock(true); };
-    function cl(){ if(!ov) return; if(Date.now()-(ov.__t||0)<450) return; /* ignore ghost taps right after opening */ ov.classList.remove('open'); ovLock(false); }
+    /* works whether #menuOpen/#menuClose are <span> (old build) or <button> (new build) */
+    function btnify(el){ if(!el) return; if(el.tagName!=='BUTTON'){ el.setAttribute('role','button'); if(!el.hasAttribute('tabindex')) el.setAttribute('tabindex','0');
+        el.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); el.click(); } }); }
+      else if(!el.getAttribute('type')) el.setAttribute('type','button'); }
+    btnify(ob); btnify(oc);
+    if(ob&&ov){ ob.setAttribute('aria-controls','overlay'); ob.setAttribute('aria-expanded','false'); if(!ob.getAttribute('aria-label')&&!ob.textContent.trim()) ob.setAttribute('aria-label','Menu'); }
+    if(oc&&!oc.getAttribute('aria-label')) oc.setAttribute('aria-label','Close');
+    function ovFocusables(){ return [].slice.call(ov.querySelectorAll('a[href],button,summary,[tabindex]:not([tabindex="-1"]),input,select,textarea')).filter(function(x){ return x.offsetParent!==null||x===oc; }); }
+    function ovOpen(e){ if(e)e.preventDefault(); ovOpener=document.activeElement; ov.__t=Date.now(); ov.classList.add('open'); ovLock(true); if(ob) ob.setAttribute('aria-expanded','true');
+      setTimeout(function(){ var f=ovFocusables().filter(function(x){ return x!==oc&&!x.closest('.ov-top'); })[0]||oc; if(f) try{ f.focus({preventScroll:true}); }catch(_){ f.focus(); } },60); }
+    function ovClose(force){ if(!ov||!ov.classList.contains('open')) return; if(!force&&Date.now()-(ov.__t||0)<450) return; /* ignore ghost taps right after opening */
+      ov.classList.remove('open'); ovLock(false); if(ob) ob.setAttribute('aria-expanded','false');
+      var t=ovOpener&&document.contains(ovOpener)&&ovOpener.offsetParent!==null?ovOpener:ob; if(t&&t.focus) try{ t.focus({preventScroll:true}); }catch(_){} }
+    if(ob&&ov) ob.onclick=ovOpen;
+    function cl(){ ovClose(false); }
     if(oc)oc.onclick=cl; if(ov)ov.querySelectorAll('a').forEach(function(a){a.onclick=cl});
-    /* mega menu hover-intent: open only from the nav LINK text, small delay (2026-07-06) */
+    if(ov) document.addEventListener('keydown',function(e){ if(!ov.classList.contains('open')) return;
+      if(e.key==='Escape'){ e.preventDefault(); ovClose(true); return; }
+      if(e.key==='Tab'){ var f=ovFocusables(); if(!f.length) return; var first=f[0], last=f[f.length-1];
+        if(!ov.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+        else if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); } } });
+    /* mega menu: hover-intent from the nav LINK text (2026-07-06) + keyboard (2026-11-07): opens while focus is inside, Esc closes */
     document.querySelectorAll('.has-mega').forEach(function(m){
       var a=null; for(var i=0;i<m.children.length;i++){ if(m.children[i].tagName==='A'){a=m.children[i];break;} }
       var panel=m.querySelector('.mega'); if(!a||!panel) return;
       var ot,ct;
-      function doOpen(){ clearTimeout(ct); ot=setTimeout(function(){ m.classList.add('mega-open'); },140); }
-      function doClose(){ clearTimeout(ot); ct=setTimeout(function(){ m.classList.remove('mega-open'); },180); }
+      a.setAttribute('aria-haspopup','true'); a.setAttribute('aria-expanded','false');
+      if(!panel.id) panel.id='mega'+Math.random().toString(36).slice(2,7); a.setAttribute('aria-controls',panel.id);
+      function setOpen(on){ m.classList.toggle('mega-open',on); if(on) m.classList.remove('mega-shut'); a.setAttribute('aria-expanded',on?'true':'false'); }
+      function doOpen(){ clearTimeout(ct); ot=setTimeout(function(){ setOpen(true); },140); }
+      function doClose(){ clearTimeout(ot); ct=setTimeout(function(){ if(!m.contains(document.activeElement)||!m.matches(':focus-within')) setOpen(false); },180); }
       a.addEventListener('mouseenter',doOpen);
       a.addEventListener('mouseleave',doClose);
       panel.addEventListener('mouseenter',function(){ if(m.classList.contains('mega-open')){ clearTimeout(ct); clearTimeout(ot); } });
       panel.addEventListener('mouseleave',doClose);
+      m.addEventListener('focusin',function(){ if(m.__escd){ m.__escd=false; return; } if(m.__kbd){ clearTimeout(ct); setOpen(true); } });
+      m.addEventListener('focusout',function(){ setTimeout(function(){ if(!m.contains(document.activeElement)){ setOpen(false); m.classList.remove('mega-shut'); } },0); });
+      /* Tab / ArrowDown from the trigger goes straight into the panel (deterministic, no wait on the CSS visibility transition) */
+      a.addEventListener('keydown',function(e){ if(e.key==='ArrowDown'||(e.key==='Tab'&&!e.shiftKey)){ var f=panel.querySelector('a[href]'); if(!f) return; e.preventDefault(); setOpen(true); panel.style.visibility='visible'; f.focus(); panel.style.visibility=''; } });
+      m.addEventListener('keydown',function(e){ if(e.key==='Escape'&&m.classList.contains('mega-open')){ e.preventDefault(); e.stopPropagation(); m.__escd=true; setOpen(false); m.classList.add('mega-shut'); a.focus(); } });
     });
+    /* only keyboard focus opens the mega (a mouse click on "Solutions" navigates as before) */
+    document.addEventListener('keydown',function(e){ if(e.key==='Tab'){ document.querySelectorAll('.has-mega').forEach(function(m){ m.__kbd=true; }); } },true);
+    document.addEventListener('mousedown',function(){ document.querySelectorAll('.has-mega').forEach(function(m){ m.__kbd=false; }); },true);
     /* accordion: only one Solutions group open at a time (2026-07-05) */
     if(ov)ov.querySelectorAll('.ov-acc').forEach(function(d){d.addEventListener('toggle',function(){if(d.open)ov.querySelectorAll('.ov-acc[open]').forEach(function(o){if(o!==d)o.open=false;})})});
-    if(!matchMedia('(hover:none)').matches){
+    if(!reduce&&!matchMedia('(hover:none)').matches){
       var dot=document.createElement('div');dot.className='cursor';document.body.appendChild(dot);
       var ring=document.createElement('div');ring.className='cursor-ring';document.body.appendChild(ring);
       var x=0,y=0,dx=0,dy=0,rx=0,ry=0;
@@ -406,17 +468,33 @@
       function no(){ btn.disabled=false; btn.textContent=old;
                      if(blurb)blurb.style.display='none'; if(fail)fail.style.display='block'; }
       /* fire-and-verify: Formsubmit needs one-time activation on BOOKING.email */
-      fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{
+      UC_SELF=true; var _wp=fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json'},
         body:JSON.stringify(payload)
-      }).then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
+      }); UC_SELF=false; _wp.then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
+        .then(function(j){ if(j&&(j.success===false||j.success==='false')) return Promise.reject('inactive'); return j; })
         .then(function(){ ok(); ucEv('generate_lead',{lead_type:'booking_wizard',service:payload.service||'',page:location.pathname});
           /* optional: mirror into UCpanel when it's wired */
           if(BOOKING.ucp){ try{ fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }catch(e){} }
         })
         .catch(function(){ no(); });
     };
+  }
+
+  /* ---------- stat counters (2026-11-07): the final value is baked into the HTML (crawlers, no-JS, reduced motion).
+     Animation counts 0 -> target only once the number scrolls into view; until then the baked text stays. ---------- */
+  function initCounters(){
+    var els=[].slice.call(document.querySelectorAll('.count[data-to]')); if(!els.length) return;
+    /* keeps any baked prefix/suffix ("100+") and only swaps the digits */
+    function put(el,v){ var t=el.textContent; el.textContent=/\d/.test(t)?t.replace(/\d[\d,.]*/,String(v)):String(v); }
+    function fill(el){ var to=el.getAttribute('data-to'); var cur=el.textContent.replace(/[^0-9]/g,''); if(!cur||cur==='0') put(el,to); }
+    if(reduce||!('IntersectionObserver' in window)){ els.forEach(fill); return; }
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(!e.isIntersecting) return; io.unobserve(e.target); var el=e.target, to=+el.getAttribute('data-to')||0, t0=null, D=1400;
+      put(el,0);
+      function f(ts){ if(t0===null) t0=ts; var k=Math.min(1,(ts-t0)/D), v=1-Math.pow(1-k,3); put(el,Math.round(to*v)); if(k<1) requestAnimationFrame(f); }
+      requestAnimationFrame(f); }); },{threshold:.6});
+    els.forEach(function(el){ fill(el); io.observe(el); });
   }
 
   /* ---------- lenis + gsap reveals ---------- */
@@ -431,7 +509,7 @@
       setTimeout(rz2,600);setTimeout(rz2,1600);setTimeout(rz2,3000);
       if(window.ResizeObserver){try{new ResizeObserver(rz2).observe(document.body);}catch(e){}}
     }
-    if(typeof Lenis!=='undefined'&&!isTouch){var l=new Lenis({lerp:0.1});window.__lenis=l;
+    if(typeof Lenis!=='undefined'&&!isTouch&&!reduce){var l=new Lenis({lerp:0.1});window.__lenis=l;
       if(hasG){l.on('scroll',ScrollTrigger.update);gsap.ticker.add(function(t){l.raf(t*1000)});gsap.ticker.lagSmoothing(0);}
       else{function raf(t){l.raf(t);requestAnimationFrame(raf)}requestAnimationFrame(raf);}
       /* recompute scrollable height after fonts/lottie/images reflow so the footer is always reachable */
@@ -441,10 +519,9 @@
       setTimeout(rz,600);setTimeout(rz,1600);setTimeout(rz,3000);
       if(window.ResizeObserver){try{new ResizeObserver(rz).observe(document.body);}catch(e){}}
     }
-    if(!hasG){document.querySelectorAll('.reveal').forEach(function(e){e.style.opacity=1;e.style.transform='none'});return;}
+    initCounters();
+    if(!hasG||reduce){document.querySelectorAll('.reveal').forEach(function(e){e.style.opacity=1;e.style.transform='none'});return;}
     gsap.utils.toArray('.reveal').forEach(function(el){gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 88%'}})});
-    gsap.utils.toArray('.count').forEach(function(el){var to=+el.getAttribute('data-to');
-      ScrollTrigger.create({trigger:el,start:'top 90%',once:true,onEnter:function(){gsap.to({v:0},{v:to,duration:1.4,ease:'power2.out',onUpdate:function(){el.textContent=Math.round(this.targets()[0].v)}})}});});
     gsap.utils.toArray('.tile').forEach(function(t,i){gsap.fromTo(t,{y:i%2?40:18},{y:i%2?-40:-18,ease:'none',scrollTrigger:{trigger:t,start:'top bottom',end:'bottom top',scrub:1}})});
   }
 
@@ -460,7 +537,8 @@
   /* ---------- Lottie ---------- */
   function initLottie(){ if(!window.lottie) return;
     document.querySelectorAll('.lottie-box[data-src]').forEach(function(el){
-      try{ lottie.loadAnimation({container:el,renderer:'svg',loop:true,autoplay:true,path:el.getAttribute('data-src')}); }catch(e){} }); }
+      try{ var an=lottie.loadAnimation({container:el,renderer:'svg',loop:!reduce,autoplay:!reduce,path:el.getAttribute('data-src')});
+        if(reduce) an.addEventListener('DOMLoaded',function(){ try{ an.goToAndStop(Math.max(0,an.totalFrames-1),true); }catch(_){} }); }catch(e){} }); }
 
   /* ---------- background effects (per page via data-fx) ---------- */
   function rgbOf(i){ var c=theme()[i]; return Math.round(c[0]*255)+','+Math.round(c[1]*255)+','+Math.round(c[2]*255); }
@@ -495,7 +573,8 @@
   function initMegaPreview(){ /* mega right panel is now a static CTA + socials card — no hover image swap */ }
   function initWorkCar(){
     var c=document.getElementById('workCar'); if(!c) return;
-    function step(dir){ var t=c.querySelector('.tile'); var dx=(t?t.offsetWidth+18:300)*dir; c.scrollBy({left:dx,behavior:'smooth'}); }
+    function rtl(){ return getComputedStyle(c).direction==='rtl'; }  /* RTL: "next" scrolls towards negative scrollLeft */
+    function step(dir){ var t=c.querySelector('.tile'); var dx=(t?t.offsetWidth+18:300)*dir*(rtl()?-1:1); c.scrollBy({left:dx,behavior:reduce?'auto':'smooth'}); }
     document.querySelectorAll('.wcar-btn').forEach(function(b){ b.addEventListener('click',function(){ step(parseInt(b.getAttribute('data-dir'),10)||1); }); });
     var down=false,moved=false,sx=0,sl=0;
     c.addEventListener('pointerdown',function(e){ down=true; moved=false; sx=e.clientX; sl=c.scrollLeft; });
@@ -632,86 +711,244 @@
     var bar=b.querySelector('.boot-bar i'); setTimeout(function(){ if(bar) bar.style.width='100%'; },80);
     setTimeout(function(){ b.classList.add('done'); document.body.style.overflow=''; try{sessionStorage.setItem('uc_booted','1');}catch(e){} setTimeout(function(){ if(b.parentNode) b.remove(); },900); },1600);
   }
-  /* ---------- booking popup (global, injected) ---------- */
+  /* ---------- booking popup (global, injected) — 2026-11-07 rebuild: 3 steps, audit mode, localised, keyboard-safe, honest success/fail ---------- */
   var BOOKING={
     w3f:'',  /* optional Web3Forms access key — if set, used instead of Formsubmit */
     email:'info@ummah-collective.com',  /* keyless Formsubmit delivery target (one-time activation) */
     ucp:''  /* UCpanel lead-intake URL — set once the dynamic panel is deployed */
   };
+  var BK_STR={
+    en:{k:'Book a call',kA:'Free AI audit',h1:'What can we help with?',s1:'Pick the closest fit and tell us where to look.',hA:'Your free AI audit',sA:'Instant score, written findings within 48 hours, a 30-minute walkthrough. Free. No pitch.',h2:'Preferred time',s2:'We confirm by email within one working day. Times are shown in your time zone, with Malaysia time (MYT) in brackets.',h3:'How to reach you',s3:'Free. 30 minutes. A written next step.',stepOf:'Step {n} of 3',selected:'Selected',change:'Change',web:'Your website',webPh:'yourcompany.com',company:'Company',opt:'optional',name:'Name',email:'Email',phone:'Phone or WhatsApp',msg:'Anything we should know?',msgPh:'Goals, the problem to solve, a deadline',next:'Next',back:'Back',send:'Send request',sending:'Sending…',hint:'Pick a day to see times.',eSvc:'Pick what you need to continue.',eWeb:'Add your website so we know what to audit.',eUrl:'That web address does not look right.',eSlot:'Pick a day and a time to continue.',eName:'Please add your name.',eEmail:'That email does not look right. We need it to confirm your time.',note:'By sending you agree to be contacted about your enquiry.',wa:'WhatsApp us',dH:'Request received.',dT:'Your preferred time: {t}. We confirm by email within one working day.',dA:'Your written findings follow within 48 hours. We confirm your walkthrough time by email.',dP:'Read our company profile (PDF)',fH:'That did not go through.',fT:'Your request did not reach us. Send it by email or WhatsApp and we reply within one working day.',fE:'Email us',fW:'WhatsApp us',fR:'Try again',close:'Close',
+      svc:{'ai-agents':['AI agents','Answer, qualify and follow up around the clock'],'automation':['Automation','Remove the manual steps'],'custom-crm':['Custom CRM','The system your team runs on'],'app-development':['Apps & software','Custom apps, shipped fast'],'web-design':['Web design','Sites that turn visits into enquiries'],'branding':['Branding','Identity and positioning'],'lead-generation':['Lead generation','A pipeline that compounds'],'seo-content':['SEO & content','Found on Google and in AI answers'],'social-media-automation':['Social media automation','Consistent posting without the hours'],'shariah-audit':['Shariah compliance audit','A structured review of your digital operations'],'audit':['Free AI audit','Score, written findings, a 30-minute walkthrough'],'other':['Something else','Tell us what you need']}},
+    de:{k:'Gespräch buchen',kA:'Kostenloses KI-Audit',h1:'Wobei können wir helfen?',s1:'Wählen Sie, was am besten passt, und sagen Sie uns, wo wir hinschauen sollen.',hA:'Ihr kostenloses KI-Audit',sA:'Sofortige Bewertung, schriftliche Ergebnisse innerhalb von 48 Stunden, 30 Minuten gemeinsames Durchgehen. Kostenlos. Ohne Verkaufsgespräch.',h2:'Wunschtermin',s2:'Wir bestätigen per E-Mail innerhalb eines Werktags. Zeiten in Ihrer Zeitzone, Malaysia-Zeit (MYT) in Klammern.',h3:'So erreichen wir Sie',s3:'Kostenlos. 30 Minuten. Ein schriftlicher nächster Schritt.',stepOf:'Schritt {n} von 3',selected:'Ausgewählt',change:'Ändern',web:'Ihre Website',webPh:'ihrefirma.de',company:'Unternehmen',opt:'optional',name:'Name',email:'E-Mail',phone:'Telefon oder WhatsApp',msg:'Was sollten wir wissen?',msgPh:'Ziele, das zu lösende Problem, eine Frist',next:'Weiter',back:'Zurück',send:'Anfrage senden',sending:'Wird gesendet…',hint:'Wählen Sie einen Tag, um Zeiten zu sehen.',eSvc:'Bitte wählen Sie aus, was Sie brauchen.',eWeb:'Bitte geben Sie Ihre Website an, damit wir wissen, was wir prüfen.',eUrl:'Diese Webadresse scheint nicht zu stimmen.',eSlot:'Bitte wählen Sie Tag und Uhrzeit.',eName:'Bitte geben Sie Ihren Namen an.',eEmail:'Diese E-Mail-Adresse scheint nicht zu stimmen. Wir brauchen sie, um Ihren Termin zu bestätigen.',note:'Mit dem Absenden stimmen Sie zu, dass wir Sie zu Ihrer Anfrage kontaktieren.',wa:'WhatsApp schreiben',dH:'Anfrage erhalten.',dT:'Ihr Wunschtermin: {t}. Wir bestätigen per E-Mail innerhalb eines Werktags.',dA:'Ihre schriftlichen Ergebnisse folgen innerhalb von 48 Stunden. Den Termin für das Durchgehen bestätigen wir per E-Mail.',dP:'Unser Unternehmensprofil lesen (PDF)',fH:'Das hat nicht geklappt.',fT:'Ihre Anfrage ist nicht bei uns angekommen. Senden Sie sie per E-Mail oder WhatsApp, wir antworten innerhalb eines Werktags.',fE:'E-Mail schreiben',fW:'WhatsApp schreiben',fR:'Erneut versuchen',close:'Schließen',
+      svc:{'ai-agents':['KI-Agenten','Beantworten, qualifizieren und nachfassen, rund um die Uhr'],'automation':['Automatisierung','Manuelle Schritte entfernen'],'custom-crm':['Individuelles CRM','Das System, mit dem Ihr Team arbeitet'],'app-development':['Apps & Software','Individuelle Apps, schnell geliefert'],'web-design':['Webdesign','Websites, die Besuche in Anfragen verwandeln'],'branding':['Branding','Identität und Positionierung'],'lead-generation':['Leadgenerierung','Eine Pipeline, die wächst'],'seo-content':['SEO & Content','Gefunden bei Google und in KI-Antworten'],'social-media-automation':['Social-Media-Automatisierung','Regelmäßig posten, ohne die Stunden'],'shariah-audit':['Shariah-Compliance-Audit','Eine strukturierte Prüfung Ihrer digitalen Abläufe'],'audit':['Kostenloses KI-Audit','Bewertung, schriftliche Ergebnisse, 30 Minuten Durchgehen'],'other':['Etwas anderes','Sagen Sie uns, was Sie brauchen']}},
+    ms:{k:'Tempah panggilan',kA:'Audit AI percuma',h1:'Apa yang boleh kami bantu?',s1:'Pilih yang paling hampir dan beritahu kami di mana untuk melihat.',hA:'Audit AI percuma anda',sA:'Skor segera, dapatan bertulis dalam masa 48 jam dan sesi penerangan 30 minit. Percuma. Tiada jualan.',h2:'Masa pilihan',s2:'Kami sahkan melalui e-mel dalam satu hari bekerja. Masa dipaparkan mengikut zon waktu anda, dengan waktu Malaysia (MYT) dalam kurungan.',h3:'Cara menghubungi anda',s3:'Percuma. 30 minit. Langkah seterusnya secara bertulis.',stepOf:'Langkah {n} daripada 3',selected:'Dipilih',change:'Tukar',web:'Laman web anda',webPh:'syarikatanda.com.my',company:'Syarikat',opt:'pilihan',name:'Nama',email:'E-mel',phone:'Telefon atau WhatsApp',msg:'Ada apa-apa yang patut kami tahu?',msgPh:'Matlamat, masalah yang perlu diselesaikan, tarikh akhir',next:'Seterusnya',back:'Kembali',send:'Hantar permintaan',sending:'Menghantar…',hint:'Pilih hari untuk melihat masa.',eSvc:'Pilih apa yang anda perlukan untuk teruskan.',eWeb:'Masukkan laman web anda supaya kami tahu apa yang perlu diaudit.',eUrl:'Alamat web itu kelihatan tidak betul.',eSlot:'Pilih hari dan masa untuk teruskan.',eName:'Sila masukkan nama anda.',eEmail:'E-mel itu kelihatan tidak betul. Kami memerlukannya untuk mengesahkan masa anda.',note:'Dengan menghantar, anda bersetuju untuk dihubungi berkenaan pertanyaan anda.',wa:'WhatsApp kami',dH:'Permintaan diterima.',dT:'Masa pilihan anda: {t}. Kami sahkan melalui e-mel dalam satu hari bekerja.',dA:'Dapatan bertulis anda akan dihantar dalam masa 48 jam. Kami sahkan masa sesi penerangan melalui e-mel.',dP:'Baca profil syarikat kami (PDF)',fH:'Permintaan tidak berjaya dihantar.',fT:'Permintaan anda tidak sampai kepada kami. Hantar melalui e-mel atau WhatsApp dan kami akan membalas dalam satu hari bekerja.',fE:'E-mel kami',fW:'WhatsApp kami',fR:'Cuba lagi',close:'Tutup',
+      svc:{'ai-agents':['Ejen AI','Menjawab, menapis dan membuat susulan sepanjang masa'],'automation':['Automasi','Buang langkah manual'],'custom-crm':['CRM tersuai','Sistem yang digunakan pasukan anda'],'app-development':['Aplikasi & perisian','Aplikasi tersuai, siap dengan pantas'],'web-design':['Reka bentuk web','Laman yang menukar lawatan kepada pertanyaan'],'branding':['Penjenamaan','Identiti dan kedudukan jenama'],'lead-generation':['Penjanaan prospek','Saluran prospek yang terus berkembang'],'seo-content':['SEO & kandungan','Ditemui di Google dan dalam jawapan AI'],'social-media-automation':['Automasi media sosial','Siaran konsisten tanpa menghabiskan masa'],'shariah-audit':['Audit pematuhan Syariah','Semakan berstruktur operasi digital anda'],'audit':['Audit AI percuma','Skor, dapatan bertulis, sesi penerangan 30 minit'],'other':['Lain-lain','Beritahu kami apa yang anda perlukan']}},
+    ar:{k:'احجز مكالمة',kA:'تدقيق ذكاء اصطناعي مجاني',h1:'كيف يمكننا مساعدتك؟',s1:'اختر الأقرب إلى حاجتك وأخبرنا أين ننظر.',hA:'تدقيقك المجاني بالذكاء الاصطناعي',sA:'تقييم فوري، ونتائج مكتوبة خلال 48 ساعة، وجلسة شرح مدتها 30 دقيقة. مجانًا ودون أي عرض بيع.',h2:'الموعد المفضّل',s2:'نؤكد الموعد بالبريد الإلكتروني خلال يوم عمل واحد. الأوقات معروضة بتوقيتك المحلي، وتوقيت ماليزيا (MYT) بين قوسين.',h3:'كيف نتواصل معك',s3:'مجانًا. 30 دقيقة. خطوة تالية مكتوبة.',stepOf:'الخطوة {n} من 3',selected:'المختار',change:'تغيير',web:'موقعك الإلكتروني',webPh:'yourcompany.com',company:'الشركة',opt:'اختياري',name:'الاسم',email:'البريد الإلكتروني',phone:'الهاتف أو واتساب',msg:'هل هناك ما يجب أن نعرفه؟',msgPh:'الأهداف، المشكلة المطلوب حلّها، موعد نهائي',next:'التالي',back:'رجوع',send:'أرسل الطلب',sending:'جارٍ الإرسال…',hint:'اختر يومًا لعرض الأوقات.',eSvc:'اختر ما تحتاجه للمتابعة.',eWeb:'أضف موقعك الإلكتروني لنعرف ما الذي سندقّقه.',eUrl:'يبدو أن عنوان الموقع غير صحيح.',eSlot:'اختر يومًا ووقتًا للمتابعة.',eName:'يرجى إدخال اسمك.',eEmail:'يبدو أن البريد الإلكتروني غير صحيح. نحتاجه لتأكيد موعدك.',note:'بإرسال الطلب، توافق على أن نتواصل معك بخصوص استفسارك.',wa:'راسلنا على واتساب',dH:'تم استلام طلبك.',dT:'موعدك المفضّل: {t}. نؤكده بالبريد الإلكتروني خلال يوم عمل واحد.',dA:'تصلك النتائج المكتوبة خلال 48 ساعة، ونؤكد موعد جلسة الشرح بالبريد الإلكتروني.',dP:'اقرأ الملف التعريفي لشركتنا (PDF)',fH:'لم يتم الإرسال.',fT:'لم يصلنا طلبك. أرسله عبر البريد الإلكتروني أو واتساب، وسنرد خلال يوم عمل واحد.',fE:'راسلنا بالبريد',fW:'راسلنا على واتساب',fR:'حاول مرة أخرى',close:'إغلاق',
+      svc:{'ai-agents':['وكلاء الذكاء الاصطناعي','يردّون ويؤهّلون العملاء ويتابعون على مدار الساعة'],'automation':['الأتمتة','التخلّص من الخطوات اليدوية'],'custom-crm':['نظام CRM مخصّص','النظام الذي يعمل عليه فريقك'],'app-development':['التطبيقات والبرمجيات','تطبيقات مخصّصة تُسلَّم بسرعة'],'web-design':['تصميم المواقع','مواقع تحوّل الزيارات إلى استفسارات'],'branding':['الهوية التجارية','الهوية والتموضع'],'lead-generation':['توليد العملاء المحتملين','مسار مبيعات ينمو باستمرار'],'seo-content':['تحسين البحث والمحتوى','الظهور في Google وفي إجابات الذكاء الاصطناعي'],'social-media-automation':['أتمتة وسائل التواصل','نشر منتظم دون إهدار الساعات'],'shariah-audit':['تدقيق الامتثال للشريعة','مراجعة منظّمة لعملياتك الرقمية'],'audit':['تدقيق ذكاء اصطناعي مجاني','تقييم ونتائج مكتوبة وجلسة شرح 30 دقيقة'],'other':['شيء آخر','أخبرنا بما تحتاجه']}},
+    zh:{k:'预约通话',kA:'免费 AI 审计',h1:'我们能帮您做什么？',s1:'选择最接近的一项，并告诉我们该看哪里。',hA:'您的免费 AI 审计',sA:'即时评分，48 小时内提供书面结论，以及 30 分钟讲解。免费，不推销。',h2:'首选时间',s2:'我们会在一个工作日内通过电子邮件确认。时间按您的时区显示，括号内为马来西亚时间（MYT）。',h3:'如何联系您',s3:'免费。30 分钟。书面的下一步建议。',stepOf:'第 {n} 步，共 3 步',selected:'已选择',change:'更改',web:'您的网站',webPh:'yourcompany.com',company:'公司',opt:'选填',name:'姓名',email:'电子邮件',phone:'电话或 WhatsApp',msg:'还有什么需要我们了解的吗？',msgPh:'目标、要解决的问题、截止日期',next:'下一步',back:'返回',send:'发送请求',sending:'正在发送…',hint:'选择日期以查看可用时间。',eSvc:'请选择您需要的服务。',eWeb:'请填写您的网站，以便我们知道审计对象。',eUrl:'网址格式似乎不正确。',eSlot:'请选择日期和时间。',eName:'请填写您的姓名。',eEmail:'电子邮件格式似乎不正确。我们需要用它来确认时间。',note:'发送即表示您同意我们就您的咨询与您联系。',wa:'WhatsApp 联系我们',dH:'已收到您的请求。',dT:'您的首选时间：{t}。我们会在一个工作日内通过电子邮件确认。',dA:'书面结论将在 48 小时内发送，讲解时间我们会通过电子邮件确认。',dP:'阅读我们的公司简介（PDF）',fH:'发送未成功。',fT:'您的请求未能送达。请通过电子邮件或 WhatsApp 发送，我们会在一个工作日内回复。',fE:'发送电子邮件',fW:'WhatsApp 联系我们',fR:'重试',close:'关闭',
+      svc:{'ai-agents':['AI 智能体','全天候回复、筛选并跟进客户'],'automation':['自动化','去掉手动步骤'],'custom-crm':['定制 CRM','团队每天使用的系统'],'app-development':['应用与软件','定制应用，快速交付'],'web-design':['网站设计','把访问转化为咨询的网站'],'branding':['品牌','品牌识别与定位'],'lead-generation':['获客','持续增长的销售管道'],'seo-content':['SEO 与内容','在 Google 和 AI 回答中被找到'],'social-media-automation':['社交媒体自动化','稳定发布，不占用您的时间'],'shariah-audit':['伊斯兰教法合规审计','对数字业务的结构化审查'],'audit':['免费 AI 审计','评分、书面结论、30 分钟讲解'],'other':['其他','告诉我们您的需求']}},
+    tr:{k:'Görüşme planla',kA:'Ücretsiz AI denetimi',h1:'Size nasıl yardımcı olabiliriz?',s1:'En yakın seçeneği seçin ve nereye bakmamız gerektiğini söyleyin.',hA:'Ücretsiz AI denetiminiz',sA:'Anında puan, 48 saat içinde yazılı bulgular ve 30 dakikalık bir değerlendirme görüşmesi. Ücretsiz. Satış konuşması yok.',h2:'Tercih ettiğiniz saat',s2:'Bir iş günü içinde e-postayla onaylıyoruz. Saatler kendi saat diliminizde, Malezya saati (MYT) parantez içinde gösterilir.',h3:'Size nasıl ulaşalım',s3:'Ücretsiz. 30 dakika. Yazılı bir sonraki adım.',stepOf:'Adım {n} / 3',selected:'Seçilen',change:'Değiştir',web:'Web siteniz',webPh:'sirketiniz.com',company:'Şirket',opt:'isteğe bağlı',name:'Ad soyad',email:'E-posta',phone:'Telefon veya WhatsApp',msg:'Bilmemiz gereken bir şey var mı?',msgPh:'Hedefler, çözülecek sorun, bir son tarih',next:'İleri',back:'Geri',send:'Talebi gönder',sending:'Gönderiliyor…',hint:'Saatleri görmek için bir gün seçin.',eSvc:'Devam etmek için ihtiyacınızı seçin.',eWeb:'Neyi denetleyeceğimizi bilmemiz için web sitenizi ekleyin.',eUrl:'Bu web adresi doğru görünmüyor.',eSlot:'Devam etmek için bir gün ve saat seçin.',eName:'Lütfen adınızı yazın.',eEmail:'Bu e-posta adresi doğru görünmüyor. Saatinizi onaylamak için ona ihtiyacımız var.',note:'Göndererek talebinizle ilgili sizinle iletişime geçmemizi kabul etmiş olursunuz.',wa:'WhatsApp’tan yazın',dH:'Talebiniz alındı.',dT:'Tercih ettiğiniz saat: {t}. Bir iş günü içinde e-postayla onaylıyoruz.',dA:'Yazılı bulgularınız 48 saat içinde gelir. Görüşmenin saatini e-postayla onaylıyoruz.',dP:'Şirket profilimizi okuyun (PDF)',fH:'Gönderilemedi.',fT:'Talebiniz bize ulaşmadı. E-posta veya WhatsApp ile gönderin, bir iş günü içinde yanıt veriyoruz.',fE:'E-posta gönderin',fW:'WhatsApp’tan yazın',fR:'Tekrar deneyin',close:'Kapat',
+      svc:{'ai-agents':['AI ajanları','Gece gündüz yanıtlar, nitelendirir ve takip eder'],'automation':['Otomasyon','Manuel adımları kaldırın'],'custom-crm':['Özel CRM','Ekibinizin üzerinde çalıştığı sistem'],'app-development':['Uygulama & yazılım','Özel uygulamalar, hızla teslim'],'web-design':['Web tasarımı','Ziyaretleri taleplere dönüştüren siteler'],'branding':['Marka','Kimlik ve konumlandırma'],'lead-generation':['Müşteri adayı üretimi','Büyüyen bir satış hattı'],'seo-content':['SEO & içerik','Google’da ve AI yanıtlarında bulunun'],'social-media-automation':['Sosyal medya otomasyonu','Saatlerinizi harcamadan düzenli paylaşım'],'shariah-audit':['Şeriata uygunluk denetimi','Dijital operasyonlarınızın yapılandırılmış incelemesi'],'audit':['Ücretsiz AI denetimi','Puan, yazılı bulgular, 30 dakikalık görüşme'],'other':['Başka bir şey','Neye ihtiyacınız olduğunu yazın']}}
+  };
+  var BK_SVC=['ai-agents','automation','custom-crm','app-development','web-design','branding','lead-generation','seo-content','social-media-automation','shariah-audit','audit','other'];
+  var BK_ALIAS={'noon-os':'custom-crm','free-audit':'audit','ai-audit':'audit'};
+  var BK_EXTRA={'launch-bundle':'Launch Bundle'};  /* product presets kept as-is (product names are not translated) */
+  /* Availability in MYT minutes-from-midnight, by MYT weekday. Evening block 20:00–22:00 MYT so DACH (afternoon) and Gulf (late afternoon) can book.
+     HARD RULE: never offer Wednesday 16:00–18:00 MYT (enforced again in bkBlocked, whatever AVAIL says). */
+  var BK_AVAIL={1:[[840,1140],[1200,1320]],2:[[690,810],[900,1020],[1200,1320]],3:[[660,840],[1200,1320]],4:[[630,900],[1200,1320]]};
+  function bkBlocked(dow,t){ return dow===3 && t<1080 && t+30>960; }
   function initBooking(){
     if(document.getElementById('ucbk')) return;
-    var WA='https://wa.me/601133262709';
-    var svc=[['ai-agents','AI Agents','Agents that sell &amp; support 24/7'],['automation','Automation','Cut overhead, keep output'],['app-development','App &amp; Software','Custom apps, shipped fast'],['web-design','Web &amp; Platforms','Sites that convert'],['branding','Branding &amp; Identity','Perception is strategy'],['custom-crm','Custom CRM','The system your team runs on'],['lead-generation','Lead Generation','A pipeline that compounds'],['marketing-ads','Marketing &amp; Ads','Demand, engineered'],['strategy','Strategy &amp; Market Entry','The roadmap that aligns it'],['other','Something else','Tell us what you need']];
-    var ind=[['','&mdash;'],['halal-fnb','Halal / F&amp;B'],['beauty','Beauty &amp; skincare'],['fashion','Fashion &amp; modest wear'],['finance','Finance / fintech'],['education','Education'],['travel','Travel / hospitality'],['tech','Tech / SaaS'],['retail','Retail / e-commerce'],['services','Professional services'],['other','Other']];
-    var tl=[['','&mdash;'],['asap','ASAP'],['1-3m','1&ndash;3 months'],['3-6m','3&ndash;6 months'],['exploring','Just exploring']];
-    var heard=[['','&mdash;'],['search','Google / search'],['referral','Referral'],['social','Social media'],['linkedin','LinkedIn'],['event','Event'],['other','Other']];
-    var contact=[['email','Email'],['whatsapp','WhatsApp'],['phone','Phone call'],['any','Any is fine']];
-    var AVAIL={1:[[840,1140]],2:[[690,810],[900,1020]],3:[[660,840]],4:[[630,900]]};
-    var DOWn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MONn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    function fmtT(x){var h=Math.floor(x/60),mm=x%60,ap=h<12?'AM':'PM',h12=h%12||12;return h12+':'+(mm<10?'0'+mm:mm)+' '+ap;}
-    function slotStarts(w){var o=[];w.forEach(function(p){for(var t=p[0];t+30<=p[1];t+=30)o.push(t);});return o;}
-    function opts(a){return a.map(function(o){return '<option value="'+o[0]+'">'+o[1]+'</option>';}).join('');}
-    function tiles(a){return a.map(function(o){return '<button type="button" class="ucbk-opt" data-val="'+o[0]+'"><b>'+o[1]+'</b><span>'+o[2]+'</span></button>';}).join('');}
-    var heads=[['What can we help with?','Pick the closest fit &mdash; you can add detail next.'],['About your business','So we come prepared.'],['Your project','A little context goes a long way.'],['Pick a time','Choose a slot &mdash; all times Malaysia time (MYT).'],['How to reach you','We&rsquo;ll confirm your meeting by email.']];
-    var m=document.createElement('div'); m.id='ucbk'; m.className='ucbk'; m.setAttribute('aria-hidden','true');
-    m.innerHTML='<div class="ucbk-back"></div><div class="ucbk-card" role="dialog" aria-modal="true" aria-label="Book a call"><button class="ucbk-x" type="button" aria-label="Close">&#10005;</button><div class="ucbk-body"><div class="ucbk-k">Book a call</div><h3 class="ucbk-h" id="ucbkH">'+heads[0][0]+'</h3><p class="ucbk-sub" id="ucbkS">'+heads[0][1]+'</p><div class="ucbk-prog"><i class="on"></i><i></i><i></i><i></i><i></i></div><form class="ucbk-form form" novalidate><div class="ucbk-step on" data-step="0"><div class="ucbk-opts">'+tiles(svc)+'</div></div><div class="ucbk-step" data-step="1"><div class="ucbk-row"><label>Company<input name="company" placeholder="&nbsp;"></label><label>Website<input name="website" placeholder="https://&hellip;"></label></div><label class="ucbk-full">Industry / type<select name="industry">'+opts(ind)+'</select></label></div><div class="ucbk-step" data-step="2"><label class="ucbk-full">When do you want to start?<select name="timeline">'+opts(tl)+'</select></label><label class="ucbk-full">What do you want to achieve?<textarea name="message" placeholder="Goals, the problem to solve, anything useful&hellip;"></textarea></label><label class="ucbk-full">How did you hear about us?<select name="heard">'+opts(heard)+'</select></label></div><div class="ucbk-step" data-step="3"><div class="ucbk-days" id="ucbkDays"></div><div class="ucbk-slots" id="ucbkSlots"><div class="ucbk-slothint">Select a day above to see times.</div></div></div><div class="ucbk-step" data-step="4"><div class="ucbk-row"><label>Name*<input name="name" required placeholder="&nbsp;"></label><label>Email*<input name="email" type="email" required placeholder="you@company.com"></label></div><div class="ucbk-row"><label>Phone / WhatsApp<input name="phone" placeholder="+60&hellip;"></label><label>Preferred contact<select name="contact">'+opts(contact)+'</select></label></div></div><div class="ucbk-nav"><button type="button" class="btn btn-ghost ucbk-prev" hidden>&larr; Back</button><span class="ucbk-spacer"></span><button type="button" class="btn btn-fill ucbk-next">Next &rarr;</button><button type="submit" class="btn btn-fill ucbk-go" hidden>Send request</button></div><div class="ucbk-note">By sending you agree to be contacted about your enquiry. &middot; <a href="'+WA+'" target="_blank" rel="noopener" class="ucbk-walink">WhatsApp us</a></div></form><div class="ucbk-done" hidden><div class="ucbk-tick">&#10003;</div><h3 class="ucbk-h">Request received.</h3><p class="ucbk-sub ucbk-dsub">Thank you &mdash; we&rsquo;ll be in touch shortly.</p></div></div></div>';
+    var WA='https://wa.me/601133262709', MAIL='info@ummah-collective.com';
+    var L=(document.documentElement.getAttribute('lang')||'en').slice(0,2); if(!BK_STR[L]) L='en';
+    var T=BK_STR[L], RTL=(L==='ar');
+    var LOC={en:'en-GB',de:'de-DE',ms:'ms-MY',ar:'ar-u-nu-latn',zh:'zh-CN',tr:'tr-TR'}[L]||'en-GB';
+    var esc=function(x){ return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); };
+    var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/, URL_RE=/^(https?:\/\/)?([a-z0-9¡-￿-]+\.)+[a-z¡-￿]{2,}(:\d+)?(\/\S*)?$/i;
+    var fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
+    var TZ=''; try{ TZ=Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){}
+    var fT=null,fM=null,fD=null; try{ fT=new Intl.DateTimeFormat(LOC,{hour:'2-digit',minute:'2-digit'}); fM=new Intl.DateTimeFormat('en-GB',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Kuala_Lumpur'}); fD=new Intl.DateTimeFormat(LOC,{weekday:'short',day:'numeric',month:'short'}); }catch(e){}
+    function tLocal(d){ return fT?fT.format(d):d.toTimeString().slice(0,5); }
+    function tMYT(d){ return fM?fM.format(d):''; }
+    var sameTZ=(function(){ var n=new Date(); return n.getTimezoneOffset()===-480; })();
+    function svcTile(id){ var s=T.svc[id]; return '<button type="button" class="ucbk-opt" data-val="'+id+'" aria-pressed="false"><b>'+esc(s[0])+'</b><span>'+esc(s[1])+'</span></button>'; }
+    function svcName(id){ return (T.svc[id]&&T.svc[id][0])||BK_EXTRA[id]||id; }
+    var ar=RTL?'&larr;':'&rarr;', arb=RTL?'&rarr;':'&larr;';
+    var m=document.createElement('div'); m.id='ucbk'; m.className='ucbk'; m.setAttribute('aria-hidden','true'); m.setAttribute('lang',L); m.setAttribute('dir',RTL?'rtl':'ltr');
+    m.innerHTML='<div class="ucbk-back"></div><div class="ucbk-card" role="dialog" aria-modal="true" aria-labelledby="ucbkH" aria-describedby="ucbkS">'
+      +'<button class="ucbk-x" type="button" aria-label="'+esc(T.close)+'">&#10005;</button><div class="ucbk-body">'
+      +'<div class="ucbk-k" id="ucbkK">'+esc(T.k)+'</div><h2 class="ucbk-h" id="ucbkH" tabindex="-1">'+esc(T.h1)+'</h2><p class="ucbk-sub" id="ucbkS">'+esc(T.s1)+'</p>'
+      +'<div class="ucbk-progw"><div class="ucbk-prog" aria-hidden="true"><i class="on"></i><i></i><i></i></div><p class="ucbk-stepn" id="ucbkN" aria-live="polite" aria-atomic="true"></p></div>'
+      +'<form class="ucbk-form form" novalidate>'
+      /* step 1: need + website (+ company) */
+      +'<div class="ucbk-step on" data-step="0">'
+        +'<div class="ucbk-chosen" hidden><span class="ucbk-chk">'+esc(T.selected)+': <b class="ucbk-chn"></b></span><button type="button" class="ucbk-chg">'+esc(T.change)+'</button></div>'
+        +'<div class="ucbk-opts" role="group" aria-labelledby="ucbkH">'+BK_SVC.map(svcTile).join('')+'</div>'
+        +'<p class="ucbk-err" id="ucbkEsvc" role="alert" hidden></p>'
+        +'<div class="ucbk-row"><label class="ucbk-lw"><span class="ucbk-lt">'+esc(T.web)+' <i class="ucbk-optl">('+esc(T.opt)+')</i></span><input name="website" type="text" inputmode="url" autocomplete="url" dir="ltr" placeholder="'+esc(T.webPh)+'" aria-describedby="ucbkEweb"><span class="ucbk-err" id="ucbkEweb" role="alert" hidden></span></label>'
+        +'<label><span class="ucbk-lt">'+esc(T.company)+' <i>('+esc(T.opt)+')</i></span><input name="company" autocomplete="organization"></label></div>'
+      +'</div>'
+      /* step 2: preferred time */
+      +'<div class="ucbk-step" data-step="1"><div class="ucbk-days" id="ucbkDays" role="group" aria-label="'+esc(T.h2)+'"></div><div class="ucbk-slots" id="ucbkSlots" role="group" aria-label="'+esc(T.h2)+'"><div class="ucbk-slothint">'+esc(T.hint)+'</div></div><p class="ucbk-err" id="ucbkEslot" role="alert" hidden></p></div>'
+      /* step 3: contact */
+      +'<div class="ucbk-step" data-step="2"><div class="ucbk-row"><label>'+esc(T.name)+'<input name="name" required autocomplete="name" aria-describedby="ucbkEname"><span class="ucbk-err" id="ucbkEname" role="alert" hidden></span></label>'
+        +'<label>'+esc(T.email)+'<input name="email" type="email" inputmode="email" autocomplete="email" required dir="ltr" placeholder="you@company.com" aria-describedby="ucbkEemail"><span class="ucbk-err" id="ucbkEemail" role="alert" hidden></span></label></div>'
+        +'<label class="ucbk-full"><span class="ucbk-lt">'+esc(T.phone)+' <i>('+esc(T.opt)+')</i></span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+60 …"></label>'
+        +'<label class="ucbk-full"><span class="ucbk-lt">'+esc(T.msg)+' <i>('+esc(T.opt)+')</i></span><textarea name="message" placeholder="'+esc(T.msgPh)+'"></textarea></label></div>'
+      +'<div class="ucbk-nav"><button type="button" class="btn btn-ghost ucbk-prev" hidden><span class="ucbk-ar" aria-hidden="true">'+arb+'</span> '+esc(T.back)+'</button><span class="ucbk-spacer"></span><button type="button" class="btn btn-fill ucbk-next">'+esc(T.next)+' <span class="ucbk-ar" aria-hidden="true">'+ar+'</span></button><button type="submit" class="btn btn-fill ucbk-go" hidden>'+esc(T.send)+'</button></div>'
+      +'<div class="ucbk-note">'+esc(T.note)+' &middot; <a href="'+WA+'" target="_blank" rel="noopener" class="ucbk-walink">'+esc(T.wa)+'</a></div></form>'
+      +'<div class="ucbk-done" hidden><div class="ucbk-tick" aria-hidden="true">&#10003;</div><h2 class="ucbk-h" tabindex="-1">'+esc(T.dH)+'</h2><p class="ucbk-sub ucbk-dsub"></p><a class="btn btn-ghost ucbk-pdf" href="https://ummah-collective.com/profile.pdf" target="_blank" rel="noopener">'+esc(T.dP)+'</a></div>'
+      +'<div class="ucbk-fail" hidden role="alert"><h2 class="ucbk-h" tabindex="-1">'+esc(T.fH)+'</h2><p class="ucbk-sub">'+esc(T.fT)+'</p><div class="ucbk-fbtns"><a class="btn btn-fill ucbk-fmail" href="mailto:'+MAIL+'">'+esc(T.fE)+'</a><a class="btn btn-ghost ucbk-fwa" href="'+WA+'" target="_blank" rel="noopener">'+esc(T.fW)+'</a><button type="button" class="btn btn-ghost ucbk-retry">'+esc(T.fR)+'</button></div><p class="ucbk-fmeta"><span class="ltr" dir="ltr">'+MAIL+'</span> &middot; <span class="ltr" dir="ltr">+60 11-3326 2709</span></p></div>'
+      +'</div></div>';
     document.body.appendChild(m);
-    var form=m.querySelector('.ucbk-form'), done=m.querySelector('.ucbk-done'), go=m.querySelector('.ucbk-go');
+    var card=m.querySelector('.ucbk-card'), form=m.querySelector('.ucbk-form'), done=m.querySelector('.ucbk-done'), fail=m.querySelector('.ucbk-fail'), go=m.querySelector('.ucbk-go');
     var steps=[].slice.call(m.querySelectorAll('.ucbk-step')), dots=[].slice.call(m.querySelectorAll('.ucbk-prog i'));
-    var prevb=m.querySelector('.ucbk-prev'), nextb=m.querySelector('.ucbk-next'), H=m.querySelector('#ucbkH'), S=m.querySelector('#ucbkS');
-    var daysEl=m.querySelector('#ucbkDays'), slotsEl=m.querySelector('#ucbkSlots');
-    var step=0, picked='', DAYS=[], slot=null;
-    function renderSlots(d){
-      var starts=slotStarts(AVAIL[d.getDay()]);
-      slotsEl.innerHTML=starts.map(function(t){return '<button type="button" class="ucbk-slot" data-t="'+t+'">'+fmtT(t)+'</button>';}).join('');
-      slotsEl.querySelectorAll('.ucbk-slot').forEach(function(b){ b.addEventListener('click',function(){ slotsEl.querySelectorAll('.ucbk-slot').forEach(function(x){x.classList.remove('sel');}); b.classList.add('sel'); slot={d:d,t:+b.getAttribute('data-t')}; }); });
-    }
+    var prevb=m.querySelector('.ucbk-prev'), nextb=m.querySelector('.ucbk-next'), H=m.querySelector('#ucbkH'), S=m.querySelector('#ucbkS'), K=m.querySelector('#ucbkK'), N=m.querySelector('#ucbkN');
+    var daysEl=m.querySelector('#ucbkDays'), slotsEl=m.querySelector('#ucbkSlots'), opts=m.querySelector('.ucbk-opts'), chosen=m.querySelector('.ucbk-chosen'), webIn=form.querySelector('[name=website]'), webLab=m.querySelector('.ucbk-lw .ucbk-optl');
+    var step=0, evStep=-1, picked='', audit=false, preset=false, DAYS=[], slot=null, opener=null, inerted=[], sent=false, lastKey=null;
+    /* ---- slots: generated in MYT, shown in the visitor's own time zone (MYT in brackets) ---- */
     function buildDays(){
-      DAYS=[]; var base=new Date(); base.setHours(0,0,0,0);
-      for(var i=1;i<=24&&DAYS.length<8;i++){ var nd=new Date(base.getTime()+i*864e5); if(AVAIL[nd.getDay()]) DAYS.push(nd); }
-      daysEl.innerHTML=DAYS.map(function(d,i){ return '<button type="button" class="ucbk-day" data-i="'+i+'"><b>'+DOWn[d.getDay()]+'</b><span>'+MONn[d.getMonth()]+' '+d.getDate()+'</span></button>'; }).join('');
-      slotsEl.innerHTML='<div class="ucbk-slothint">Select a day above to see times.</div>';
-      daysEl.querySelectorAll('.ucbk-day').forEach(function(b){ b.addEventListener('click',function(){ daysEl.querySelectorAll('.ucbk-day').forEach(function(x){x.classList.remove('sel');}); b.classList.add('sel'); renderSlots(DAYS[+b.getAttribute('data-i')]); }); });
+      DAYS=[]; var now=Date.now(), my=new Date(now+8*36e5), byKey={}, order=[];
+      for(var i=0;i<=24&&order.length<8;i++){
+        var Y=my.getUTCFullYear(), Mo=my.getUTCMonth(), D=my.getUTCDate()+i, dow=new Date(Date.UTC(Y,Mo,D)).getUTCDay(), win=BK_AVAIL[dow]; if(!win) continue;
+        win.forEach(function(w){ for(var t=w[0];t+30<=w[1];t+=30){ if(bkBlocked(dow,t)) continue;
+          var at=new Date(Date.UTC(Y,Mo,D,0,0)+ (t-480)*6e4); if(at.getTime()<now+12*36e5) continue;  /* at least 12h notice */
+          var key=at.getFullYear()+'-'+at.getMonth()+'-'+at.getDate();
+          if(!byKey[key]){ if(order.length>=8) continue; byKey[key]={date:at,slots:[]}; order.push(key); }
+          byKey[key].slots.push({at:at,dow:dow,t:t}); } });
+      }
+      DAYS=order.map(function(k){ return byKey[k]; });
+      daysEl.innerHTML=DAYS.map(function(d,i){ var lab=fD?fD.format(d.date):d.date.toDateString(); var p=lab.split(/,\s*|\s(?=\d)/);
+        return '<button type="button" class="ucbk-day" data-i="'+i+'" aria-pressed="false" aria-label="'+esc(lab)+'"><b>'+esc(p[0])+'</b><span>'+esc(p.slice(1).join(' '))+'</span></button>'; }).join('');
+      slotsEl.innerHTML='<div class="ucbk-slothint">'+esc(T.hint)+'</div>';
+      daysEl.querySelectorAll('.ucbk-day').forEach(function(b){ b.addEventListener('click',function(){ daysEl.querySelectorAll('.ucbk-day').forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-pressed','false');}); b.classList.add('sel'); b.setAttribute('aria-pressed','true'); slot=null; renderSlots(DAYS[+b.getAttribute('data-i')]); }); });
     }
-    function slotLabel(){ if(!slot) return ''; return DOWn[slot.d.getDay()]+', '+MONn[slot.d.getMonth()]+' '+slot.d.getDate()+' &middot; '+fmtT(slot.t)+' MYT'; }
-    function render(){
+    function renderSlots(d){
+      slotsEl.innerHTML=d.slots.map(function(s,i){ var lt=tLocal(s.at), mt=tMYT(s.at); var lab=(fD?fD.format(s.at):'')+' '+lt+(sameTZ?' MYT':' ('+mt+' MYT)');
+        return '<button type="button" class="ucbk-slot" data-i="'+i+'" aria-pressed="false" aria-label="'+esc(lab)+'"><b dir="ltr">'+esc(lt)+'</b>'+(sameTZ?'<i>MYT</i>':'<i dir="ltr">('+esc(mt)+' MYT)</i>')+'</button>'; }).join('');
+      slotsEl.querySelectorAll('.ucbk-slot').forEach(function(b){ b.addEventListener('click',function(){ slotsEl.querySelectorAll('.ucbk-slot').forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-pressed','false');}); b.classList.add('sel'); b.setAttribute('aria-pressed','true'); slot=d.slots[+b.getAttribute('data-i')]; err('ucbkEslot',''); }); });
+    }
+    function slotText(){ if(!slot) return ''; var lab=(fD?fD.format(slot.at):'')+', '+tLocal(slot.at); return sameTZ?lab+' MYT':lab+' ('+tMYT(slot.at)+' MYT)'; }
+    function slotMYT(){ if(!slot) return '-'; var d; try{ d=new Intl.DateTimeFormat('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',timeZone:'Asia/Kuala_Lumpur'}).format(slot.at); }catch(e){ d=''; }
+      return d+' '+tMYT(slot.at)+' MYT'+(sameTZ?'':' (visitor local '+tLocal(slot.at)+(TZ?', '+TZ:'')+')'); }
+    /* ---- errors ---- */
+    function err(id,msg,field){ var e=m.querySelector('#'+id); if(!e) return; e.textContent=msg||''; e.hidden=!msg; if(field){ if(msg) field.setAttribute('aria-invalid','true'); else field.removeAttribute('aria-invalid'); } }
+    function clearErr(){ m.querySelectorAll('.ucbk-err').forEach(function(e){ e.hidden=true; e.textContent=''; }); m.querySelectorAll('[aria-invalid]').forEach(function(f){ f.removeAttribute('aria-invalid'); }); }
+    function focusEl(el){ if(!el) return; try{ el.focus({preventScroll:false}); }catch(e){ el.focus(); } }
+    /* ---- render ---- */
+    function setMode(){
+      K.textContent=audit?T.kA:T.k;
+      opts.hidden=(audit||preset); chosen.hidden=!(preset&&!audit);
+      if(preset&&!audit) m.querySelector('.ucbk-chn').textContent=svcName(picked);
+      if(webLab) webLab.hidden=audit;  /* website required in audit mode */
+      webIn.required=audit;
+      opts.querySelectorAll('.ucbk-opt').forEach(function(x){ var on=x.getAttribute('data-val')===picked; x.classList.toggle('sel',on); x.setAttribute('aria-pressed',on?'true':'false'); });
+    }
+    function heads(){ if(step===0) return audit?[T.hA,T.sA]:[T.h1,T.s1]; if(step===1) return [T.h2,T.s2]; return [T.h3,audit?T.sA:T.s3]; }
+    function render(focus){
       steps.forEach(function(s,i){ s.classList.toggle('on',i===step); });
       dots.forEach(function(d,i){ d.classList.toggle('on',i<=step); });
-      H.innerHTML=heads[step][0]; S.innerHTML=heads[step][1];
-      prevb.hidden=(step===0); nextb.hidden=(step===0||step===steps.length-1); go.hidden=(step!==steps.length-1);
-      var card=m.querySelector('.ucbk-card'); if(card) card.scrollTop=0;
-      setTimeout(function(){ if(step>0){ var f=steps[step].querySelector('input,select,textarea'); if(f) f.focus(); } },120);
+      var h=heads(); H.textContent=h[0]; S.textContent=h[1];
+      N.textContent=T.stepOf.replace('{n}',step+1);
+      prevb.hidden=(step===0); nextb.hidden=(step===steps.length-1); go.hidden=(step!==steps.length-1);
+      card.scrollTop=0;
+      if(step!==evStep&&m.classList.contains('on')){ evStep=step; ucEv('booking_step',{step:step+1,mode:audit?'free-audit':'booking'}); }
+      if(focus===false) return;
+      setTimeout(function(){
+        var f=null;
+        if(fine){ if(step===0) f=(audit||preset)?webIn:(opts.querySelector('.ucbk-opt.sel')||opts.querySelector('.ucbk-opt')); else if(step===1) f=daysEl.querySelector('.sel')||daysEl.querySelector('.ucbk-day'); else f=form.querySelector('[name=name]'); }
+        focusEl(f||H);   /* touch: focus the heading (announces the step, no keyboard pop-up) */
+      },60);
     }
-    function go2(n){ step=Math.max(0,Math.min(steps.length-1,n)); render(); }
-    m.querySelectorAll('.ucbk-opt').forEach(function(b){ b.addEventListener('click',function(){ m.querySelectorAll('.ucbk-opt').forEach(function(x){x.classList.remove('sel');}); b.classList.add('sel'); picked=b.getAttribute('data-val'); go2(1); }); });
+    function validate(n){
+      clearErr();
+      if(n===0){
+        if(!audit&&!picked){ err('ucbkEsvc',T.eSvc); focusEl(opts.querySelector('.ucbk-opt')); return false; }
+        var w=webIn.value.trim();
+        if(audit&&!w){ err('ucbkEweb',T.eWeb,webIn); focusEl(webIn); return false; }
+        if(w&&!URL_RE.test(w)){ err('ucbkEweb',T.eUrl,webIn); focusEl(webIn); return false; }
+      }
+      if(n===1&&!slot){ err('ucbkEslot',T.eSlot); focusEl(daysEl.querySelector('.sel')?slotsEl.querySelector('.ucbk-slot'):daysEl.querySelector('.ucbk-day')); return false; }
+      if(n===2){
+        var nm=form.querySelector('[name=name]'), em=form.querySelector('[name=email]'), bad=null;
+        if(!nm.value.trim()){ err('ucbkEname',T.eName,nm); bad=bad||nm; }
+        if(!EMAIL_RE.test(em.value.trim())){ err('ucbkEemail',T.eEmail,em); bad=bad||em; }
+        if(bad){ focusEl(bad); return false; }
+      }
+      return true;
+    }
+    function go2(n){ if(n>step){ for(var k=step;k<n;k++){ if(!validate(k)){ step=k; render(false); return; } } } step=Math.max(0,Math.min(steps.length-1,n)); render(); }
+    opts.querySelectorAll('.ucbk-opt').forEach(function(b){ b.addEventListener('click',function(){ picked=b.getAttribute('data-val');
+      if(picked==='audit'){ audit=true; preset=false; }
+      setMode(); err('ucbkEsvc',''); render(false); if(audit){ var h=heads(); H.textContent=h[0]; S.textContent=h[1]; }
+      setTimeout(function(){ focusEl(webIn); },40); }); });
+    m.querySelector('.ucbk-chg').addEventListener('click',function(){ preset=false; setMode(); focusEl(opts.querySelector('.ucbk-opt.sel')||opts.querySelector('.ucbk-opt')); });
     nextb.addEventListener('click',function(){ go2(step+1); });
-    prevb.addEventListener('click',function(){ go2(step-1); });
-    function open(sv){ step=0; picked=sv||''; slot=null; try{form.reset();}catch(e){} m.querySelectorAll('.ucbk-opt').forEach(function(x){ x.classList.toggle('sel', !!sv&&x.getAttribute('data-val')===sv); }); buildDays(); form.hidden=false; done.hidden=true; render(); m.classList.add('on'); m.setAttribute('aria-hidden','false'); document.documentElement.style.overflow='hidden'; }
-    function close(){ m.classList.remove('on'); m.setAttribute('aria-hidden','true'); document.documentElement.style.overflow=''; }
-    window.ucOpenBooking=open;
+    prevb.addEventListener('click',function(){ clearErr(); step=Math.max(0,step-1); render(); });
+    form.addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.tagName==='INPUT'&&step<steps.length-1){ e.preventDefault(); go2(step+1); } });
+    ['website','name','email'].forEach(function(k){ var f=form.querySelector('[name='+k+']'); f.addEventListener('input',function(){ if(f.getAttribute('aria-invalid')){ f.removeAttribute('aria-invalid'); var e=m.querySelector('#'+f.getAttribute('aria-describedby')); if(e){e.hidden=true;e.textContent='';} } }); });
+    /* ---- open / close with focus management ---- */
+    function trapKeys(e){
+      if(!m.classList.contains('on')) return;
+      if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); close(); return; }
+      if(e.key!=='Tab') return;
+      var f=[].slice.call(card.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])')).filter(function(x){ return x.offsetParent!==null&&!x.closest('[hidden]'); });
+      if(!f.length) return; var first=f[0], last=f[f.length-1], a=document.activeElement;
+      if(!card.contains(a)){ e.preventDefault(); first.focus(); }
+      else if(e.shiftKey&&(a===first||a===H)){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey&&a===last){ e.preventDefault(); first.focus(); }
+    }
+    function setInert(on){
+      if(on){ inerted=[]; [].forEach.call(document.body.children,function(el){ if(el===m||el.tagName==='SCRIPT'||el.hasAttribute('inert')) return; el.setAttribute('inert',''); inerted.push(el); }); }
+      else { inerted.forEach(function(el){ el.removeAttribute('inert'); }); inerted=[]; }
+    }
+    function open(sv,from){
+      sv=(sv||'').toLowerCase(); sv=BK_ALIAS[sv]||sv;
+      var key=sv||'';
+      opener=from||document.activeElement;
+      if(sent||key!==lastKey){  /* keep half-filled answers when the same popup is reopened (Esc no longer loses state) */
+        try{form.reset();}catch(e){} clearErr(); slot=null; sent=false;
+        audit=(sv==='audit'); picked=audit?'audit':(sv&&(T.svc[sv]||BK_EXTRA[sv])?sv:''); preset=!!picked&&!audit;
+        step=0; buildDays();
+      }
+      lastKey=key; setMode();
+      form.hidden=false; done.hidden=true; fail.hidden=true; go.disabled=false; go.textContent=T.send;
+      m.classList.add('on'); m.setAttribute('aria-hidden','false');
+      document.documentElement.style.overflow='hidden'; document.documentElement.classList.add('ucbk-open');
+      try{ if(window.__lenis) window.__lenis.stop(); }catch(e){}
+      setInert(true); document.addEventListener('keydown',trapKeys,true);
+      ucEv('booking_open',{mode:audit?'free-audit':'booking',service:picked||'',page:location.pathname});
+      evStep=-1; render(false);
+      setTimeout(function(){ focusEl(m.querySelector('.ucbk-x')); },30);
+    }
+    function close(){
+      if(!m.classList.contains('on')) return;
+      m.classList.remove('on'); m.setAttribute('aria-hidden','true');
+      document.documentElement.style.overflow=''; document.documentElement.classList.remove('ucbk-open');
+      try{ if(window.__lenis) window.__lenis.start(); }catch(e){}
+      setInert(false); document.removeEventListener('keydown',trapKeys,true);
+      var t=opener; opener=null; if(t&&t.focus&&document.contains(t)){ try{ t.focus({preventScroll:true}); }catch(e){ t.focus(); } }
+    }
+    window.ucOpenBooking=function(sv){ open(sv); };
     m.querySelector('.ucbk-x').addEventListener('click',close);
     m.querySelector('.ucbk-back').addEventListener('click',close);
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&m.classList.contains('on')) close(); });
+    m.querySelector('.ucbk-retry').addEventListener('click',function(){ fail.hidden=true; form.hidden=false; step=2; render(); });
     document.addEventListener('click',function(e){
-      var a=e.target.closest?e.target.closest('a[href],button[data-book]'):null; if(!a) return;
-      var h=a.getAttribute('href')||a.getAttribute('data-book')||'';
-      if(/(^|\/)booking\.html/.test(h)||a.hasAttribute('data-book')){ e.preventDefault(); var sv=''; var mm=h.match(/service=([a-z-]+)/); if(mm) sv=mm[1]; open(sv); }
+      var a=e.target.closest?e.target.closest('a[href],button[data-book]'):null; if(!a||m.contains(a)) return;
+      var h=a.getAttribute('href')||'', db=a.getAttribute('data-book');
+      if(/(^|\/)booking\.html/.test(h)||a.hasAttribute('data-book')){ e.preventDefault(); var sv=''; var mm=h.match(/[?&](?:service|sv)=([a-z-]+)/i); if(mm) sv=mm[1]; else if(db&&db!=='true'&&db!=='') sv=db; open(sv,a); }
     },true);
+    /* ---- send ---- */
     form.addEventListener('submit',function(e){
       e.preventDefault();
-      var d={}; ['company','website','industry','timeline','message','heard','name','email','phone','contact'].forEach(function(k){var el=form.querySelector('[name='+k+']'); d[k]=el?el.value.trim():'';});
-      d.service=picked; var meeting=slotLabel();
-      if(!d.name||!d.email){ go2(4); setTimeout(function(){ (d.name?form.querySelector('[name=email]'):form.querySelector('[name=name]')).focus(); },140); return; }
-      go.disabled=true; go.innerHTML='Sending&hellip;';
-      var subj='New booking request - '+d.name+(d.company?(' ('+d.company+')'):'');
-      var mtxt=(meeting||'-').replace(/&middot;/g,'-');
-      var notes='Service: '+(d.service||'-')+' | Meeting: '+mtxt+' | Industry: '+(d.industry||'-')+' | Timeline: '+(d.timeline||'-')+' | Preferred: '+(d.contact||'-')+' | Heard: '+(d.heard||'-')+' | Website: '+(d.website||'-')+(d.message?(' | '+d.message):'');
+      for(var k=0;k<steps.length;k++){ if(!validate(k)){ step=k; render(false); return; } }
+      var d={}; ['company','website','name','email','phone','message'].forEach(function(k){var el=form.querySelector('[name='+k+']'); d[k]=el?el.value.trim():'';});
+      var service=audit?'free-audit':picked, mtxt=slotMYT(), shown=slotText();
+      go.disabled=true; go.textContent=T.sending;
+      var subj=(audit?'Free AI audit request - ':'New booking request - ')+d.name+(d.company?(' ('+d.company+')'):'');
+      var notes='Service: '+service+' | Meeting: '+mtxt+' | Website: '+(d.website||'-')+' | Lang: '+L+(d.message?(' | '+d.message):'');
+      var body={_subject:subj,_captcha:'false',_template:'table',name:d.name,email:d.email,phone:d.phone||'-',company:d.company||'-',website:d.website||'-',service:service,requested_meeting:mtxt,visitor_timezone:TZ||'-',language:L,message:d.message||'-',page:location.href};
       var jobs=[];
-      if(BOOKING.w3f){ jobs.push(fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({access_key:BOOKING.w3f,subject:subj,from_name:'UC Website',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,requested_meeting:mtxt,industry:d.industry,timeline:d.timeline,preferred_contact:d.contact,how_heard:d.heard,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
-      else if(BOOKING.email){ jobs.push(fetch('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({_subject:subj,_captcha:'false',_template:'table',name:d.name,email:d.email,phone:d.phone,company:d.company,website:d.website,service:d.service,requested_meeting:mtxt,industry:d.industry,timeline:d.timeline,preferred_contact:d.contact,how_heard:d.heard,message:d.message,page:location.href})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
-      if(BOOKING.ucp){ jobs.push(fetch(BOOKING.ucp,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:d.name,email:d.email,phone:d.phone,company:d.company,title:d.service,source:'website',status:'new',notes:notes})}).then(function(r){return r.ok;}).catch(function(){return false;})); }
-      var dsub=m.querySelector('.ucbk-dsub'); if(dsub) dsub.innerHTML = meeting ? ('Your requested time: <b>'+meeting+'</b>.<br>We&rsquo;ll confirm by email shortly.') : 'Thank you &mdash; we&rsquo;ll be in touch shortly to lock a time.';
-      Promise.all(jobs).then(function(res){ if(res.some(Boolean)) ucEv('generate_lead',{lead_type:'booking_popup',service:d.service||'',page:location.pathname}); form.hidden=true; done.hidden=false; go.disabled=false; go.innerHTML='Send request'; });
+      if(BOOKING.w3f){ var wb={}; for(var x in body) wb[x]=body[x]; wb.access_key=BOOKING.w3f; wb.subject=subj; wb.from_name='UC Website'; jobs.push(ucPost('https://api.web3forms.com/submit',wb)); }
+      else if(BOOKING.email){ jobs.push(ucPost('https://formsubmit.co/ajax/'+encodeURIComponent(BOOKING.email),body)); }
+      if(BOOKING.ucp){ jobs.push(ucPost(BOOKING.ucp,{name:d.name,email:d.email,phone:d.phone,company:d.company,title:service,source:'website',status:'new',notes:notes})); }
+      Promise.all(jobs).then(function(res){
+        go.disabled=false; go.textContent=T.send;
+        if(res.some(Boolean)){
+          sent=true; form.hidden=true; done.hidden=false;
+          m.querySelector('.ucbk-dsub').textContent=audit?T.dA:T.dT.replace('{t}',shown);
+          ucEv('generate_lead',{lead_type:audit?'free-audit':'booking',service:service||'',page:location.pathname});
+          focusEl(done.querySelector('.ucbk-h'));
+        } else {
+          var mb='Name: '+d.name+'\nEmail: '+d.email+(d.phone?'\nPhone: '+d.phone:'')+(d.company?'\nCompany: '+d.company:'')+(d.website?'\nWebsite: '+d.website:'')+'\nService: '+service+'\nPreferred time: '+mtxt+(d.message?'\n\n'+d.message:'');
+          m.querySelector('.ucbk-fmail').href='mailto:'+MAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(mb);
+          m.querySelector('.ucbk-fwa').href=WA+'?text='+encodeURIComponent((audit?'Free AI audit request':'Booking request')+'\n'+mb);
+          form.hidden=true; fail.hidden=false;
+          ucEv('booking_fail',{mode:audit?'free-audit':'booking',service:service||'',page:location.pathname});
+          focusEl(fail.querySelector('.ucbk-h'));
+        }
+      });
     });
   }
   function initTop(){
