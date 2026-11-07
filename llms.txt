@@ -7,7 +7,7 @@ Ummah Collective Sdn. Bhd. is a boutique studio, not a large agency. It designs 
 ## Services
 - [AI Agents](https://ummah-collective.com/service-ai-agents.html): agents that answer, qualify and follow up on WhatsApp, email and web chat.
 - [Automation and Workflows](https://ummah-collective.com/service-automation.html): removing manual handoffs between tools, quotes, invoices and CRM records.
-- [Custom CRM](https://ummah-collective.com/service-custom-crm.html): one source of truth built around how a company actually sells.
+- [Custom CRM and business systems (Noon OS)](https://ummah-collective.com/noon-os.html): one source of truth built around how a company actually sells.
 - [App and Software Development](https://ummah-collective.com/service-app-development.html): internal tools, portals and products.
 - [Web Design and Platforms](https://ummah-collective.com/service-web-design.html): premium multilingual sites engineered for conversion.
 - [Branding and Strategy](https://ummah-collective.com/service-branding.html): positioning, identity and messaging.
@@ -21,20 +21,24 @@ Ummah Collective Sdn. Bhd. is a boutique studio, not a large agency. It designs 
 - [DeenGen](https://www.deengen.com): Shariah-compliant crypto and trading education. Education only, never financial advice.
 - [Rayhan Kids](https://www.rayhan-kids.com): premium Islamic interactive products for children.
 - [niyya](https://niyya.my): halal beverage brand.
-- [Ummah Hub](https://ummah-collective.com/ummah-hub): coworking space in Petaling Jaya, Kuala Lumpur, built on Islamic values.
+- [Ummah Hub](https://ummah-collective.com/ummah-hub/): coworking space in Petaling Jaya, Kuala Lumpur, built on Islamic values.
 
 ## Verified case study
 - [ANAAKA](https://ummah-collective.com/project-anaaka.html): European halal skincare brand taken from no Malaysian presence to a flagship store at TRX over 16 months. Measured results: 10,446 sessions, 8,244 users, 6,432 Instagram followers, and 18.45 percent of revenue from organic search. These are the only client performance figures Ummah Collective publishes.
 
 ## Facts
-- Company: Ummah Collective Sdn. Bhd., Oval Damansara, Taman Tun Dr Ismail, 60000 Kuala Lumpur, Malaysia.
+- Company: Ummah Collective Sdn. Bhd., founded 2022. Studio at Oval Damansara, Taman Tun Dr Ismail, 60000 Kuala Lumpur (Petaling Jaya side of the Klang Valley), Malaysia.
+- Track record: 100+ projects delivered for 60+ clients; the team has built brands, websites and software for 12+ years, starting with a Berlin agency in 2014.
+- Markets: Malaysia and Southeast Asia, Germany and the wider EU (DACH), and the GCC.
+- Languages: the site and the work run in six languages: English, German, Malay, Arabic, Chinese and Turkish.
+- Contact: info@ummah-collective.com, +60 11 3326 2709 (WhatsApp), or book a call via the booking page listed below.
 - Tax identification number: C 58604106000.
-- Contact: info@ummah-collective.com, +60 11 3326 2709.
 - Pricing anchors: websites from about EUR 4,800; AI agents, automation and CRM scoped per project; Noon OS from EUR 19 per month.
+- Free AI audit: an instant website score, written findings within 48 hours, then a 30-minute walkthrough. Free, no pitch.
 - Delivery model: fixed-scope sprints, systems retainers, and outcome-based engagements.
 
 ## Reference
 - [Insights articles](https://ummah-collective.com/insights.html): long-form guides on AI agents, automation, CRM, halal-market growth and search visibility.
 - [Company profile PDF](https://ummah-collective.com/profile.pdf)
-- [Book a call](https://ummah-collective.com/meet.html)
-- [Free AI and website audit](https://ummah-collective.com/audit.html)
+- [Book a call](https://ummah-collective.com/booking.html)
+- [Free AI audit: 60-second website score](https://ummah-collective.com/audit.html)

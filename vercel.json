@@ -45,6 +45,24 @@
           "value": "public, max-age=300"
         }
       ]
+    },
+    {
+      "source": "/:page(anaaka-thumb|arju-thumb|liquid-preview).html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/:lang(ar|de|ms|tr|zh)/:page(anaaka-thumb|arju-thumb|liquid-preview).html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "rewrites": [

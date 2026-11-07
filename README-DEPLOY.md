@@ -4,7 +4,7 @@ Static site (HTML + CSS + JS). No build step required — every page is pre-gene
 
 ## Stack
 - Static HTML (52 pages + redirects) in the repo root
-- `assets/uc.css`, `assets/uc.js`, `assets/*-lottie.json`
+- `uc.css`, `uc.js` (repo root), `*-lottie.json`
 - 3D/animation: Three.js, GSAP, Lenis, lottie-web (loaded from CDN — no install)
 
 ## Auto-deploy via GitHub (recommended)
