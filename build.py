@@ -24,6 +24,10 @@ CDN=('<script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/th
      '<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>'
      '<script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>'
      '<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>')
+def _cdn(body):
+    """2026-11-07 (M18): every library stays `defer`; lottie-web only ships on pages that render a .lottie-box.
+    three.js/GSAP/Lenis drive the aurora, reveals and smooth scroll that uc.js boots on every page."""
+    return CDN if 'lottie-box' in body else CDN.replace('<script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>','')
 # Perf/SEO head block (2026-07-04): preconnect to every external origin, fonts moved
 # from uc.css @import (render-blocking chain) to <link> here, social card og-image-2026.png.
 PERF=('<style>html{background:#0B0F0E;color:#F6F3EC}body{background:#0B0F0E;margin:0}</style>'
@@ -32,6 +36,7 @@ PERF=('<style>html{background:#0B0F0E;color:#F6F3EC}body{background:#0B0F0E;marg
       '<link rel="manifest" href="site.webmanifest">'
       '<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="UMMAH">'
       '<link rel="preconnect" href="https://api.fontshare.com"><link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>'
+      '<link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdn.fontshare.com/wf/2GQIT54GKQY3JRFTSHS4ARTRNRQISSAA/3CIP5EBHRRHE5FVQU3VFROPUERNDSTDF/JTSL5QESUXATU47LCPUNHZQBDDIWDOSW.woff2">'
       '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
       '<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin><link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>'
       '<link rel="dns-prefetch" href="https://s0.wp.com">'
@@ -44,7 +49,7 @@ LAWAL_IMG='https://lh3.googleusercontent.com/d/1BpqQExtjIRQ0K2pUCsDAMehLjHKXviSH
 LAWAL_BIO=('Trained in Islamic finance at <strong>INCEIF University</strong>, Kuala Lumpur &mdash; the global university of Islamic finance &mdash; '
  'with research on <strong>cryptocurrencies</strong> and the Shariah questions of digital assets. He brings industry experience across sectors, '
  'including work with <strong>Zakat Selangor</strong> on optimising its operations.')
-BRAND='<a href="index.html" class="brand"><img class="logo" src="'+LOGO+'" alt="Ummah Collective"><span class="wmtext" style="display:none">Ummah Collective</span></a>'
+BRAND='<a href="index.html" class="brand"><img class="logo" src="'+LOGO+'" alt="Ummah Collective" width="400" height="377"><span class="wmtext" style="display:none">Ummah Collective</span></a>'
 
 # ---- SEO helpers ----
 def _plain(s): return re.sub('<[^>]+>','',html.unescape(str(s))).strip()
@@ -57,7 +62,19 @@ GLOBAL_LD=json.dumps({"@context":"https://schema.org","@graph":[
 FXMAP={'default':'aurora','services':'mesh','work':'particles','ventures':'grid','insights':'grid','contact':'aurora','about':'particles','market':'mesh'}
 WA='https://wa.me/601133262709'
 def U(i,w=1400): return f'https://images.unsplash.com/photo-{i}?auto=format&fit=crop&w={w}&q=80'
-def img(src,alt,cls="ph"): return f'<figure class="{cls}"><img src="{src}" alt="{alt}" loading="lazy"></figure>'
+_DIMS={}
+def _wh(src):
+    """2026-11-07 (N7): intrinsic width/height for local /assets images so the browser reserves space."""
+    if not src.startswith('/assets/'): return ''
+    pth=os.path.join(OUT,src.split('?')[0].lstrip('/'))
+    if pth not in _DIMS:
+        try:
+            from PIL import Image as _Im
+            with _Im.open(pth) as _i: _DIMS[pth]=_i.size
+        except Exception: _DIMS[pth]=None
+    d=_DIMS[pth]
+    return f' width="{d[0]}" height="{d[1]}"' if d else ''
+def img(src,alt,cls="ph"): return f'<figure class="{cls}"><img src="{src}" alt="{alt}"{_wh(src)} loading="lazy"></figure>'
 
 # ---- contextual animated explainers (SVG + CSS, "Lottie-style") ----
 EX={
@@ -294,7 +311,7 @@ def footer():
     # Symmetric 5-column footer (Attila 2026-07-04): brand | Services | Products | Company | Connect
     svc="".join(f'<a href="service-{s}.html">{t}</a>' for s,t in [("ai-agents","AI Agents"),("automation","Automation"),("app-development","App Development"),("web-design","Web Design"),("branding","Branding &amp; Strategy"),("lead-generation","Lead Gen &amp; Marketing")])
     return f'''<footer><div class="wrap"><div class="f-grid">
-    <div><a href="index.html" class="brand"><img class="logo" src="{LOGO}" alt="Ummah Collective"><span class="wmtext" style="display:none">Ummah Collective</span></a>
+    <div><a href="index.html" class="brand"><img class="logo" src="{LOGO}" alt="Ummah Collective" width="400" height="377"><span class="wmtext" style="display:none">Ummah Collective</span></a>
       <p style="margin-top:14px;max-width:32ch" data-i18n="ftag">Intelligence, with integrity. An applied-AI studio for the trust economy &mdash; the software, agents and systems modern companies run on.</p></div>
     <div><div class="h6" data-i18n="services">Services</div>{svc}<a href="services.html" data-i18n="allsol">All solutions &rarr;</a></div>
     <div><div class="h6" data-i18n="products">Products</div><a href="https://www.noon-os.com" target="_blank" rel="noopener">Noon OS</a><a href="https://www.deengen.com" target="_blank" rel="noopener">DeenGen.com</a><a href="https://www.rayhan-kids.com" target="_blank" rel="noopener">Rayhan Kids</a><a href="https://niyya.my" target="_blank" rel="noopener">niyya.</a><a href="launch-bundle.html">Launch Bundle</a><a href="ventures.html" data-i18n="ventures">Ventures</a></div>
@@ -332,7 +349,7 @@ def page(fname,title,desc,body,aurora="default",bg="",ld="",og="website"):
 {nav()}{overlay()}{fab()}
 <main class="page" id="main">
 {body}
-</main>{footer()}{CDN}<script defer src="uc.js"></script></body></html>'''
+</main>{footer()}{_cdn(body)}<script defer src="uc.js"></script></body></html>'''
     open(os.path.join(OUT,fname),"w",encoding="utf-8").write(html); return fname
 
 def phero(crumb,eyebrow,h1,intro,h1key=''):
@@ -614,7 +631,7 @@ def _tile(s,n,c,y,b,im,v=''):
     if s in LOGOIMG:
         inner='<div class="ph logo-ph"><img class="tlogo" src="'+LOGOIMG[s]+'" alt="'+n+'" loading="eager" decoding="async"></div>'
     else:
-        inner='<div class="ph"><img src="'+_thumb(s,im)+'" alt="'+n+'" loading="lazy"></div>'
+        inner='<div class="ph"><img src="'+_thumb(s,im)+'" alt="'+n+'"'+_wh(_thumb(s,im))+' loading="lazy" decoding="async"></div>'
     return ('<a class="tile reveal '+v+'" href="project-'+s+'.html">'+inner+
             '<div class="meta"><div class="top"><span class="cat">'+c+'</span></div>'  # no dates on tiles (Attila 2026-07-04)
             '<div><div class="nm">'+n+'</div><div class="res">'+b+'</div></div></div></a>')
@@ -2194,7 +2211,7 @@ def home():
   <div class="reveal" style="display:flex;justify-content:center;margin-top:10px"><div class="lottie-box" data-src="pulse-lottie.json"></div></div>
 </div></section>
 
-<section><div class="wrap"><div class="sh"><h2 class="reveal" data-i18n="selwork">Selected work</h2><div class="wcar-head reveal"><span class="eyebrow"><span class="t"></span><span class="mono">(03) &mdash; 100+ projects</span></span><span class="wcar-nav"><button class="wcar-btn" data-dir="-1" type="button" aria-label="Previous">&larr;</button><button class="wcar-btn" data-dir="1" type="button" aria-label="Next">&rarr;</button></span></div></div><div class="wcar" id="workCar">{tiles}</div>
+<section><div class="wrap"><div class="sh"><h2 class="reveal" data-i18n="selwork">Selected work</h2><div class="wcar-head reveal"><span class="eyebrow"><span class="t"></span><span class="mono">(03) &mdash; 100+ projects</span></span><span class="wcar-nav"><button class="wcar-btn" data-dir="-1" type="button" aria-label="Previous">&larr;</button><button class="wcar-btn" data-dir="1" type="button" aria-label="Next">&rarr;</button></span></div></div><div class="wcar" id="workCar" style="scroll-snap-type:none;scroll-behavior:auto">{tiles}</div><script>addEventListener('load',function(){{setTimeout(function(){{var c=document.getElementById('workCar');if(c){{c.style.scrollSnapType='';c.style.scrollBehavior='';}}}},2500)}})</script>
   <div class="reveal" style="margin-top:18px"><a href="work.html" class="alink" data-i18n="work">See all work <span class="ar">&rarr;</span></a></div></div></section>
 
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal" data-i18n="products">Products</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Built in-house</span></div></div>
