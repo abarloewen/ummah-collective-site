@@ -2178,7 +2178,7 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
 <section style="padding-top:16px"><div class="wrap"><div class="article">
   <div class="art-hero reveal"><img src="{U(imgid)}" class="ld" alt="{_plain(title)}" loading="lazy"></div>
   <p class="lede reveal">{lede}</p>
-  <div class="reveal">{''.join(blocks).replace("<strong>","").replace("</strong>","")}</div>
+  <div class="reveal">{''.join(blocks).replace("<strong>","").replace("</strong>","").replace('href="service-custom-crm.html"','href="noon-os.html"')}</div>
   <div style="margin-top:36px;display:flex;gap:12px;flex-wrap:wrap"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="insights.html" class="btn btn-ghost">All insights</a></div>
 </div></div></section>'''+cta()
     ald=_ld({"@context":"https://schema.org","@type":"BlogPosting","headline":_plain(title),"description":_plain(lede),"image":U(imgid),"datePublished":str(date),"dateModified":str(ARTICLE_UPDATED.get(slug,date)),"inLanguage":"en","author":{"@id":SITE+"/#org"},"publisher":{"@id":SITE+"/#org"},"mainEntityOfPage":SITE+"/article-"+slug+".html"})
