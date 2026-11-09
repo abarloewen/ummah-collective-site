@@ -148,7 +148,7 @@ def explain(kind,cap):
           '<div class="lp-chart">'+('<span class="bar"></span>'*7)+'</div>'
           '<div class="lp-rows">'
           '<div class="lp-row"><span class="av"></span><span class="rt">Agent closed a &euro;4,200 deal</span><span class="pill">Autonomous</span></div>'
-          '<div class="lp-row"><span class="av"></span><span class="rt">47 leads scored overnight</span><span class="pill">AI</span></div>'
+          '<div class="lp-row"><span class="av"></span><span class="rt">Leads scored overnight</span><span class="pill">AI</span></div>'
           '<div class="lp-row"><span class="av"></span><span class="rt">Contract + invoice auto-sent</span><span class="pill">Done</span></div>'
           '</div></div></div>')
     return '<div class="demo reveal">'+inner+'<span class="cap">'+cap+'</span>'+DEMO_TAG+'</div>'
@@ -756,7 +756,7 @@ DEPTH={
    [("Hours lost","Gone to copy-paste, re-keying and chasing updates that should be automatic."),("Deals slip","Work falls through the cracks between disconnected tools and inboxes."),("Stale data","You decide on numbers that were already out of date this morning.")],
    "Custom software removes the tape &mdash; your data, your roadmap. Find your biggest leak with a free AI audit."),
  'web-design':("Your best salesperson","Your website is your hardest-working salesperson &mdash; or your weakest.",
-   "It sells every hour you don&rsquo;t, in every market you can&rsquo;t reach in person. A slow, generic, English-only site quietly turns away the exact buyers you paid to attract.",
+   "It sells every hour you don&rsquo;t, in every market you can&rsquo;t reach in person. A slow, generic, English-only site turns away the exact buyers you paid to attract, and you never see them leave.",
    [("The 3-second test","Half of visitors leave a slow or unclear page &mdash; and you never hear from them."),("Trust at a glance","People judge your credibility from your site before they read a single word."),("Speaks their language","Multilingual, fast and built to convert &mdash; so the right buyer says yes.")],
    "We build sites that sell while you sleep. See what yours could do."),
  'branding':("Perception is price","You&rsquo;re not expensive &mdash; you just look it.",
@@ -2340,6 +2340,7 @@ def home():
 
 def services_overview():
     rows="".join(f'<a class="idx-row" href="service-{s}.html"><span class="no">{n}</span><span class="ti">{t}</span><span class="de">{i}</span><span class="go">&rarr;</span></a>' for s,n,t,_,i,*_ in SERVICES)
+    rows+='<a class="idx-row" href="noon-os.html"><span class="no">'+('%02d'%(len(SERVICES)+1))+'</span><span class="ti">Custom Systems &amp; CRM</span><span class="de">One CRM built around how your team sells</span><span class="go">&rarr;</span></a>'  # QA 2026-11-10: Custom CRM lives on noon-os.html
     body=phero('<a href="index.html">Home</a> / Services',"What we build","Four pillars.<br><em>One accountable team.</em>",
         "AI agents, software, websites and growth, built by the same senior people, so nothing falls between vendors.",h1key='c_svch1',extra=hero_ctas(False))+f'''
 <section style="padding-top:24px"><div class="wrap"><div class="idx reveal">{rows}</div></div></section>
@@ -2631,7 +2632,7 @@ def noon_os_page():
       ("Records &amp; 360 views","Every call, email, deal and document in one place &mdash; customers, suppliers, anything."),
       ("Live dashboards","Real-time sales, ops and finance tracking &mdash; in your branding."),
       ("Automations built in","Quotes, invoices, reminders and reports on autopilot."),
-      ("WhatsApp &amp; AI agents","Capture and qualify leads on the channels SEA &amp; MENA actually use."),
+      ("WhatsApp &amp; AI agents","Capture and qualify leads on the channels your buyers in SEA &amp; MENA use every day."),
       ("Integrations &amp; APIs","Wired into your accounting, email, calendar and payments."),
       ("Multi-language","EN / BM / AR-RTL / ZH and more, out of the box."),
       ("You own it","Your data, your code, your roadmap &mdash; no per-seat tax.")]
@@ -2647,14 +2648,14 @@ def noon_os_page():
     faqs="".join(f'<details class="reveal"><summary>{q}<span class="pl">+</span></summary><p>{a}</p></details>' for q,a in faq)
     body=phero('<a href="index.html">Home</a> / <a href="services.html">Services</a> / Custom Systems &amp; CRM','Custom Systems &amp; CRM','One CRM built around how your team sells',
         "We design and build custom CRMs and internal systems around your real sales process: your stages, your fields, WhatsApp and email in one timeline, invoices and reports connected. No per-seat licences, and the code and data belong to you.",extra=hero_ctas(False))+proof_strip()+f'''
-<section style="padding-top:6px"><div class="wrap"><div class="reveal" style="max-width:66ch"><div class="eyebrow"><span class="t"></span><span class="mono">See it live</span></div><h2 style="font-size:clamp(26px,3vw,40px);margin-bottom:10px">A system that works the way you do</h2><p>Real features from the systems we&rsquo;ve built &mdash; boards, records, dashboards and automations &mdash; wired to how your team actually works, not a vendor&rsquo;s template.</p></div>
+<section style="padding-top:6px"><div class="wrap"><div class="reveal" style="max-width:66ch"><div class="eyebrow"><span class="t"></span><span class="mono">See it live</span></div><h2 style="font-size:clamp(26px,3vw,40px);margin-bottom:10px">A system that works the way you do</h2><p>Real features from the systems we&rsquo;ve built &mdash; boards, records, dashboards and automations &mdash; wired to how your team works, not a vendor&rsquo;s template.</p></div>
 <div class="grid g2 crmprev" style="gap:18px;margin-top:24px">{crm_pipeline()}{crm_contact()}{crm_dash()}{crm_auto()}{cap}</div></div></section>
 {crm_savings()}
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">What we build into it</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Capabilities</span></div></div><div class="grid g4" style="gap:14px">{fc}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="depth reveal"><div class="eyebrow"><span class="t"></span><span class="mono">Off the shelf, off the mark</span></div>
 <h2 class="depth-h">Off-the-shelf software makes you work its way.</h2>
-<p class="depth-lead">Generic tools force your team to bend to someone else&rsquo;s process &mdash; so people work around them, data scatters and cost quietly creeps. A system built for you fits exactly, removes the manual glue between your tools, and your team actually uses it.</p>
-<div class="grid g3 depth-cards" style="gap:16px;margin-top:26px"><div class="dpc reveal"><div class="dpc-k">Fits your process</div><div class="dpc-b">Stages, fields and views that match how you really operate.</div></div><div class="dpc reveal"><div class="dpc-k">Actually adopted</div><div class="dpc-b">When the tool fits, the team logs everything &mdash; so the data is real.</div></div><div class="dpc reveal"><div class="dpc-k">Grows with you</div><div class="dpc-b">New product line, market or workflow &mdash; the system bends, you don&rsquo;t.</div></div></div>
+<p class="depth-lead">Generic tools force your team to bend to someone else&rsquo;s process &mdash; so people work around them, data scatters and costs creep up unnoticed. A system built for you fits exactly, removes the manual glue between your tools, and your team keeps using it.</p>
+<div class="grid g3 depth-cards" style="gap:16px;margin-top:26px"><div class="dpc reveal"><div class="dpc-k">Fits your process</div><div class="dpc-b">Stages, fields and views that match how you really operate.</div></div><div class="dpc reveal"><div class="dpc-k">Adopted by the team</div><div class="dpc-b">When the tool fits, the team logs everything &mdash; so the data is real.</div></div><div class="dpc reveal"><div class="dpc-k">Grows with you</div><div class="dpc-b">New product line, market or workflow &mdash; the system bends, you don&rsquo;t.</div></div></div>
 <div class="depth-cta"><p>See what we&rsquo;d build for you &mdash; book a free workflow audit.</p><a href="booking.html?service=noon-os" class="btn btn-fill" data-i18n="book">Book a call</a></div></div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">How it works</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Idea to live in weeks</span></div></div><div class="grid g3" style="gap:14px">{stc}</div></div></section>
 {ladder()}
