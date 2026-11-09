@@ -1602,3 +1602,4 @@ html[lang=zh] body{font-family:'Noto Sans SC',var(--sans)}
 .anaaka-res .res-line{font-family:var(--disp);font-weight:500;font-size:clamp(22px,2.6vw,34px);letter-spacing:-.02em;line-height:1.15;max-width:30ch;margin-bottom:clamp(26px,3vw,40px)}
 .ready-line{margin-top:18px;color:var(--dim)}
 .contact-helper{margin-bottom:22px;color:var(--dim)}
+.anaaka-res .stat .n{font-size:clamp(40px,5.2vw,80px)}

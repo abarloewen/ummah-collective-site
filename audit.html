@@ -7,7 +7,7 @@
 <main class="page" id="main">
 <header class="phero"><div class="lottie-box pmark" data-src="orbit-lottie.json"></div><div class="wrap"><div class="crumb reveal"><a href="index.html">Home</a> / Audit</div>
   <div class="eyebrow reveal"><span class="t"></span><span class="mono">Free AI audit</span></div>
-  <h1 class="reveal">Your digital footprint,<br><em>scored.</em></h1><p class="reveal">Answer a few quick questions. We pull live data on your website&rsquo;s performance and SEO, grade your digital infrastructure, and show you exactly where growth is leaking &mdash; in about 60 seconds.</p></div></header>
+  <h1 class="reveal">Your digital footprint,<br><em>scored.</em></h1><p class="reveal">Answer a few questions. We score your site&rsquo;s speed and search basics in about 60 seconds, send written findings within 48 hours and walk you through them in 30 minutes. Free.</p></div></header>
 <section style="padding-top:24px;padding-bottom:110px"><div class="wrap">
 <style>
 .ux-card{max-width:920px;margin:0 auto;background:rgba(10,14,13,.62);border:1px solid rgba(246,243,236,.11);border-radius:20px;padding:clamp(22px,4vw,42px);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
@@ -128,8 +128,8 @@
   <p class="ux-k" style="margin-top:8px">Infrastructure &amp; growth findings</p>
   <div id="uxFinds"></div>
   <div class="ux-cta">
-   <button type="button" class="btn btn-fill" id="uxPrint">Download as PDF</button>
-   <a class="btn btn-ghost" href="booking.html">Walk through this with us &mdash; free</a>
+   <a class="btn btn-fill" id="uxBook" href="booking.html?service=audit">Book my 30-minute walkthrough</a>
+   <button type="button" class="btn btn-ghost" id="uxPrint">Download as PDF</button>
    <a class="btn btn-ghost" href="https://wa.me/601133262709" target="_blank" rel="noopener">WhatsApp us</a>
   </div>
   <p class="ux-note">A copy has reached our team &mdash; we&rsquo;ll follow up with the deeper human analysis.</p>
@@ -213,4 +213,7 @@ document.getElementById('uxF4').addEventListener('submit',async function(e){e.pr
     <div><div class="h6" data-i18n="products">Products</div><a href="https://www.noon-os.com" target="_blank" rel="noopener">Noon OS</a><a href="https://www.deengen.com" target="_blank" rel="noopener">DeenGen.com</a><a href="https://www.rayhan-kids.com" target="_blank" rel="noopener">Rayhan Kids</a><a href="https://niyya.my" target="_blank" rel="noopener">niyya.</a><a href="launch-bundle.html">Launch Bundle</a><a href="ventures.html" data-i18n="ventures">Ventures</a></div>
     <div><div class="h6" data-i18n="company">Company</div><a href="work.html" data-i18n="work">Work</a><a href="about.html" data-i18n="about">About</a><a href="process.html">How we work</a><a href="founders-club.html" data-i18n="club">Founders Club</a><a href="insights.html" data-i18n="insights">Insights</a></div>
     <div><div class="h6" data-i18n="connect">Connect</div><a href="booking.html" data-i18n="book">Book a call</a><a href="mailto:info@ummah-collective.com" data-i18n="email">Email</a><a href="https://wa.me/601133262709" data-i18n="whatsapp">WhatsApp</a><a href="https://www.linkedin.com/company/ummah-collective/">LinkedIn</a><a href="imprint.html" data-i18n="imprint">Legal notice</a><a href="privacy.html" data-i18n="f_privacy">Privacy Policy</a><a href="terms.html" data-i18n="f_terms">Terms of Use</a></div>
-  </div><div class="f-bot"><span>&copy; 2026 Ummah Collective Sdn. Bhd.</span><span>Kuala Lumpur &middot; Berlin &middot; Borderless</span></div></div></footer><script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script><script defer src="uc.js"></script></body></html>
+  </div><div class="f-bot"><span>&copy; 2026 Ummah Collective Sdn. Bhd.</span><span>Kuala Lumpur &middot; Berlin &middot; Borderless</span></div></div></footer><script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script><script>/* 2026-11-10: results CTA opens the booking popup in audit mode (uc.js intercepts booking.html links), prefilled from the audit form */
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#uxBook');if(!b)return;setTimeout(function(){var m=document.getElementById('ucbk');if(!m)return;
+var src=document.querySelector('.ux-wrap')||document;function g(n){var el=document.querySelector('#main [name='+n+']');return el?el.value.trim():'';}
+[['website','url'],['company','company'],['email','email'],['name','name']].forEach(function(p){var v=g(p[1]),t=m.querySelector('[name='+p[0]+']');if(v&&t&&!t.value){t.value=v;t.dispatchEvent(new Event('input',{bubbles:true}));}});},60);});</script><script defer src="uc.js"></script></body></html>

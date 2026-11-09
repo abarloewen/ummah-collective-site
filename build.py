@@ -56,7 +56,7 @@ def _plain(s): return re.sub('<[^>]+>','',html.unescape(str(s))).strip()
 def _ld(obj): return '<script type="application/ld+json">'+json.dumps(obj,ensure_ascii=False)+'</script>'
 def faq_ld(faq): return _ld({"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":_plain(q),"acceptedAnswer":{"@type":"Answer","text":_plain(a)}} for q,a in faq]})
 GLOBAL_LD=json.dumps({"@context":"https://schema.org","@graph":[
- {"@type":["Organization","ProfessionalService"],"@id":SITE+"/#org","name":"Ummah Collective","legalName":"Ummah Collective Sdn. Bhd.","url":SITE+"/","logo":SITE+"/assets/logo-square.png","image":SITE+"/assets/logo-square.png","email":"info@ummah-collective.com","telephone":"+60 11 3326 2709","foundingDate":"2022","founder":{"@type":"Person","name":"Attila von Barloewen"},"address":{"@type":"PostalAddress","streetAddress":"Oval Damansara, Taman Tun Dr Ismail","addressLocality":"Kuala Lumpur","postalCode":"60000","addressRegion":"Wilayah Persekutuan Kuala Lumpur","addressCountry":"MY"},"geo":{"@type":"GeoCoordinates","latitude":3.1316938,"longitude":101.6309275},"hasMap":"https://www.google.com/maps?cid=5094825734493406137","priceRange":"$$","areaServed":["MY","DE","AE","SA","SG"],"description":"Applied-AI studio — the software, AI agents, CRMs and growth systems modern companies run on. Kuala Lumpur, Berlin, borderless.","sameAs":["https://www.linkedin.com/company/ummah-collective/","https://www.instagram.com/ummahcollective/","https://www.google.com/maps?cid=5094825734493406137"]},
+ {"@type":["Organization","ProfessionalService"],"@id":SITE+"/#org","name":"Ummah Collective","legalName":"Ummah Collective Sdn. Bhd.","url":SITE+"/","logo":SITE+"/assets/logo-square.png","image":SITE+"/assets/logo-square.png","email":"info@ummah-collective.com","telephone":"+60 11 3326 2709","foundingDate":"2022","founder":{"@type":"Person","name":"Attila von Barloewen"},"address":{"@type":"PostalAddress","streetAddress":"Oval Damansara, Taman Tun Dr Ismail","addressLocality":"Kuala Lumpur","postalCode":"60000","addressRegion":"Wilayah Persekutuan Kuala Lumpur","addressCountry":"MY"},"geo":{"@type":"GeoCoordinates","latitude":3.1316938,"longitude":101.6309275},"hasMap":"https://www.google.com/maps?cid=5094825734493406137","priceRange":"$$","foundingLocation":{"@type":"Place","name":"Kuala Lumpur, Malaysia"},"location":[{"@type":"Place","name":"Kuala Lumpur, Malaysia"},{"@type":"Place","name":"Petaling Jaya, Malaysia"}],"areaServed":[{"@type":"Country","name":"Malaysia"},{"@type":"Place","name":"Southeast Asia"},{"@type":"Country","name":"Germany"},{"@type":"Place","name":"Europe"},{"@type":"Place","name":"Gulf Cooperation Council"}],"knowsLanguage":["en","de","ms","ar","tr","zh"],"slogan":"Intelligence, with integrity.","description":"Applied-AI studio in Kuala Lumpur and Petaling Jaya, founded 2022: AI agents, websites, custom CRMs and growth systems. 100+ client projects for 60+ clients, 12+ years of craft, six languages. Markets: Malaysia and Southeast Asia, Germany and Europe, the Gulf.","sameAs":["https://www.linkedin.com/company/ummah-collective/","https://www.instagram.com/ummahcollective/","https://www.google.com/maps?cid=5094825734493406137"]},
  {"@type":"WebSite","@id":SITE+"/#website","url":SITE+"/","name":"Ummah Collective","inLanguage":["en","de","ms","ar","zh","tr"],"publisher":{"@id":SITE+"/#org"}}
 ]},ensure_ascii=False)
 FXMAP={'default':'aurora','services':'mesh','work':'particles','ventures':'grid','insights':'grid','contact':'aurora','about':'particles','market':'mesh'}
@@ -933,8 +933,10 @@ def project_page(s,n,c,y,b,scope,url,im):
         herosec=('<section style="padding-top:10px"><div class="wrap"><img class="pimg reveal" src="'+GIF+'" alt="anaaka.com.my" loading="eager"></div></section>') if GIF else _showcase
         SEIBU='https://lh3.googleusercontent.com/d/1_mAKHo5dU3Hp3J5heN8PQDl3T24K6OKg=w1000'  # SEIBU/TRX store photo (Attila's Drive, via Google CDN)
         store_img=(f'<img class="pimg reveal" src="{SEIBU}" alt="ANAAKA flagship at SEIBU, TRX Mall, Kuala Lumpur" loading="lazy">') if SEIBU else ''
-        res=[("10,446","Sessions generated"),("8,244","Users acquired"),("18.45%","Revenue from organic search"),("6,432","Instagram followers"),("15,212","Page views in one month"),("98.55%","Engagement rate")]
-        rcells="".join('<div class="stat"><b>'+v+'</b><div class="k">'+k+'</div></div>' for v,k in res)
+        res=[("10,446","Sessions"),("8,244","Users"),("18.45%","Revenue from organic search"),("6,432","Instagram followers during the engagement")]
+        rcells="".join('<div class="stat"><div class="n">'+v+'</div><div class="k">'+k+'</div></div>' for v,k in res)
+        resband=('<section class="anaaka-res" style="padding-top:10px"><div class="wrap"><p class="res-line reveal">Zero Malaysian presence to a flagship store at TRX in 16 months.</p>'
+          '<div class="stats reveal">'+rcells+'</div></div></section>')
         built=[("Brand &amp; identity","Name, positioning, packaging story and the visual system for a premium halal house."),("E-commerce","A conversion-built, multilingual Shopify store &mdash; fast, and made to sell."),("Analytics &amp; tracking","Full measurement, so every channel and every ringgit of spend is accountable."),("Content &amp; social","A content engine and social presence &mdash; @anaaka.official &mdash; that compounds."),("Market-entry strategy","The plan to take a European brand into Malaysia from a standing start."),("Retail &amp; activation","A flagship at TRX and a retail activation at SEIBU KL, with a national ambassador.")]
         bcards="".join('<div class="card reveal"><h3 style="font-size:19px">'+t+'</h3><p>'+d+'</p></div>' for t,d in built)
         skin=["Overnight Revitalizer","Priming Anti-Aging Day Cream &middot; SPF 15","Firming Anti-Aging Serum","Radiance-Boosting Eye Serum","Foaming Cleanser &amp; Make-up Remover"]
@@ -942,7 +944,7 @@ def project_page(s,n,c,y,b,scope,url,im):
         skinli="".join('<li><span class="ck">&#10003;</span><div><b>'+x+'</b></div></li>' for x in skin)
         hairli="".join('<li><span class="ck">&#10003;</span><div><b>'+x+'</b></div></li>' for x in hair)
         IGPROC='<script>(function(){function p(){if(window.instgrm&&window.instgrm.Embeds){window.instgrm.Embeds.process();}else{setTimeout(p,400);}}if(document.readyState==="complete")p();else window.addEventListener("load",function(){setTimeout(p,300);});})();</script>'
-        body=phero(crumb,f"Case / {c}",n,"A European halal skincare house &mdash; built from the ground up, then brought to Malaysia and made a category leader.")+f'''
+        body=phero(crumb,f"Case / {c}",n,"A European halal skincare house &mdash; built from the ground up, then brought to Malaysia and made a category leader.")+resband+f'''
 {herosec}
 <section style="padding-top:0"><div class="wrap"><div class="grid g2" style="align-items:start;gap:26px">
   <div class="reveal"><div class="eyebrow"><span class="t"></span><span class="mono">The brand</span></div>
@@ -960,9 +962,6 @@ def project_page(s,n,c,y,b,scope,url,im):
   </div>
 </div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">What we built</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Full ecosystem</span></div></div><div class="grid g3">{bcards}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="eyebrow reveal"><span class="t"></span><span class="mono">The results &middot; 16 months</span></div>
-  <div class="stats reveal" style="margin-top:24px">{rcells}</div>
-  <p class="reveal" style="margin-top:18px;max-width:64ch;color:var(--dim)">From zero Malaysian presence to category leader &mdash; and 4,980 clicks in the first 24 hours of a single social push. Proof that a brand built as an asset keeps paying back.</p></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">The range</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Skincare &amp; halal haircare</span></div></div>
   <div class="grid g2" style="gap:26px;align-items:start">
     <div class="reveal"><div class="mono" style="color:var(--acc2);margin-bottom:12px">Skincare</div><ul class="incl">{skinli}</ul></div>
@@ -980,7 +979,7 @@ def project_page(s,n,c,y,b,scope,url,im):
     </div>
     <div class="reveal">{store_img}</div>
   </div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">On Instagram</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">@anaaka.official &middot; 23.7k followers</span></div></div>
+<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">On Instagram</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">@anaaka.official</span></div></div>
   <div class="ig-feed reveal">
     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DaM5cdNI4nu/" data-instgrm-version="14"></blockquote>
     <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DaCm1H1sOQS/" data-instgrm-version="14"></blockquote>
@@ -989,7 +988,7 @@ def project_page(s,n,c,y,b,scope,url,im):
   <div style="text-align:center;margin-top:26px"><a href="https://www.instagram.com/anaaka.official/" class="btn btn-fill" target="_blank" rel="noopener">Follow @anaaka.official &rarr;</a></div>
 </div></section>
 <script async src="//www.instagram.com/embed.js"></script>{IGPROC}
-<section style="padding-top:0"><div class="wrap" style="text-align:center"><div class="quote reveal" style="margin:0 auto">&ldquo;They built our entire ecosystem &mdash; brand, site, tracking and a flagship store. <em>Not a campaign. An asset.</em>&rdquo;</div><div class="quote-by reveal">ANAAKA &mdash; Halal Skincare &middot; Flagship @ TRX, Kuala Lumpur</div>
+<section style="padding-top:0"><div class="wrap" style="text-align:center"><div class="anl reveal" style="margin:0 auto;text-align:center;border-top:0;padding-top:0"><div class="anl-k mono">The engagement, in one line</div><p class="anl-t">Brand, website, tracking and a flagship store at TRX, built as one asset over 16 months.</p></div>
   <div style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center"><a href="{url}" class="btn btn-fill" target="_blank" rel="noopener">Visit anaaka.com.my &rarr;</a><a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a></div></div></section>
 {nextnav}
 '''+cta('Want results<br>like <em>these?</em>')
@@ -2353,13 +2352,12 @@ def services_overview():
 def about_page():
     TEAM=[("Attila von Barloewen","CEO &amp; Co-Founder","/assets/team-attila.jpg"),("MD. Safiqul Islam","CTO / Technical Director","/assets/team-safik.jpg"),("Yusef Abu-Saiba","B2B Market Analyst &amp; Sales","/assets/team-yuseda.jpg"),("Saidah Sheikh Jaffar","Content &amp; Co-Founder","/assets/team-saidah.jpg"),("Zackry M. Fazillah","Sales Director","/assets/team-zackry.jpg"),("Ustadh Dr. Muhammad Lawal","Shariah Advisor &amp; Auditor",LAWAL_IMG)]
     tcards="".join(f'<div class="card reveal">{img(p if (p.startswith("http") or p.startswith("/")) else RU+p,n,"tphoto")}<h3 style="font-size:21px">{n}</h3><p class="mono" style="color:var(--acc2)">{r}</p></div>' for n,r,p in TEAM)
+    FACTS=[("Founded","2022"),("Based in","Kuala Lumpur and Petaling Jaya"),("Client projects","100+"),("Clients","60+"),("Experience","12+ years of craft"),("Languages","Six"),("Markets","Malaysia and Southeast Asia, Germany and Europe, the Gulf")]
+    facts="".join('<div><span>'+k+'</span><b>'+v+'</b></div>' for k,v in FACTS)
     body=phero('<a href="index.html">Home</a> / About',"The studio","European standards.<br>Cultural fluency.<br><em>Applied AI.</em>",
         "Founded in 2022 in Kuala Lumpur, Ummah Collective blends European quality standards with traditional values and Islamic ethics &mdash; now running on applied AI. The team behind it has built brands, sites and software for 12+ years; we grew into AI, we didn&rsquo;t appear with it. We bridge Europe, Southeast Asia and the Muslim economy.")+f'''
-<section style="padding-top:0"><div class="wrap"><div class="stats">
-  <div class="stat reveal"><div class="n">2022</div><div class="k">Founded &middot; KL</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="100">100</span>+</div><div class="k">Projects</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="60">60</span>+</div><div class="k">Clients</div></div>
-  <div class="stat reveal"><div class="n">3</div><div class="k">Regions</div></div></div></div></section>
+<section style="padding-top:0"><div class="wrap"><div class="eyebrow reveal"><span class="t"></span><span class="mono">At a glance</span></div>
+  <div class="facts reveal" style="margin-top:18px">{facts}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Our team</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">The people</span></div></div><div class="grid g3">{tcards}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">What we believe</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Principles</span></div></div><div class="grid g3">
   <div class="card reveal"><div class="no">01</div><h3>Assets over traffic</h3><p>Systems you own, not rented clicks.</p></div>
@@ -2471,8 +2469,8 @@ def contact_page():
     <div><label for="bfService">Interested in</label><select id="bfService" name="service">{opts}</select></div>
     <div><label for="bfMessage">What are you trying to build?</label><textarea id="bfMessage" name="message" required placeholder="A custom CRM, an AI agent, a new site..."></textarea></div>
     <div><button class="btn btn-fill" type="submit" data-i18n="brief">Send a brief</button><span id="briefSending" hidden>Sending&hellip;</span></div>
-    <p class="ok" id="briefOk" role="status" hidden style="color:var(--acc)">Thank you. Your brief has reached us and we will reply within one business day.</p>
-    <div id="briefFail" role="alert" hidden style="color:#ff8c7a"><p>Your brief could not be sent. Please email us or message us on WhatsApp.</p><p style="margin-top:8px"><a href="mailto:info@ummah-collective.com" dir="ltr">info@ummah-collective.com</a> &middot; <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a></p></div></form>
+    <p class="ok" id="briefOk" role="status" hidden style="color:var(--acc)">Thank you. Your brief reached us; we reply within one working day.</p>
+    <div id="briefFail" role="alert" hidden style="color:#ff8c7a"><p>That didn&rsquo;t send. Email info@ummah-collective.com or WhatsApp us and we&rsquo;ll pick it up from there.</p><p style="margin-top:8px"><a href="mailto:info@ummah-collective.com" dir="ltr">info@ummah-collective.com</a> &middot; <a href="{WA}" target="_blank" rel="noopener">WhatsApp</a></p></div></form>
 <script>(function(){{var f=document.getElementById('briefForm');if(!f)return;var ok=document.getElementById('briefOk'),bad=document.getElementById('briefFail'),btn=f.querySelector('button[type=submit]'),lbl=btn.innerHTML,snd=document.getElementById('briefSending').textContent;
 function v(n){{var e=f.querySelector('[name='+n+']');return e?e.value.trim():'';}}
 f.addEventListener('submit',function(e){{e.preventDefault();if(f.checkValidity&&!f.checkValidity()){{f.reportValidity&&f.reportValidity();return;}}
@@ -2483,12 +2481,15 @@ try{{var x=new XMLHttpRequest();x.open('POST','https://formsubmit.co/ajax/info@u
 x.onload=function(){{var j=null;try{{j=JSON.parse(x.responseText);}}catch(_){{}}done(x.status>=200&&x.status<300&&!!j&&(j.success===true||j.success==='true'));}};
 x.onerror=x.ontimeout=function(){{done(false);}};x.timeout=20000;x.send(JSON.stringify(d));}}catch(_){{done(false);}}}});}})();</script>
   <div class="reveal">
+    <p class="contact-helper">Fastest: WhatsApp. Most thorough: the free audit.</p>
     <div class="eyebrow"><span class="t"></span><span class="mono">Direct</span></div>
+    <p style="margin-bottom:18px"><a class="alink" href="booking.html?service=audit">Get your free audit <span class="ar">&rarr;</span></a></p>
     <p style="margin-bottom:18px"><a class="alink" href="booking.html" data-i18n="book">Book a call</a></p>
     <p style="margin-bottom:18px"><a class="alink" href="mailto:info@ummah-collective.com">info@ummah-collective.com <span class="ar">&rarr;</span></a></p>
     <p style="margin-bottom:18px"><a class="alink" href="{WA}">WhatsApp +60 11 3326 2709 <span class="ar">&rarr;</span></a></p>
     <div class="eyebrow" style="margin-top:18px"><span class="t"></span><span class="mono">Studio</span></div><p style="margin-bottom:10px"><a class="alink" href="https://www.google.com/maps?cid=5094825734493406137" target="_blank" rel="noopener">Oval Damansara, TTDI, 60000 Kuala Lumpur <span class="ar">&rarr;</span></a></p><p>Kuala Lumpur &middot; Berlin &middot; Borderless</p></div>
-</div></div></section>'''
+</div></div></section>
+'''+risk_row()
     return page("contact.html","Contact — Ummah Collective","Contact Ummah Collective in Kuala Lumpur: book a free call, send a project brief or message us on WhatsApp about AI, automation, web or CRM.",body,aurora="contact")
 
 def booking_page():
