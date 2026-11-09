@@ -261,9 +261,9 @@ def nav():
     prev=('<div class="mega-preview" id="megaPreview"><div class="mp-glow"></div>'
       '<div class="pv"><span class="pk">Start here</span>'
       '<span class="lab">Tell us what&rsquo;s slowing your growth.</span>'
-      '<span class="dsc">A free 30-minute teardown &mdash; no pitch, just the map.</span>'
+      '<span class="dsc">A free AI audit: instant score, written findings within 48 hours, a 30-minute walkthrough. No pitch.</span>'
       '<div class="mega-btns"><a class="mb1" href="booking.html">Book a call &rarr;</a><a class="mb2" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-      '<a class="alink mega-audit" href="/audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a>'
+      '<a class="alink mega-audit" href="/audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Get your instant score <span class="ar">&rarr;</span></a>'
       '<div class="mega-soc">'
       '<a href="'+WA+'" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.9c0 1.76.46 3.45 1.32 4.95L2 22l5.3-1.39a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.16 8.16 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.48-1.38-1.73-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31s-.86.84-.86 2.05c0 1.21.88 2.38 1 2.54.12.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a>'
       '<a href="https://www.linkedin.com/company/ummah-collective/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9.5 9H13v1.65h.05c.49-.93 1.7-1.9 3.5-1.9 3.74 0 4.43 2.46 4.43 5.66V21h-4v-5.3c0-1.26-.02-2.89-1.76-2.89-1.76 0-2.03 1.38-2.03 2.8V21h-4z"/></svg></a>'
@@ -297,8 +297,9 @@ def overlay():
     compsec='<section class="ov-sec" style="margin-top:18px"><div class="ov-k" data-i18n="company">Company</div><div class="ov-comp">'+compitems+'</div></section>'
     cta_card=('<div class="ov-cta"><span class="ov-cta-k">Start here</span>'
       '<span class="ov-cta-h">Tell us what&rsquo;s slowing your growth.</span>'
+      '<span class="ov-cta-d">A free AI audit: instant score, written findings within 48 hours, a 30-minute walkthrough. No pitch.</span>'
       '<div class="ov-cta-btns"><a class="btn btn-fill" href="booking.html" data-i18n="book">Book a call</a><a class="btn btn-ghost" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-      '<a class="alink" href="/audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a></div>')
+      '<a class="alink" href="/audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Get your instant score <span class="ar">&rarr;</span></a></div>')
     return f'''<div class="overlay" id="overlay"><div class="ov-top">{BRAND}<button type="button" class="ov-close" id="menuClose" aria-label="Close menu">&#10005;</button></div>
   <div class="ov-body">{sol}{work}{compsec}<div class="ov-ctawrap">{cta_card}</div></div></div>'''
 
@@ -420,8 +421,8 @@ def risk_row():
 def audit():
     return '''<section><div class="wrap"><div class="audit reveal"><span class="badge" data-i18n="abadge">No-risk front door</span>
   <h2 data-i18n="audith2">Get a <em>free AI audit</em> of your business</h2>
-  <p style="margin:0 auto 26px" data-i18n="auditp">A 30-minute teardown: where AI agents, automation and a better site would save you the most time and money. No pitch, just the map.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="/audit.html" class="alink">Take the 60-second audit <span class="ar">&rarr;</span></a></div></div></div></section>'''
+  <p style="margin:0 auto 26px" data-i18n="auditp">Instant score, written findings within 48 hours, a 30-minute walkthrough: where AI agents, automation and a better site would save you the most time and money. No pitch, just the map.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="/audit.html" class="alink">Get your instant score <span class="ar">&rarr;</span></a></div></div></div></section>'''
 
 # ---------------- SERVICES (14 granular) ----------------
 SERVICES=[
@@ -497,7 +498,7 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
     aix=''
     if slug=='ai-agents':
         d1=agent_chat('Sales agent &middot; WhatsApp','Closing a complex export order',[('a','Assalamualaikum &#128075; I need 5,000 units of your halal serum in Jeddah before Ramadan &mdash; MYR pricing + export docs. Possible?'),('u','Wa alaikum salam. Checking stock, JAKIM cert &amp; Jeddah lead-time&hellip;'),('u','&#9989; 5,000 confirmed &mdash; MYR 142,500, SFDA labels + export docs in. Ships in 3 weeks.'),('a','Perfect. Split &mdash; 3,000 now, 2,000 in March?'),('typing',''),('u','Done &mdash; drafted a 2-shipment contract, reserved stock &amp; booked our export lead for Thu 11am KSA &#128196;')])
-        d2=agent_chat('Outbound agent &middot; Email','Booking a meeting from a cold open',[('u','Hi Sarah &mdash; saw your brand just launched in Dubai. We build WhatsApp agents for halal brands selling into the Gulf. Worth a short call?'),('a','Maybe&hellip; what&rsquo;s the catch?'),('u','No catch &mdash; fixed scope, you own everything we build. Free teardown of your funnel?'),('a','Go on then. Thursday?'),('typing',''),('u','Booked Thu 2pm + sent a 1-page plan tailored to your brand &#9989;')])
+        d2=agent_chat('Outbound agent &middot; Email','Booking a meeting from a cold open',[('u','Hi Sarah &mdash; saw your brand just launched in Dubai. We build WhatsApp agents for halal brands selling into the Gulf. Worth a short call?'),('a','Maybe&hellip; what&rsquo;s the catch?'),('u','No catch &mdash; fixed scope, you own everything we build. Free AI audit of your funnel?'),('a','Go on then. Thursday?'),('typing',''),('u','Booked Thu 2pm + sent a 1-page plan tailored to your brand &#9989;')])
         d3=agent_chat('Support agent &middot; WhatsApp','Resolving a hard ticket on its own',[('a','Order #4821 says delivered but I got nothing &#128545;'),('u','So sorry &mdash; pulling the courier scan &amp; GPS now&hellip;'),('u','Found it: misdelivered 2 streets over. Replacement dispatched (free express) + shipping refunded &#9989;'),('a','Oh wow &mdash; thank you!'),('typing',''),('u','Anytime &#128591; Logged the address error so it can&rsquo;t happen again.')])
         d4=agent_chat('HR agent &middot; WhatsApp','Screening &amp; scheduling a candidate',[('a','Salam, I applied for the marketing role &mdash; any update? And is remote possible?'),('u','Salam Yusuf! You&rsquo;re shortlisted &#127881; Checking the calendar&hellip;'),('u','Remote: hybrid, 2 days/wk in KL. Interview booked Tue 10am with Aisha &mdash; invite + prep guide sent.'),('a','That&rsquo;s perfect, thank you!'),('typing',''),('u','Onboarding pack will be ready the moment you sign &#128203;')])
         exsec=('<section style="padding-top:0"><div class="wrap"><div class="reveal" style="max-width:64ch"><div class="eyebrow"><span class="t"></span><span class="mono">In action</span></div>'
@@ -753,7 +754,7 @@ DEPTH={
  'app-development':("The duct-tape tax","You don&rsquo;t have a software problem &mdash; you have a duct-tape problem.",
    "Spreadsheets here, three SaaS tools there, a WhatsApp group holding it together. It works &mdash; until it doesn&rsquo;t. Every manual hand-off is a leak: lost hours, dropped orders, numbers nobody trusts.",
    [("Hours lost","Gone to copy-paste, re-keying and chasing updates that should be automatic."),("Deals slip","Work falls through the cracks between disconnected tools and inboxes."),("Stale data","You decide on numbers that were already out of date this morning.")],
-   "Custom software removes the tape &mdash; your data, your roadmap. Find your biggest leak in a free 30-minute teardown."),
+   "Custom software removes the tape &mdash; your data, your roadmap. Find your biggest leak with a free AI audit."),
  'web-design':("Your best salesperson","Your website is your hardest-working salesperson &mdash; or your weakest.",
    "It sells every hour you don&rsquo;t, in every market you can&rsquo;t reach in person. A slow, generic, English-only site quietly turns away the exact buyers you paid to attract.",
    [("The 3-second test","Half of visitors leave a slow or unclear page &mdash; and you never hear from them."),("Trust at a glance","People judge your credibility from your site before they read a single word."),("Speaks their language","Multilingual, fast and built to convert &mdash; so the right buyer says yes.")],
@@ -2494,7 +2495,7 @@ x.onerror=x.ontimeout=function(){{done(false);}};x.timeout=20000;x.send(JSON.str
 
 def booking_page():
     svc="".join(f'<button type="button" aria-pressed="false" class="opt" data-grp="service" data-val="{s}"><b>{t}</b><span>{e}</span></button>' for s,_,t,e,*_ in SERVICES[:6])
-    pkgs=[("sprint","Sprint","Fixed-scope, 2&ndash;4 weeks"),("retainer","Systems retainer","Monthly build &amp; run"),("audit","Free AI audit","30-min teardown"),("explore","Just exploring","Let's talk options")]
+    pkgs=[("sprint","Sprint","Fixed-scope, 2&ndash;4 weeks"),("retainer","Systems retainer","Monthly build &amp; run"),("audit","Free AI audit","Score, findings, walkthrough"),("explore","Just exploring","Let's talk options")]
     pk="".join(f'<button type="button" aria-pressed="false" class="opt" data-grp="pkg" data-val="{v}"><b>{t}</b><span>{d}</span></button>' for v,t,d in pkgs)
     slots=[("mon","Mon","10:00"),("tue","Tue","14:00"),("wed","Wed","11:00"),("thu","Thu","16:00"),("fri","Fri","09:30"),("mon2","Mon","13:00"),("tue2","Tue","10:30"),("wed2","Wed","15:00")]
     sl="".join(f'<button type="button" aria-pressed="false" class="slot" data-val="{v} {h}"><b>{d}</b><span>{h} MYT</span></button>' for v,d,h in slots)

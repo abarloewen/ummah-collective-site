@@ -95,6 +95,7 @@ body[dir=rtl] .lang-menu{right:auto;left:0}
 .ov-cta{margin-top:8px;border:1px solid color-mix(in srgb,var(--acc) 34%,transparent);border-radius:18px;padding:22px;background:linear-gradient(135deg,hsl(var(--auraH2,150) 34% 12% / .6),rgba(7,10,9,.86))}
 .ov-cta-k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);display:block;margin-bottom:9px}
 .ov-cta-h{font-family:var(--disp);font-weight:600;font-size:23px;line-height:1.14;display:block;margin-bottom:18px}
+.ov-cta-d{display:block;font-size:13.5px;line-height:1.5;color:var(--dim);margin:-8px 0 16px}
 .ov-cta-btns{display:flex;gap:10px}
 .ov-cta-btns .btn{flex:1;justify-content:center;text-align:center}
 @media(min-width:560px){.ov-items{grid-template-columns:1fr 1fr;gap:3px 18px}.ov-comp{grid-template-columns:repeat(3,1fr)}}
