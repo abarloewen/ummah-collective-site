@@ -369,11 +369,11 @@ def page(fname,title,desc,body,aurora="default",bg="",ld="",og="website"):
 </main>{footer()}{_cdn(body)}<script defer src="uc.js"></script></body></html>'''
     open(os.path.join(OUT,fname),"w",encoding="utf-8").write(html); return fname
 
-def phero(crumb,eyebrow,h1,intro,h1key=''):
+def phero(crumb,eyebrow,h1,intro,h1key='',extra=''):
     h1a=(' data-i18n="'+h1key+'"') if h1key else ''
     return f'''<header class="phero"><div class="lottie-box pmark" data-src="orbit-lottie.json"></div><div class="wrap"><div class="crumb reveal">{crumb}</div>
   <div class="eyebrow reveal"><span class="t"></span><span class="mono">{eyebrow}</span></div>
-  <h1 class="reveal"{h1a}>{h1}</h1>{('<p class="reveal">'+intro+'</p>') if intro else ''}</div></header>'''
+  <h1 class="reveal"{h1a}>{h1}</h1>{('<p class="reveal">'+intro+'</p>') if intro else ''}{extra}</div></header>'''
 
 # 2026-11-10 copy deck: ONE closing CTA band per page. Default = the free-audit band; pages may keep
 # their own H2 hook (project pages). legacy=True keeps the old book/brief band (Founders Club, launch bundle).
@@ -2314,14 +2314,14 @@ def home():
 
 def services_overview():
     rows="".join(f'<a class="idx-row" href="service-{s}.html"><span class="no">{n}</span><span class="ti">{t}</span><span class="de">{i}</span><span class="go">&rarr;</span></a>' for s,n,t,_,i,*_ in SERVICES)
-    body=phero('<a href="index.html">Home</a> / Services',"What we build","Fourteen disciplines.<br><em>One roof.</em>",
-        "Every capability of a full-service agency, rebuilt around applied AI &mdash; from the first line of code to the lead that closes itself.")+f'''
+    body=phero('<a href="index.html">Home</a> / Services',"What we build","Four pillars.<br><em>One accountable team.</em>",
+        "AI agents, software, websites and growth, built by the same senior people, so nothing falls between vendors.",h1key='c_svch1',extra=hero_ctas(False))+f'''
 <section style="padding-top:24px"><div class="wrap"><div class="idx reveal">{rows}</div></div></section>
 <section><div class="wrap"><div class="sh"><h2 class="reveal">Three ways to work with us</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Engagement</span></div></div><div class="reveal">
   <div class="erow"><span class="x">01 &mdash; Direct</span><span class="nm">Direct engagement</span><span class="de">Full studio partnership, end to end.</span></div>
   <div class="erow"><span class="x">02 &mdash; White-label</span><span class="nm">White-label delivery</span><span class="de">We build behind your agency's brand.</span></div>
   <div class="erow"><span class="x">03 &mdash; Referral</span><span class="nm">Referral partnership</span><span class="de">Earn a fee on every closed project.</span></div></div></div></section>
-'''+audit()+cta('What should we<br>build <em>first?</em>')
+'''+ladder()+cta()
     return page("services.html","Services — Ummah Collective","14 services: AI agents, automation, CRM, web, apps, lead gen, SEO, branding, paid media, strategy.",body,aurora="services")
 
 def about_page():
