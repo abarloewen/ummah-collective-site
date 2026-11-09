@@ -1534,7 +1534,7 @@ html[lang=zh] body{font-family:'Noto Sans SC',var(--sans)}
 :lang(ar) .mono,:lang(ar) .eyebrow .mono{font-family:'Noto Sans Arabic',var(--mono)}
 :lang(ar) h1,:lang(ar) h2,:lang(ar) h3,:lang(ar) .ti,:lang(ar) .big2{letter-spacing:0!important}
 /* directional glyphs: flip arrows in RTL (the arrow characters stay the same in the HTML) */
-[dir=rtl] .alink .ar,[dir=rtl] .idx-row .go,[dir=rtl] .wcar-btn,[dir=rtl] .pc-go,[dir=rtl] .cmdk-item .ar,[dir=rtl] .ov-go,[dir=rtl] .mega-btns .ar,[dir=rtl] .pnav .pn-ar{display:inline-block;transform:scaleX(-1)}
+[dir=rtl] .alink .ar,[dir=rtl] .idx-row .go,[dir=rtl] .wcar-btn,[dir=rtl] .cmdk-item .ar,[dir=rtl] .ov-go,[dir=rtl] .mega-btns .ar,[dir=rtl] .pnav .pn-ar{display:inline-block;transform:scaleX(-1)}
 [dir=rtl] .alink:hover .ar{transform:scaleX(-1) translateX(6px)}
 [dir=rtl] .idx-row:hover{padding-left:0;padding-right:18px}
 [dir=rtl] .idx-row:hover .ti{transform:translateX(-8px)}
@@ -1544,6 +1544,8 @@ html[lang=zh] body{font-family:'Noto Sans SC',var(--sans)}
 [dir=rtl] .tile:hover::after{transform:scaleX(-1)}
 [dir=rtl] .uc-top{left:auto;right:20px}
 [dir=rtl] .ucbk-opt,[dir=rtl] .lang-menu button{text-align:right}
+svg[data-word],svg[data-word] text{direction:ltr;unicode-bidi:isolate}
+:lang(ar) .pc-meta,:lang(ar) .pc-tags span{letter-spacing:0}
 [dir=rtl] a[href^="tel:"],[dir=rtl] a[href^="mailto:"]{unicode-bidi:isolate;direction:ltr;display:inline-block}
 
 /* S20 one global reduced-motion block (aurora becomes a static dark frame, nothing moves) */
