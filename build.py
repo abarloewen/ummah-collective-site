@@ -2437,7 +2437,7 @@ def founders_club():
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">What&rsquo;s on</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Online &amp; in Kuala Lumpur</span></div></div><div class="grid g2" style="gap:18px">{cards}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Coming up</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Members hear first</span></div></div><div class="reveal">{uprows}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">How it works</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Free to join</span></div></div><div class="grid g2">{stepcards}</div></div></section>
-'''+cta('Apply to the<br>Founders <em>Club.</em>')
+'''+cta('Apply to the<br>Founders <em>Club.</em>',legacy=True)
     return page("founders-club.html","Founders Club — Ummah Collective","A community of Muslim and values-aligned founders — online and in Kuala Lumpur. Free to join; premium masterclasses, mixers and events.",body,aurora="ventures")
 
 def market_entry():
@@ -2698,7 +2698,7 @@ def launch_bundle_page():
   <div class="card reveal"><div class="no">Speed</div><h3 style="font-size:30px">2&ndash;3 wks</h3><p>from kickoff to a live launch.</p></div></div></div></section>
 <section style="padding-top:0"><div class="wrap" style="text-align:center"><div class="quote reveal" style="margin:0 auto">&ldquo;They built our entire ecosystem &mdash; brand, site, tracking and a flagship store. <em>Not a campaign. An asset.</em>&rdquo;</div><div class="quote-by reveal">ANAAKA &mdash; Halal Skincare &middot; Flagship @ TRX, KL</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Questions</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
-'''+cta('Claim your<br><em>launch slot.</em>')
+'''+cta('Claim your<br><em>launch slot.</em>',legacy=True)
     return page("launch-bundle.html","Launch Bundle — Exclusive Launch for Halal-Industry Businesses | Ummah Collective","A done-for-you launch bundle for halal-industry businesses: premium website, content, social, brand guide and 6 months of Noon OS. By application only.",body,aurora="market",ld=faq_ld(faq))
 
 def liquid_preview():
