@@ -299,6 +299,8 @@ select option,select optgroup{background-color:#0F1512;color:var(--bone)}
 .slot{border:1px solid var(--line);border-radius:12px;padding:14px 10px;text-align:center;cursor:pointer;font-size:14px;transition:.3s}
 .slot:hover{border-color:var(--acc)}.slot.sel{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 12%,transparent)}
 .slot b{display:block;font-family:var(--disp);font-size:18px}.slot span{font-size:11px;color:var(--dim2)}
+button.opt,button.slot{font:inherit;color:inherit;background:none;width:100%;text-align:start}button.slot{text-align:center}.opt:focus-visible,.slot:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.bk-launch{border:1px solid var(--line);border-radius:18px;padding:28px;text-align:center;max-width:640px;margin:0 auto}.bk-launch p{margin:0 auto 18px;color:var(--dim)}.bk-launch-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 .wiz-nav{display:flex;justify-content:space-between;margin-top:28px;gap:12px}
 
 /* article */

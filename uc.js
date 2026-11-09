@@ -426,9 +426,10 @@
     w.querySelectorAll('[data-prev]').forEach(function(b){b.onclick=function(){show(cur-1)}});
     w.querySelectorAll('.opt').forEach(function(o){o.onclick=function(){
       var grp=o.getAttribute('data-grp'); w.querySelectorAll('.opt[data-grp="'+grp+'"]').forEach(function(x){x.classList.remove('sel')});
-      o.classList.add('sel'); sel[grp]=o.getAttribute('data-val');}});
-    w.querySelectorAll('.slot').forEach(function(s){s.onclick=function(){w.querySelectorAll('.slot').forEach(function(x){x.classList.remove('sel')});s.classList.add('sel');sel.slot=s.getAttribute('data-val');}});
-    if(qs){var pre=w.querySelector('.opt[data-grp="service"][data-val="'+qs+'"]'); if(pre){pre.classList.add('sel');sel.service=qs;}}
+      w.querySelectorAll('.opt[data-grp="'+grp+'"]').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      o.classList.add('sel'); o.setAttribute('aria-pressed','true'); sel[grp]=o.getAttribute('data-val');}});
+    w.querySelectorAll('.slot').forEach(function(s){s.onclick=function(){w.querySelectorAll('.slot').forEach(function(x){x.classList.remove('sel');x.setAttribute('aria-pressed','false')});s.classList.add('sel');s.setAttribute('aria-pressed','true');sel.slot=s.getAttribute('data-val');}});
+    if(qs){var pre=w.querySelector('.opt[data-grp="service"][data-val="'+qs+'"]'); if(pre){pre.classList.add('sel');pre.setAttribute('aria-pressed','true');sel.service=qs;}}
     /* --- step 4 -> review: validate, then summarise --- */
     var fin=w.querySelector('#wizFinish');
     if(fin) fin.onclick=function(){
@@ -950,6 +951,17 @@
         }
       });
     });
+    /* QA 2026-11-10 (M10): booking.html opens the accessible popup straight away (respecting ?service=, incl. audit);
+       the old #wiz stays in the markup only as a no-JS fallback */
+    var wz=document.getElementById('wiz');
+    if(wz){
+      var qsv=''; try{ qsv=(new URLSearchParams(location.search).get('service')||new URLSearchParams(location.search).get('sv')||'').replace(/[^a-z-]/gi,''); }catch(e){}
+      wz.hidden=true; wz.style.display='none';
+      var lw=document.getElementById('bkLaunch'), rb=document.getElementById('bkReopen');
+      if(lw) lw.hidden=false;
+      if(rb) rb.setAttribute('data-book',qsv||'true');
+      open(qsv,rb);
+    }
   }
   function initTop(){
     if(document.getElementById('ucTop')) return;

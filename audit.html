@@ -16,15 +16,15 @@
 .ux-dots{display:flex;gap:7px;margin:0 0 20px}
 .ux-dots i{width:26px;height:4px;border-radius:2px;background:rgba(246,243,236,.14)}
 .ux-dots i.on{background:#2FD8A4}
-.ux-f label{display:block;font-size:12.5px;letter-spacing:.04em;color:rgba(246,243,236,.65);margin:0 0 14px}
+.ux-f label,.ux-f .ux-grp{display:block;font-size:12.5px;letter-spacing:.04em;color:rgba(246,243,236,.65);margin:0 0 14px}
 .ux-f input,.ux-f select{width:100%;box-sizing:border-box;margin-top:6px;background:rgba(246,243,236,.05);border:1px solid rgba(246,243,236,.18);border-radius:10px;padding:12px 14px;color:#F6F3EC;font-size:16px;font-family:'General Sans',sans-serif}
 .ux-f select option{background:#101614;color:#F6F3EC}
 .ux-f input:focus,.ux-f select:focus{outline:none;border-color:#2FD8A4}
 .ux-two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:640px){.ux-two{grid-template-columns:1fr}}
 .ux-opts{display:flex;flex-wrap:wrap;gap:9px;margin-top:6px}
-.ux-opt{background:rgba(246,243,236,.04);border:1px solid rgba(246,243,236,.18);border-radius:20px;padding:8px 15px;font-size:13.5px;color:#F6F3EC;cursor:pointer;transition:.2s;user-select:none}
-.ux-opt.sel{background:rgba(19,163,122,.16);border-color:#2FD8A4}
+.ux-opt{font-family:inherit;line-height:1.3;background:rgba(246,243,236,.04);border:1px solid rgba(246,243,236,.18);border-radius:20px;padding:8px 15px;font-size:13.5px;color:#F6F3EC;cursor:pointer;transition:.2s;user-select:none}
+.ux-opt:focus-visible{outline:2px solid #2FD8A4;outline-offset:2px}.ux-opt.sel{background:rgba(19,163,122,.16);border-color:#2FD8A4}
 .ux-nav{display:flex;gap:10px;align-items:center;margin-top:8px}
 .ux-err{display:none;color:#ff8c7a;font-size:13.5px;margin:10px 0 0}
 .ux-wait{display:none;text-align:center;padding:40px 10px}
@@ -73,7 +73,7 @@
     <label>Main market<select name="market"><option value="">&mdash;</option><option>Malaysia / SEA</option><option>Germany / Europe</option><option>GCC / MENA</option><option>Global</option></select></label>
    </div>
    <div class="ux-nav"><button type="submit" class="btn btn-fill">Continue &rarr;</button></div>
-   <div class="ux-err" id="uxE1">Please add your website and company name.</div>
+   <div class="ux-err" id="uxE1" role="alert">Please add your website and company name.</div>
   </form>
  </div>
  <div id="uxS2" style="display:none">
@@ -81,12 +81,12 @@
   <div class="ux-dots"><i class="on"></i><i class="on"></i><i></i><i></i></div>
   <h3 class="ux-h">How do you operate today?</h3>
   <form class="ux-f" id="uxF2">
-   <label>Which channels do you actively use? <span style="opacity:.5">(tap all that apply)</span>
-    <div class="ux-opts" data-multi="channels"><span class="ux-opt">WhatsApp</span><span class="ux-opt">Instagram</span><span class="ux-opt">LinkedIn</span><span class="ux-opt">Paid ads</span><span class="ux-opt">Email marketing</span><span class="ux-opt">None consistently</span></div></label>
-   <label>Where do your leads live?
-    <div class="ux-opts" data-one="crm"><span class="ux-opt">A real CRM</span><span class="ux-opt">Spreadsheets</span><span class="ux-opt">Inbox / WhatsApp</span><span class="ux-opt">Nowhere really</span></div></label>
-   <label>Who answers customer enquiries after hours?
-    <div class="ux-opts" data-one="afterhours"><span class="ux-opt">Nobody until morning</span><span class="ux-opt">Me, personally</span><span class="ux-opt">A team rota</span><span class="ux-opt">AI / automation</span></div></label>
+   <div class="ux-grp" role="group" aria-labelledby="uxQ1"><span id="uxQ1">Which channels do you actively use? <span style="opacity:.5">(tap all that apply)</span></span>
+    <div class="ux-opts" data-multi="channels"><button type="button" class="ux-opt" aria-pressed="false">WhatsApp</button><button type="button" class="ux-opt" aria-pressed="false">Instagram</button><button type="button" class="ux-opt" aria-pressed="false">LinkedIn</button><button type="button" class="ux-opt" aria-pressed="false">Paid ads</button><button type="button" class="ux-opt" aria-pressed="false">Email marketing</button><button type="button" class="ux-opt" aria-pressed="false">None consistently</button></div></div>
+   <div class="ux-grp" role="group" aria-labelledby="uxQ2"><span id="uxQ2">Where do your leads live?</span>
+    <div class="ux-opts" data-one="crm"><button type="button" class="ux-opt" aria-pressed="false">A real CRM</button><button type="button" class="ux-opt" aria-pressed="false">Spreadsheets</button><button type="button" class="ux-opt" aria-pressed="false">Inbox / WhatsApp</button><button type="button" class="ux-opt" aria-pressed="false">Nowhere really</button></div></div>
+   <div class="ux-grp" role="group" aria-labelledby="uxQ3"><span id="uxQ3">Who answers customer enquiries after hours?</span>
+    <div class="ux-opts" data-one="afterhours"><button type="button" class="ux-opt" aria-pressed="false">Nobody until morning</button><button type="button" class="ux-opt" aria-pressed="false">Me, personally</button><button type="button" class="ux-opt" aria-pressed="false">A team rota</button><button type="button" class="ux-opt" aria-pressed="false">AI / automation</button></div></div>
    <div class="ux-nav"><button type="button" class="btn btn-ghost" data-back="uxS1">&larr; Back</button><button type="submit" class="btn btn-fill">Continue &rarr;</button></div>
   </form>
  </div>
@@ -95,12 +95,12 @@
   <div class="ux-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
   <h3 class="ux-h">Where does growth come from?</h3>
   <form class="ux-f" id="uxF3">
-   <label>How do new customers mostly find you?
-    <div class="ux-opts" data-one="acq"><span class="ux-opt">Referrals</span><span class="ux-opt">Google search</span><span class="ux-opt">Social media</span><span class="ux-opt">Paid ads</span><span class="ux-opt">Marketplaces</span></div></label>
-   <label>In how many languages do you sell?
-    <div class="ux-opts" data-one="langs"><span class="ux-opt">1</span><span class="ux-opt">2</span><span class="ux-opt">3+</span></div></label>
-   <label>Your #1 goal for the next 12 months
-    <div class="ux-opts" data-one="goal"><span class="ux-opt">More leads</span><span class="ux-opt">Higher conversion</span><span class="ux-opt">New market entry</span><span class="ux-opt">Lower workload / automation</span></div></label>
+   <div class="ux-grp" role="group" aria-labelledby="uxQ4"><span id="uxQ4">How do new customers mostly find you?</span>
+    <div class="ux-opts" data-one="acq"><button type="button" class="ux-opt" aria-pressed="false">Referrals</button><button type="button" class="ux-opt" aria-pressed="false">Google search</button><button type="button" class="ux-opt" aria-pressed="false">Social media</button><button type="button" class="ux-opt" aria-pressed="false">Paid ads</button><button type="button" class="ux-opt" aria-pressed="false">Marketplaces</button></div></div>
+   <div class="ux-grp" role="group" aria-labelledby="uxQ5"><span id="uxQ5">In how many languages do you sell?</span>
+    <div class="ux-opts" data-one="langs"><button type="button" class="ux-opt" aria-pressed="false">1</button><button type="button" class="ux-opt" aria-pressed="false">2</button><button type="button" class="ux-opt" aria-pressed="false">3+</button></div></div>
+   <div class="ux-grp" role="group" aria-labelledby="uxQ6"><span id="uxQ6">Your #1 goal for the next 12 months</span>
+    <div class="ux-opts" data-one="goal"><button type="button" class="ux-opt" aria-pressed="false">More leads</button><button type="button" class="ux-opt" aria-pressed="false">Higher conversion</button><button type="button" class="ux-opt" aria-pressed="false">New market entry</button><button type="button" class="ux-opt" aria-pressed="false">Lower workload / automation</button></div></div>
    <div class="ux-nav"><button type="button" class="btn btn-ghost" data-back="uxS2">&larr; Back</button><button type="submit" class="btn btn-fill">Continue &rarr;</button></div>
   </form>
  </div>
@@ -115,7 +115,7 @@
    </div>
    <label>Phone / WhatsApp <span style="opacity:.5">(optional)</span><input name="phone" placeholder="+60&hellip;"></label>
    <div class="ux-nav"><button type="button" class="btn btn-ghost" data-back="uxS3">&larr; Back</button><button type="submit" class="btn btn-fill">Run my audit &rarr;</button></div>
-   <div class="ux-err" id="uxE4">Please add your name and a valid email.</div>
+   <div class="ux-err" id="uxE4" role="alert">Please add your name and a valid email.</div>
    <p class="ux-note">You&rsquo;ll see your audit right here &mdash; and can download it as a PDF. We&rsquo;ll follow up with the deeper human analysis.</p>
   </form>
  </div>
@@ -142,6 +142,7 @@ document.querySelectorAll('.ux-opts').forEach(function(g){
   g.querySelectorAll('.ux-opt').forEach(function(c){c.addEventListener('click',function(){
     if(multi){c.classList.toggle('sel');}
     else{g.querySelectorAll('.ux-opt').forEach(function(x){x.classList.remove('sel')});c.classList.add('sel');}
+    g.querySelectorAll('.ux-opt').forEach(function(x){x.setAttribute('aria-pressed',x.classList.contains('sel')?'true':'false')});
   });});});
 function vals(key){var g=document.querySelector('[data-multi="'+key+'"],[data-one="'+key+'"]');if(!g)return '';
   return [].map.call(g.querySelectorAll('.ux-opt.sel'),function(c){return c.textContent}).join(', ');}
@@ -150,7 +151,7 @@ function show(id){['uxS1','uxS2','uxS3','uxS4'].forEach(function(x){document.get
 document.querySelectorAll('[data-back]').forEach(function(b){b.addEventListener('click',function(){show(b.getAttribute('data-back'))});});
 document.getElementById('uxF1').addEventListener('submit',function(e){e.preventDefault();
   var f=e.target;D.url=f.url.value.trim();D.company=f.company.value.trim();D.industry=f.industry.value;D.market=f.market.value;
-  if(!D.url||!D.company){document.getElementById('uxE1').style.display='block';return;}
+  if(!D.url||!D.company){document.getElementById('uxE1').style.display='block';(D.url?f.company:f.url).focus();return;}
   document.getElementById('uxE1').style.display='none';
   if(D.url.indexOf('http')!==0)D.url='https://'+D.url;
   show('uxS2');});
@@ -165,7 +166,7 @@ function find(ic,html){return '<div class="ux-it"><div class="ic">'+ic+'</div><d
 document.getElementById('uxPrint').addEventListener('click',function(){window.print();});
 document.getElementById('uxF4').addEventListener('submit',async function(e){e.preventDefault();
   var f=e.target;D.name=f.name.value.trim();D.email=f.email.value.trim();D.phone=f.phone.value.trim();
-  if(!D.name||D.email.indexOf('@')<1||D.email.indexOf('.')<0){document.getElementById('uxE4').style.display='block';return;}
+  if(!D.name||D.email.indexOf('@')<1||D.email.indexOf('.')<0){document.getElementById('uxE4').style.display='block';(D.name?f.email:f.name).focus();return;}
   document.getElementById('uxS4').style.display='none';document.getElementById('uxWait').style.display='block';
   var msgs=['Pulling live performance data from Google\u2026','Scoring SEO signals\u2026','Grading your digital infrastructure\u2026','Writing your recommendations\u2026'];var mi=0;
   var tick=setInterval(function(){mi=(mi+1)%msgs.length;document.getElementById('uxWaitMsg').textContent=msgs[mi];},5000);

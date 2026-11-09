@@ -4400,3 +4400,7 @@ def register(R):
     R("Sessions","Sitzungen","Sesi","الجلسات","会话","Oturum")
     R("Users","Nutzer","Pengguna","المستخدمون","用户","Kullanıcı")
     R("Instagram followers during the engagement","Instagram-Follower während des Mandats","Pengikut Instagram sepanjang projek","متابعو إنستغرام خلال فترة المشروع","合作期间的 Instagram 粉丝","İş birliği süresince Instagram takipçisi")
+    # QA fixes 2026-11-10: booking page launcher
+    R("Pick what you need and a time that suits you. The first call is a free scoping session.","Wählen Sie, was Sie brauchen, und eine passende Zeit. Das erste Gespräch ist eine kostenlose Scoping-Session.","Pilih apa yang anda perlukan dan masa yang sesuai. Panggilan pertama ialah sesi skop percuma.","اختر ما تحتاجه والوقت الذي يناسبك. المكالمة الأولى جلسة تحديد نطاق مجانية.","选择您的需求和合适的时间。首次通话为免费需求梳理。","İhtiyacınızı ve size uyan bir zamanı seçin. İlk görüşme ücretsiz bir kapsam belirleme oturumudur.")
+    R("The booking form opens in a window on this page.","Das Buchungsformular öffnet sich in einem Fenster auf dieser Seite.","Borang tempahan dibuka dalam tetingkap di halaman ini.","يُفتح نموذج الحجز في نافذة على هذه الصفحة.","预约表单会在本页的窗口中打开。","Rezervasyon formu bu sayfada bir pencerede açılır.")
+    R("Open the booking form","Buchungsformular öffnen","Buka borang tempahan","افتح نموذج الحجز","打开预约表单","Rezervasyon formunu açın")
