@@ -375,13 +375,47 @@ def phero(crumb,eyebrow,h1,intro,h1key=''):
   <div class="eyebrow reveal"><span class="t"></span><span class="mono">{eyebrow}</span></div>
   <h1 class="reveal"{h1a}>{h1}</h1>{('<p class="reveal">'+intro+'</p>') if intro else ''}</div></header>'''
 
-def cta(big='Build something<br>worth <em>trusting.</em>'):
+# 2026-11-10 copy deck: ONE closing CTA band per page. Default = the free-audit band; pages may keep
+# their own H2 hook (project pages). legacy=True keeps the old book/brief band (Founders Club, launch bundle).
+def cta(big=None,legacy=False):
     _ck={'Build something<br>worth <em>trusting.</em>':'ctah2','Want results<br>like <em>these?</em>':'cta_results','What should we<br>build <em>first?</em>':'cta_first','Work with<br>the <em>studio.</em>':'cta_studio','Be first on<br><em>Noon OS.</em>':'cta_noon','Claim your<br><em>launch slot.</em>':'cta_launch'}.get(big)
     h2a=(' data-i18n="'+_ck+'"') if _ck else ''
-    return f'''<section class="cta"><div class="wrap"><div class="eyebrow reveal" style="justify-content:center"><span class="t"></span><span class="mono" data-i18n="letsbuild">Let's build</span></div>
-  <h2 class="reveal"{h2a}>{big}</h2><p class="lead reveal" data-i18n="ctalead">Tell us what's slowing your business down. We'll show you the system that fixes it &mdash; and how fast.</p>
-  <div class="reveal" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="booking.html" class="btn btn-fill" data-i18n="book">Book a call</a><a href="contact.html" class="btn btn-ghost" data-i18n="brief">Send a brief</a></div>
-  <div class="cta-meta reveal"><div><span data-i18n="email">Email</span><b>info@ummah-collective.com</b></div><div><span data-i18n="lblphone">Phone</span><b>+60 11 3326 2709</b></div><div><span data-i18n="lblstudio">Studio</span><b>Kuala Lumpur &middot; Berlin</b></div></div></div></section>'''
+    meta='<div class="cta-meta reveal"><div><span data-i18n="email">Email</span><b>info@ummah-collective.com</b></div><div><span data-i18n="lblphone">Phone</span><b>+60 11 3326 2709</b></div><div><span data-i18n="lblstudio">Studio</span><b>Kuala Lumpur &middot; Berlin</b></div></div></div></section>'
+    if legacy:
+        return ('<section class="cta"><div class="wrap"><div class="eyebrow reveal" style="justify-content:center"><span class="t"></span><span class="mono" data-i18n="letsbuild">Let\'s build</span></div>\n'
+          '  <h2 class="reveal"'+h2a+'>'+big+'</h2><p class="lead reveal" data-i18n="ctalead">Tell us what\'s slowing your business down. We\'ll show you the system that fixes it &mdash; and how fast.</p>\n'
+          '  <div class="reveal" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="booking.html" class="btn btn-fill" data-i18n="book">Book a call</a><a href="contact.html" class="btn btn-ghost" data-i18n="brief">Send a brief</a></div>\n  '+meta)
+    h2=('<h2 class="reveal"'+h2a+'>'+big+'</h2>') if big else '<h2 class="reveal" data-i18n="c_closeh2">See what&rsquo;s <em>leaking</em> before you spend.</h2>'
+    return ('<section class="cta"><div class="wrap"><div class="eyebrow reveal" style="justify-content:center"><span class="t"></span><span class="mono" data-i18n="audit">Free AI audit</span></div>\n'
+      '  '+h2+'<p class="lead reveal">An instant score, written findings within 48 hours and a 30-minute walkthrough. Free, with no pitch.</p>\n'
+      '  <div class="reveal" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap"><a href="booking.html?service=audit" class="btn btn-fill">Get your free audit</a><a href="'+WA+'" class="btn btn-ghost" target="_blank" rel="noopener">WhatsApp us</a></div>\n  '+meta)
+
+# ---- shared copy-deck blocks (2026-11-10) ----
+OFFER_LINE='Free AI audit: an instant score, written findings within 48 hours and a 30-minute walkthrough.'
+def hero_ctas(services_link=True):
+    return ('<div class="hero-cta reveal" style="margin-top:24px"><a href="booking.html?service=audit" class="btn btn-fill">Get your free audit</a>'
+      '<a href="booking.html" class="btn btn-ghost" data-i18n="book">Book a call</a>'
+      +('<a href="services.html" class="alink hero-alink" data-i18n="c_seesvc">See our services <span class="ar">&rarr;</span></a>' if services_link else '')+'</div>'
+      '<p class="offer-line reveal">'+OFFER_LINE+'</p>')
+PROOF_CLIENTS=['ANAAKA','Shoraka','Eurogida','Optima','Kamar Halal','Matcha K&ouml;ln','Jugendberufsagentur Brandenburg']
+def proof_strip():
+    return ('<section class="proof-sec"><div class="wrap"><div class="proofstrip reveal">'
+      '<div class="ps-stats"><div><b>100+</b><span>client projects</span></div><div><b>60+</b><span>clients</span></div>'
+      '<div><b>18.45%</b><span>of ANAAKA&rsquo;s revenue from organic search</span></div></div>'
+      '<div class="ps-clients"><span class="mono">Selected clients</span><span class="ps-names">'+''.join('<i>'+c+'</i>' for c in PROOF_CLIENTS)+'</span></div>'
+      '</div></div></section>')
+LADDER=[("01","Free AI audit","Instant score, written findings within 48 hours, a 30-minute walkthrough. Free."),
+        ("02","Fixed-scope sprint","One outcome, one price and one date, agreed before work starts. Websites from &euro;4,800."),
+        ("03","Systems retainer","We keep it secure, ranking and improving every month. From RM 2,500 a month.")]
+def ladder():
+    cols="".join('<div class="lad-step reveal"><span class="lad-n">'+n+'</span><h3>'+t+'</h3><p>'+d+'</p></div>' for n,t,d in LADDER)
+    return ('<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Three steps, each one earns the next.</h2>'
+      '<div class="eyebrow reveal"><span class="t"></span><span class="mono">How we start</span></div></div><div class="ladder">'+cols+'</div></div></section>')
+RISK=[("Fixed quote","Scope and price agreed before we start."),("You own it","Code, data, content and accounts stay yours."),
+      ("Your data stays yours","Private deployments on request; we never train models on your data."),("Senior team","The people you meet are the people who build.")]
+def risk_row():
+    it="".join('<div class="rr"><b>'+t+'</b><p>'+d+'</p></div>' for t,d in RISK)
+    return '<section style="padding-top:0"><div class="wrap"><div class="riskrow reveal">'+it+'</div></div></section>'
 
 def audit():
     return '''<section><div class="wrap"><div class="audit reveal"><span class="badge" data-i18n="abadge">No-risk front door</span>
@@ -2205,13 +2239,13 @@ def article_page(slug,cat,date,title,lede,imgid,blocks):
 
 # ---------------- CORE PAGES ----------------
 def home():
-    pil=[("01","AI Agents","Agents that sell, support and run your back office, 24/7.","ai-agents"),("02","Noon OS","Our CRM built for the Halal economy &mdash; from &euro;19/mo.","noon-os"),("03","Web &amp; Apps","Premium sites, platforms and custom software.","web-design"),("04","Growth","Lead gen, SEO &amp; content, paid media and strategy.","lead-generation")]
+    pil=[("01","AI Agents","Agents that sell, support and run your back office, 24/7.","ai-agents"),("02","Custom CRM &amp; Systems","CRMs and internal systems built around how you sell.","noon-os"),("03","Web &amp; Apps","Premium sites, platforms and custom software.","web-design"),("04","Growth","Lead gen, SEO &amp; content, paid media and strategy.","lead-generation")]
     idx="".join(f'<a class="idx-row" href="{_href(s)}"><span class="no">{n}</span><span class="ti">{t}</span><span class="de">{d}</span><span class="go">&rarr;</span></a>' for n,t,d,s in pil)
     _fsl=['anaaka','shoraka','eurogida','jugendberufsagentur','optima','kamar-halal','matchakoeln']
     _pm={p[0]:p for p in PROJECTS}
     feat=[_pm[s] for s in _fsl if s in _pm]
     tiles="".join(_tile(s,n,c,y,b,im) for s,n,c,y,b,sc,url,im in feat)
-    faq=[("How fast can you ship?","Most builds go from brief to live in weeks, not quarters, using fixed-scope sprints and AI-assisted delivery."),("Do you work outside Malaysia?","Yes &mdash; borderless across SEA, Europe (DACH) and the Gulf, in five languages."),("Can you work white-label?","Yes: direct, white-label behind your agency, or referral partnership."),("What does it cost?","Web from ~&euro;4,800; AI agents and systems scoped per project. Book a call for a fixed quote.")]
+    faq=[("How fast can you ship?","Most builds go from brief to live in weeks, not quarters, using fixed-scope sprints and AI-assisted delivery."),("Do you work outside Malaysia?","Yes. We work across Southeast Asia, Europe (DACH) and the Gulf, in six languages: EN, DE, MS, AR, TR and ZH."),("Can you work white-label?","Yes: direct, white-label behind your agency, or referral partnership."),("What does it cost?","Web from ~&euro;4,800; AI agents and systems scoped per project. Book a call for a fixed quote.")]
     faqs="".join(f'<details class="reveal"><summary>{q}<span class="pl">+</span></summary><p>{a}</p></details>' for q,a in faq)
     body=f'''
 <header class="hero"><div class="wrap">
@@ -2219,19 +2253,15 @@ def home():
     <div class="lottie-box lottie-mark reveal" data-src="orbit-lottie.json" style="margin-bottom:16px"></div>
     <div class="eyebrow reveal"><span class="t"></span><span class="mono">Applied-AI Studio &middot; Since MMXXII</span></div>
     <h1 class="reveal hero-cycle" dir="auto"><span class="ht1">Intelligence,</span><br><span class="out ht2">with integrity.</span></h1>
-    <p class="lead reveal" data-i18n="herosub" style="margin-top:26px">We build the software, AI agents and systems modern companies run on — engineered fast, grounded in a decade of trust.</p>
-    <div class="hero-cta reveal" style="margin-top:24px"><a href="booking.html" class="btn btn-fill" data-i18n="book">Book a call</a><a href="services.html" class="btn btn-ghost" data-i18n="services">Services</a></div>
-    <div class="hero-stats reveal">
-      <div class="s"><b><span class="count" data-to="100">100</span>+</b><span data-i18n="st_proj">Projects</span></div>
-      <div class="s"><b><span class="count" data-to="60">60</span>+</b><span data-i18n="st_cli">Clients</span></div>
-      <div class="s"><b>6</b><span data-i18n="st_lang">Languages</span></div></div>
+    <p class="lead reveal" style="margin-top:26px">We build the AI agents, websites and software that companies across Malaysia, Europe and the Gulf run on, and you own every line of it.</p>
+    {hero_ctas()}
   </div>
 </div></header>
 
 <section><div class="wrap"><div class="eyebrow reveal"><span class="t"></span><span class="mono" data-i18n="shifteyebrow">(01) &mdash; The shift</span></div>
-  <h2 class="big2 reveal" data-i18n="shifth2">Anyone can <em>use</em> AI now. Almost no one turns it into systems you actually <em>trust.</em></h2>
-  <div class="grid g2" style="margin-top:50px;align-items:start"><p class="lead reveal">For a decade we've built digital assets, not temporary traffic. The companies that win own their systems &mdash; search visibility, data, pipeline, tools.</p>
-  <p class="reveal">We pair a decade of brand and engineering craft with applied AI and deep systems integration &mdash; reliable, refined, built to compound. European standards, modern strategy, genuine cultural fluency.</p></div></div></section>
+  <h2 class="big2 reveal" data-i18n="c_shifth2">Anyone can <em>use</em> AI now. Almost no one turns it into systems you can <em>trust.</em></h2>
+  <div class="grid g2" style="margin-top:50px;align-items:start"><p class="lead reveal">We build digital assets, not temporary traffic. The companies that win own their systems: search visibility, data, pipeline and tools.</p>
+  <p class="reveal">We pair brand and engineering craft with applied AI and deep systems integration, so what we build keeps working long after launch. European standards, modern strategy and fluency in the markets you sell to.</p></div></div></section>
 
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal" data-i18n="whatwebuild">What we build</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">(02) &mdash; Four pillars, 14 disciplines</span></div></div><div class="idx reveal">{idx}</div>
   <div class="reveal" style="margin-top:24px"><a href="services.html" class="alink" data-i18n="services">All services <span class="ar">&rarr;</span></a></div></div></section>
@@ -2243,6 +2273,14 @@ def home():
 
 <section><div class="wrap"><div class="sh"><h2 class="reveal" data-i18n="selwork">Selected work</h2><div class="wcar-head reveal"><span class="eyebrow"><span class="t"></span><span class="mono">(03) &mdash; 100+ projects</span></span><span class="wcar-nav"><button class="wcar-btn" data-dir="-1" type="button" aria-label="Previous">&larr;</button><button class="wcar-btn" data-dir="1" type="button" aria-label="Next">&rarr;</button></span></div></div><div class="wcar" id="workCar" style="scroll-snap-type:none;scroll-behavior:auto">{tiles}</div><script>addEventListener('load',function(){{setTimeout(function(){{var c=document.getElementById('workCar');if(c){{c.style.scrollSnapType='';c.style.scrollBehavior='';}}}},2500)}})</script>
   <div class="reveal" style="margin-top:18px"><a href="work.html" class="alink" data-i18n="work">See all work <span class="ar">&rarr;</span></a></div></div></section>
+
+<section style="padding-top:0"><div class="wrap"><div class="stats stats3">
+  <div class="stat reveal"><div class="n"><span class="count" data-to="100">100</span>+</div><div class="k">Projects delivered</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="60">60</span>+</div><div class="k">Clients worldwide</div></div>
+  <div class="stat reveal"><div class="n"><span class="count" data-to="12">12</span>+</div><div class="k">Years of craft</div></div></div>
+  <div class="anl reveal"><div class="anl-k mono">The engagement, in one line</div><p class="anl-t">Brand, website, tracking and a flagship store at TRX, built as one asset over 16 months.</p><a href="project-anaaka.html" class="alink">ANAAKA case study <span class="ar">&rarr;</span></a></div></div></section>
+
+{audit()}
 
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal" data-i18n="products">Products</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Built in-house</span></div></div>
 <div class="prodshow reveal">
@@ -2269,17 +2307,6 @@ def home():
     </ul>
   </div>
 </div></div></section>
-
-{audit()}
-
-<section><div class="wrap"><div class="stats">
-  <div class="stat reveal"><div class="n"><span class="count" data-to="100">100</span>+</div><div class="k">Projects delivered</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="60">60</span>+</div><div class="k">Clients worldwide</div></div>
-  <div class="stat reveal"><div class="n"><span class="count" data-to="12">12</span>+</div><div class="k">Years of craft</div></div>
-  <div class="stat reveal"><div class="n">3</div><div class="k">Regions &mdash; SEA &middot; EU &middot; MENA</div></div></div></div></section>
-
-<section><div class="wrap" style="text-align:center"><div class="quote reveal" data-i18n="homequote" style="margin:0 auto">&ldquo;They built our entire ecosystem &mdash; brand, site, tracking and a flagship store. <em>Not a campaign. An asset.</em>&rdquo;</div>
-  <div class="quote-by reveal" data-i18n="homequoteby">ANAAKA &mdash; Halal Skincare &middot; Flagship @ TRX, Kuala Lumpur</div></div></section>
 
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Questions, answered</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">(04) &mdash; FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
 '''+cta()
