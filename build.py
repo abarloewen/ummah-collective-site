@@ -263,7 +263,7 @@ def nav():
       '<span class="lab">Tell us what&rsquo;s slowing your growth.</span>'
       '<span class="dsc">A free 30-minute teardown &mdash; no pitch, just the map.</span>'
       '<div class="mega-btns"><a class="mb1" href="booking.html">Book a call &rarr;</a><a class="mb2" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-      '<a class="alink mega-audit" href="audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a>'
+      '<a class="alink mega-audit" href="/audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a>'
       '<div class="mega-soc">'
       '<a href="'+WA+'" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.9c0 1.76.46 3.45 1.32 4.95L2 22l5.3-1.39a9.86 9.86 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.16 8.16 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.24-8.23 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.69 8.23-8.23 8.23zm4.5-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.48-1.38-1.73-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.14.16-.25.25-.42.08-.16.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31s-.86.84-.86 2.05c0 1.21.88 2.38 1 2.54.12.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a>'
       '<a href="https://www.linkedin.com/company/ummah-collective/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9.5 9H13v1.65h.05c.49-.93 1.7-1.9 3.5-1.9 3.74 0 4.43 2.46 4.43 5.66V21h-4v-5.3c0-1.26-.02-2.89-1.76-2.89-1.76 0-2.03 1.38-2.03 2.8V21h-4z"/></svg></a>'
@@ -298,7 +298,7 @@ def overlay():
     cta_card=('<div class="ov-cta"><span class="ov-cta-k">Start here</span>'
       '<span class="ov-cta-h">Tell us what&rsquo;s slowing your growth.</span>'
       '<div class="ov-cta-btns"><a class="btn btn-fill" href="booking.html" data-i18n="book">Book a call</a><a class="btn btn-ghost" href="'+WA+'" target="_blank" rel="noopener">WhatsApp</a></div>'
-      '<a class="alink" href="audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a></div>')
+      '<a class="alink" href="/audit.html" style="display:inline-block;margin-top:12px;font-size:13px">Take the 60-second audit <span class="ar">&rarr;</span></a></div>')
     return f'''<div class="overlay" id="overlay"><div class="ov-top">{BRAND}<button type="button" class="ov-close" id="menuClose" aria-label="Close menu">&#10005;</button></div>
   <div class="ov-body">{sol}{work}{compsec}<div class="ov-ctawrap">{cta_card}</div></div></div>'''
 
@@ -421,7 +421,7 @@ def audit():
     return '''<section><div class="wrap"><div class="audit reveal"><span class="badge" data-i18n="abadge">No-risk front door</span>
   <h2 data-i18n="audith2">Get a <em>free AI audit</em> of your business</h2>
   <p style="margin:0 auto 26px" data-i18n="auditp">A 30-minute teardown: where AI agents, automation and a better site would save you the most time and money. No pitch, just the map.</p>
-  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="audit.html" class="alink">Take the 60-second audit <span class="ar">&rarr;</span></a></div></div></div></section>'''
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center"><a href="booking.html?service=audit" class="btn btn-fill" data-i18n="audit">Free AI audit</a><a href="/audit.html" class="alink">Take the 60-second audit <span class="ar">&rarr;</span></a></div></div></div></section>'''
 
 # ---------------- SERVICES (14 granular) ----------------
 SERVICES=[
@@ -2926,6 +2926,9 @@ def localize(pages):
             h=_localize_ld(h,tr,l)
             # links to articles that have no version in this language go to the English page
             h=_re.sub(r'href="(article-[a-z0-9-]+\.html)"',lambda m5: m5.group(0) if l in _alangs(m5.group(1)) else 'href="/'+m5.group(1)+'"',h)
+            # hand-maintained pages with no version in this tree go to the English page (QA 2026-11-10)
+            for sp in ['audit.html','meet.html','ummah-hub.html']:
+                if not os.path.isfile(os.path.join(OUT,l,sp)): h=h.replace('href="'+sp+'"','href="/'+sp+'"')
             # absolute asset paths (page lives one level down)
             for a in ['uc.css','uc.js','translations.js','favicon.ico','favicon.svg','apple-touch-icon.png','site.webmanifest','orbit-lottie.json','pulse-lottie.json']:
                 h=h.replace('href="'+a+'"','href="/'+a+'"').replace('src="'+a+'"','src="/'+a+'"').replace('data-src="'+a+'"','data-src="/'+a+'"')
