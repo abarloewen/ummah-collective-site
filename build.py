@@ -889,7 +889,7 @@ def crm_savings():
     # 2026-11-10: unproven savings figures replaced with capability lines (copy deck)
     items=[("One","Place for leads, deals and invoices"),("Your fields","Stages that match how you sell"),("Connected","WhatsApp, email, calendar and invoices"),("Yours","No per-seat licence, you own the code")]
     cc="".join('<div class="svc reveal"><div class="svc-n">'+n+'</div><div class="svc-l">'+l+'</div></div>' for n,l in items)
-    return ('<section style="padding-top:0"><div class="wrap"><div class="depth reveal"><div class="eyebrow"><span class="t"></span><span class="mono">The math</span></div>'
+    return ('<section style="padding-top:0"><div class="wrap"><div class="depth reveal"><div class="eyebrow"><span class="t"></span><span class="mono">You own it</span></div>'
       '<h2 class="depth-h">Own your system. Stop renting five.</h2>'
       '<p class="depth-lead">Most teams bleed money on a stack of per-seat subscriptions and hours of manual work that never quite fit. A custom system replaces the stack, fits your workflows exactly, and becomes an asset you own &mdash; not a bill that grows forever.</p>'
       '<div class="grid g4 svc-grid" style="gap:14px;margin-top:26px">'+cc+'</div></div></div></section>')

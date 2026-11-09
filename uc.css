@@ -1603,3 +1603,5 @@ html[lang=zh] body{font-family:'Noto Sans SC',var(--sans)}
 .ready-line{margin-top:18px;color:var(--dim)}
 .contact-helper{margin-bottom:22px;color:var(--dim)}
 .anaaka-res .stat .n{font-size:clamp(40px,5.2vw,80px)}
+.phero p.offer-line{font-size:14px;line-height:1.5;margin-top:14px;max-width:62ch;color:var(--dim)}
+.hero-alink{margin-inline-start:4px}
