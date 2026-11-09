@@ -463,11 +463,30 @@ SERVICES=[
   [("Clarity","On your status quo"),("Scholar-led","Not a checkbox"),("Ready","For official bodies"),("Trusted","By the market")],["Scholar review","Islamic finance","Halal standards","Gap analysis","Audit report","Roadmap"],"1554224155-6726b3ff858f"),
 ]
 
+# 2026-11-10 copy deck: service hero = eyebrow (service name) + outcome H1 + definition
+SVC_COPY={
+ 'ai-agents':("AI Agents","Agents that answer, qualify and book, around the clock","We build AI agents for sales, support and back office that work on WhatsApp, email and web chat in your customers&rsquo; language. They answer in seconds, qualify every lead, book meetings into your calendar and hand edge cases to your team with the full context. For companies in Malaysia, Europe and the Gulf."),
+ 'automation':("Automation &amp; Workflows","Take the manual work out of the gaps between your tools","We connect your forms, CRM, inbox, invoicing and accounting so data moves on its own and every step is logged. Quotes, invoices, onboarding and reports run without copy-paste, and your team spends its time on customers instead of spreadsheets."),
+ 'app-development':("App &amp; Software Development","Internal tools, portals and apps, built to your process","We build web and mobile applications, client portals and internal tools with the APIs, integrations and payment rails your product needs. Scoped as fixed sprints, shipped to production and maintained by the team that wrote them."),
+ 'web-design':("Web Design &amp; Platforms","A website that works as your best salesperson","We design and build fast, multilingual websites and platforms that explain your offer in seconds, rank in search and turn visits into enquiries. Right-to-left Arabic, booking flows and tracking are built in from the start. Websites from &euro;4,800."),
+ 'branding':("Branding &amp; Strategy","Positioning and identity that make you the obvious choice","We define what you stand for, who you sell to and how you sound, then build the identity, messaging and roadmap that carry it across web, content and sales. Including market entry for Southeast Asia, Europe and the Gulf."),
+ 'lead-generation':("Lead Generation &amp; Performance Marketing","A pipeline of qualified buyers, measured to the ringgit and euro","Outbound, paid media, landing pages and conversion work run as one engine that finds, warms and converts the right buyers. Every step is tracked server-side, so you see cost per meeting and per customer, not only clicks."),
+ 'seo-content':("SEO &amp; Content","Be found on Google and cited in AI answers","Technical SEO, multilingual content and answer-engine work that make your site the clearest source on the questions your buyers ask. Built to compound: pages you own that keep bringing customers after the campaign ends."),
+ 'social-media-automation':("Social Media Automation","On-brand social content, published without a full-time hire","A template system, an AI content engine and scheduled publishing produce on-brand posts every week. You approve in one tap, and a monthly performance review tells the engine what to make more of."),
+ 'shariah-audit':("Shariah Compliance &amp; Halal Audit","Know exactly where you stand before you certify","A scholar-led external review of your products, finance and digital operations against Shariah and halal requirements. You get a clear written picture of your status quo and what to fix before applying for certification or entering the Muslim market."),
+}
+# capability lines replace the unproven KPI tiles (decision 7 Nov 2026)
+SVC_TILES={
+ 'ai-agents':[("24/7","Answers at any hour"),("Seconds","First reply, on every channel"),("Every lead","Followed up until there&rsquo;s an answer"),("Next best offer","Suggested at the right moment"),("Clean hand-off","Edge cases reach your team with context"),("6+","Languages, switching mid-conversation")],
+ 'automation':[("One","Source of truth across your tools"),("Zero","Copy-paste between systems"),("Logged","Every step is auditable"),("Hours","Handed back to your team each week")],
+}
+
 def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
     crumb='<a href="index.html">Home</a> / <a href="services.html">Services</a> / '+title
     if slug=='ai-agents':
         deliver=[("Sales &amp; SDR agents","Inbound leads qualified and meetings booked, 24/7."),("Outbound agents","Accounts researched, outreach personalised, follow-ups run."),("Customer-support agents","Tickets resolved and escalated &mdash; in any language."),("WhatsApp &amp; commerce agents","Conversational selling on the channels your market uses."),("HR &amp; ops agents","HR and back-office overhead, cut."),("Document &amp; back-office agents","Quotes, invoices and reports, automated.")]
-        outcomes=[("24/7","Replies faster than humans"),("0","Never lose a deal"),("100%","Every lead followed up"),("&uarr;","Up- &amp; cross-sells"),("&minus;40%","Lower HR cost"),("6+","Speaks every language")]
+    outcomes=SVC_TILES.get(slug,outcomes)
+    if slug=='web-design': outcomes=[("Mobile-first","Fast on the phones your buyers use") if k=="Performance" else (("Yours","Code, content and accounts") if k=="Scales" else (n,k)) for n,k in outcomes]
     deliv="".join(f'<li><span class="i">{i:02d}</span><div><b>{b}</b><p>{p}</p></div></li>' for i,(b,p) in enumerate(deliver,1))
     cards="".join(f'<div class="card reveal"><div class="no">{n}</div><h3>{k}</h3></div>' for n,k in outcomes)
     tg="".join(f'<i>{t}</i>' for t in tools)
@@ -478,7 +497,7 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
     aix=''
     if slug=='ai-agents':
         d1=agent_chat('Sales agent &middot; WhatsApp','Closing a complex export order',[('a','Assalamualaikum &#128075; I need 5,000 units of your halal serum in Jeddah before Ramadan &mdash; MYR pricing + export docs. Possible?'),('u','Wa alaikum salam. Checking stock, JAKIM cert &amp; Jeddah lead-time&hellip;'),('u','&#9989; 5,000 confirmed &mdash; MYR 142,500, SFDA labels + export docs in. Ships in 3 weeks.'),('a','Perfect. Split &mdash; 3,000 now, 2,000 in March?'),('typing',''),('u','Done &mdash; drafted a 2-shipment contract, reserved stock &amp; booked our export lead for Thu 11am KSA &#128196;')])
-        d2=agent_chat('Outbound agent &middot; Email','Booking a meeting from a cold open',[('u','Hi Sarah &mdash; saw your brand just launched in Dubai. We helped 3 halal brands localise for the Gulf in under 6 weeks. Worth 15 min?'),('a','Maybe&hellip; what&rsquo;s the catch?'),('u','No catch &mdash; fixed scope, you own everything we build. Free teardown of your funnel?'),('a','Go on then. Thursday?'),('typing',''),('u','Booked Thu 2pm + sent a 1-page plan tailored to your brand &#9989;')])
+        d2=agent_chat('Outbound agent &middot; Email','Booking a meeting from a cold open',[('u','Hi Sarah &mdash; saw your brand just launched in Dubai. We build WhatsApp agents for halal brands selling into the Gulf. Worth a short call?'),('a','Maybe&hellip; what&rsquo;s the catch?'),('u','No catch &mdash; fixed scope, you own everything we build. Free teardown of your funnel?'),('a','Go on then. Thursday?'),('typing',''),('u','Booked Thu 2pm + sent a 1-page plan tailored to your brand &#9989;')])
         d3=agent_chat('Support agent &middot; WhatsApp','Resolving a hard ticket on its own',[('a','Order #4821 says delivered but I got nothing &#128545;'),('u','So sorry &mdash; pulling the courier scan &amp; GPS now&hellip;'),('u','Found it: misdelivered 2 streets over. Replacement dispatched (free express) + shipping refunded &#9989;'),('a','Oh wow &mdash; thank you!'),('typing',''),('u','Anytime &#128591; Logged the address error so it can&rsquo;t happen again.')])
         d4=agent_chat('HR agent &middot; WhatsApp','Screening &amp; scheduling a candidate',[('a','Salam, I applied for the marketing role &mdash; any update? And is remote possible?'),('u','Salam Yusuf! You&rsquo;re shortlisted &#127881; Checking the calendar&hellip;'),('u','Remote: hybrid, 2 days/wk in KL. Interview booked Tue 10am with Aisha &mdash; invite + prep guide sent.'),('a','That&rsquo;s perfect, thank you!'),('typing',''),('u','Onboarding pack will be ready the moment you sign &#128203;')])
         exsec=('<section style="padding-top:0"><div class="wrap"><div class="reveal" style="max-width:64ch"><div class="eyebrow"><span class="t"></span><span class="mono">In action</span></div>'
@@ -487,7 +506,7 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
           '<div class="grid g2" style="gap:18px;margin-top:24px">'+d1+d2+d3+d4+'</div></div></section>')
         _ag=[("01","Sales &amp; SDR agent","Qualifies inbound leads, answers questions and books meetings on autopilot &mdash; web, WhatsApp and email."),
              ("02","Outbound agent","Researches accounts, personalises every message and runs the follow-ups until a real conversation starts."),
-             ("03","Customer-support agent","Resolves tickets, escalates the hard ones and never sleeps &mdash; in any language, with &minus;60% response time."),
+             ("03","Customer-support agent","Resolves tickets and escalates the hard ones, in any language, at any hour."),
              ("04","WhatsApp commerce agent","Sells, takes orders and answers on the channel your market actually uses &mdash; conversational checkout."),
              ("05","HR &amp; ops agent","Cuts HR and back-office overhead: screens applicants, onboards staff and answers internal questions, 24/7."),
              ("06","Back-office &amp; document agent","Generates quotes, invoices and reports, then pushes them into your systems &mdash; quote-to-cash, automated.")]
@@ -574,7 +593,14 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
           '<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">How it works</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Four steps to clarity</span></div></div><div class="grid g4" style="gap:14px">'+stc+'</div></div></section>'
           '<section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Straight answers</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">FAQ</span></div></div><div class="faq">'+fqc+'</div></div></section>')
     depth=depth_section(slug)
-    body=phero(crumb,f"Service / {eyebrow}",title,intro)+f'''
+    fqsec=''
+    _k=aix.find('<div class="faq">')
+    if _k>=0:
+        _st=aix.rfind('<section',0,_k); _en=aix.find('</section>',_k)+len('</section>')
+        fqsec=aix[_st:_en]; aix=aix[:_st]+aix[_en:]
+    _nm,_h1,_def=SVC_COPY[slug]
+    intro=_def
+    body=phero(crumb,_nm,_h1,_def,extra=hero_ctas(False))+proof_strip()+f'''
 <section style="padding-top:20px"><div class="wrap"><div class="grid g2" style="align-items:start">
   <div class="reveal"><div class="eyebrow"><span class="t"></span><span class="mono">What we deliver</span></div><ul class="dlist">{deliv}</ul>
     <div style="margin-top:22px"><div class="eyebrow"><span class="t"></span><span class="mono">Stack</span></div><div class="tg" style="display:flex;flex-wrap:wrap;gap:7px">{tg}</div></div>
@@ -584,8 +610,11 @@ def service_page(slug,num,title,eyebrow,intro,deliver,outcomes,tools,imgid):
 {exsec}
 {aix}
 {depth}
+{ladder()}
+{fqsec}
+{risk_row()}
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Related services</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">One roof</span></div></div><div class="idx reveal">{rels}</div></div></section>
-'''+audit()+cta()
+'''+cta()
     _SEOT={'ai-agents':'AI Automation Agency — Done-for-You AI Agents & WhatsApp AI','web-design':'Web Design Agency Kuala Lumpur — Premium Multilingual Websites','lead-generation':'Lead Generation & Growth for Halal-Certified Brands','automation':'Business Process Automation — Cut Overhead, Keep Output','custom-crm':'Custom CRM Development Malaysia — Systems You Own','app-development':'App & Software Development — Shariah-Compliant by Design'}
     _SEOD={'ai-agents':'Done-for-you AI agents and WhatsApp automation that sell and support 24/7. An applied-AI automation agency serving Malaysia, Europe, the Gulf and the US.','web-design':'Premium web design from Kuala Lumpur: conversion-focused, multilingual (EN/BM/DE/AR) websites for modern and halal businesses. European standards, local fluency.','lead-generation':'Outbound, paid and CRO in one engine — including growth marketing for halal-certified brands entering Malaysia, Europe and the US.','custom-crm':'Custom CRM development in Malaysia: your workflow, WhatsApp-native, and you own the system. From audit to daily-driver.','app-development':'Custom apps, APIs and payment systems — including shariah-compliant software development for islamic fintech and halal-economy startups.'}
     sld=_ld({"@context":"https://schema.org","@type":"Service","name":_plain(title),"description":_plain(intro),"serviceType":_plain(title),"provider":{"@id":SITE+"/#org"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/service-"+slug+".html","inLanguage":"en"})
@@ -723,7 +752,7 @@ DEPTH={
    "Hand the busywork to machines &mdash; keep your people for the real work."),
  'app-development':("The duct-tape tax","You don&rsquo;t have a software problem &mdash; you have a duct-tape problem.",
    "Spreadsheets here, three SaaS tools there, a WhatsApp group holding it together. It works &mdash; until it doesn&rsquo;t. Every manual hand-off is a leak: lost hours, dropped orders, numbers nobody trusts.",
-   [("~10 hrs / week","Gone to copy-paste, re-keying and chasing updates that should be automatic."),("Deals slip","Work falls through the cracks between disconnected tools and inboxes."),("Stale data","You decide on numbers that were already out of date this morning.")],
+   [("Hours lost","Gone to copy-paste, re-keying and chasing updates that should be automatic."),("Deals slip","Work falls through the cracks between disconnected tools and inboxes."),("Stale data","You decide on numbers that were already out of date this morning.")],
    "Custom software removes the tape &mdash; your data, your roadmap. Find your biggest leak in a free 30-minute teardown."),
  'web-design':("Your best salesperson","Your website is your hardest-working salesperson &mdash; or your weakest.",
    "It sells every hour you don&rsquo;t, in every market you can&rsquo;t reach in person. A slow, generic, English-only site quietly turns away the exact buyers you paid to attract.",
@@ -857,16 +886,13 @@ def crm_auto():
     return ('<div class="demo reveal"><div class="lpanel">'+_ltop('Automation','Running')+'<div class="flow-steps" style="margin-top:6px">'+rows+'</div></div>'
       '<span class="cap">When something happens, the busywork handles itself</span>'+DEMO_TAG+'</div>')
 def crm_savings():
-    items=[("5&ndash;8 &rarr; 1","tools replaced","One system instead of paying for a CRM plus email, scheduling, invoicing and chat tools."),
-      ("up to &minus;40%","software + ops cost","Versus a stack of per-seat SaaS subscriptions that grow with every hire."),
-      ("~12 hrs / week","saved per team","Reclaimed from re-keying, chasing updates and building reports by hand."),
-      ("0","per-seat tax","You own the asset &mdash; adding people doesn&rsquo;t add licence fees.")]
-    cc="".join('<div class="svc reveal"><div class="svc-n">'+n+'</div><div class="svc-l">'+l+'</div><div class="svc-b">'+b+'</div></div>' for n,l,b in items)
+    # 2026-11-10: unproven savings figures replaced with capability lines (copy deck)
+    items=[("One","Place for leads, deals and invoices"),("Your fields","Stages that match how you sell"),("Connected","WhatsApp, email, calendar and invoices"),("Yours","No per-seat licence, you own the code")]
+    cc="".join('<div class="svc reveal"><div class="svc-n">'+n+'</div><div class="svc-l">'+l+'</div></div>' for n,l in items)
     return ('<section style="padding-top:0"><div class="wrap"><div class="depth reveal"><div class="eyebrow"><span class="t"></span><span class="mono">The math</span></div>'
       '<h2 class="depth-h">Own your system. Stop renting five.</h2>'
       '<p class="depth-lead">Most teams bleed money on a stack of per-seat subscriptions and hours of manual work that never quite fit. A custom system replaces the stack, fits your workflows exactly, and becomes an asset you own &mdash; not a bill that grows forever.</p>'
-      '<div class="grid g4 svc-grid" style="gap:14px;margin-top:26px">'+cc+'</div>'
-      '<p class="svc-foot">Typical for a 10-person B2B team &mdash; we model your real numbers in the audit.</p></div></div></section>')
+      '<div class="grid g4 svc-grid" style="gap:14px;margin-top:26px">'+cc+'</div></div></div></section>')
 WHIDE=set()  # all previously-hidden slugs removed from PROJECTS entirely (2026-07-04)
 def work_page():
     tiles="".join(_tile(s,n,c,y,b,im) for s,n,c,y,b,sc,url,im in PROJECTS if s not in WHIDE)
@@ -2616,8 +2642,8 @@ def noon_os_page():
          ("Can AI agents work inside it?","Absolutely &mdash; capture, qualify and follow up leads 24/7, in any language."),
          ("What does it cost?","Every build is scoped to you. Book an audit and we&rsquo;ll map the work &mdash; and the savings.")]
     faqs="".join(f'<details class="reveal"><summary>{q}<span class="pl">+</span></summary><p>{a}</p></details>' for q,a in faq)
-    body=phero('<a href="index.html">Home</a> / Services / Custom Systems','Service / Custom Systems &amp; CRM','The custom system<br>your business <em>runs on.</em>',
-        "We build bespoke internal systems that optimize how your business actually runs &mdash; sales, operations, finance and every workflow in between &mdash; cutting manual work and cost. A CRM is one shape it takes; white-labelling or reselling it is just an option.")+f'''
+    body=phero('<a href="index.html">Home</a> / <a href="services.html">Services</a> / Custom Systems &amp; CRM','Custom Systems &amp; CRM','One CRM built around how your team sells',
+        "We design and build custom CRMs and internal systems around your real sales process: your stages, your fields, WhatsApp and email in one timeline, invoices and reports connected. No per-seat licences, and the code and data belong to you.",extra=hero_ctas(False))+proof_strip()+f'''
 <section style="padding-top:6px"><div class="wrap"><div class="reveal" style="max-width:66ch"><div class="eyebrow"><span class="t"></span><span class="mono">See it live</span></div><h2 style="font-size:clamp(26px,3vw,40px);margin-bottom:10px">A system that works the way you do</h2><p>Real features from the systems we&rsquo;ve built &mdash; boards, records, dashboards and automations &mdash; wired to how your team actually works, not a vendor&rsquo;s template.</p></div>
 <div class="grid g2 crmprev" style="gap:18px;margin-top:24px">{crm_pipeline()}{crm_contact()}{crm_dash()}{crm_auto()}{cap}</div></div></section>
 {crm_savings()}
@@ -2628,9 +2654,12 @@ def noon_os_page():
 <div class="grid g3 depth-cards" style="gap:16px;margin-top:26px"><div class="dpc reveal"><div class="dpc-k">Fits your process</div><div class="dpc-b">Stages, fields and views that match how you really operate.</div></div><div class="dpc reveal"><div class="dpc-k">Actually adopted</div><div class="dpc-b">When the tool fits, the team logs everything &mdash; so the data is real.</div></div><div class="dpc reveal"><div class="dpc-k">Grows with you</div><div class="dpc-b">New product line, market or workflow &mdash; the system bends, you don&rsquo;t.</div></div></div>
 <div class="depth-cta"><p>See what we&rsquo;d build for you &mdash; book a free workflow audit.</p><a href="booking.html?service=noon-os" class="btn btn-fill" data-i18n="book">Book a call</a></div></div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">How it works</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">Idea to live in weeks</span></div></div><div class="grid g3" style="gap:14px">{stc}</div></div></section>
+{ladder()}
 <section style="padding-top:0"><div class="wrap"><div class="sh"><h2 class="reveal">Custom systems, answered</h2><div class="eyebrow reveal"><span class="t"></span><span class="mono">FAQ</span></div></div><div class="faq">{faqs}</div></div></section>
-'''+cta('Book a<br><em>CRM audit.</em>')
-    return page("noon-os.html","Noon OS — Halal CRM & Business Software for Muslim Founders","Noon OS is the halal CRM and business operating system for Muslim founders: sales, projects, finance and community in one panel.",body,aurora="services",ld=_ld({"@context":"https://schema.org","@type":"Service","name":"Custom CRM & Business Systems","description":"Bespoke CRM and internal systems built around how a business sells and operates, with WhatsApp, accounting and AI agents connected. Delivered as Noon OS or a white-label build.","serviceType":"Custom CRM development","provider":{"@id":SITE+"/#org"},"brand":{"@type":"Brand","name":"Noon OS"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/noon-os.html","inLanguage":"en"})+faq_ld(faq))
+{risk_row()}
+<section style="padding-top:0"><div class="wrap"><p class="ready-line reveal">Prefer something ready-made? <a class="alink" href="https://noonos-site.vercel.app" target="_blank" rel="noopener">Noon OS, our own CRM for the halal economy, starts at &euro;19 a month.</a></p></div></section>
+'''+cta()
+    return page("noon-os.html","Custom CRM Development Malaysia: Systems You Own | Ummah Collective","Custom CRMs and internal systems built around how your team sells: your stages and fields, WhatsApp and email in one timeline, invoices connected. You own the code.",body,aurora="services",ld=_ld({"@context":"https://schema.org","@type":"Service","name":"Custom CRM & Business Systems","description":"Custom CRMs and internal systems built around a company's real sales process, with WhatsApp, email, invoices and reports connected. No per-seat licences; the client owns the code and data.","serviceType":"Custom CRM development","provider":{"@id":SITE+"/#org"},"areaServed":["MY","DE","AE","SA","SG"],"url":SITE+"/noon-os.html","inLanguage":"en"})+faq_ld(faq))
 
 def launch_bundle_page():
     incl=[("Premium website &mdash; new or redesign","A conversion-built, multilingual site, designed and developed by us &mdash; built fresh, or your existing one rebuilt and modernised. Fast, secure and structured to turn visitors into real enquiries, not just views."),
