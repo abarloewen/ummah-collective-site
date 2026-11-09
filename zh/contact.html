@@ -15,8 +15,8 @@
     <div><label for="bfService">对……感兴趣</label><select id="bfService" name="service"><option value="Start a project">开启一个项目</option><option value="AI Agents">AI 智能体</option><option value="Automation & Workflows">自动化与工作流</option><option value="App & Software Development">应用与软件开发</option><option value="Web Design & Platforms">网页设计与平台</option><option value="Branding & Strategy">品牌与战略</option><option value="Social Media Automation Flow">社交媒体自动化流程</option><option value="Lead Generation & Performance Marketing">获客与效果营销</option><option value="SEO & Content">SEO 与内容</option><option value="Shariah Compliance & Halal Audit">伊斯兰教法合规与清真审计</option><option value="Free AI audit">免费AI审计</option><option value="Something else">其他情况</option></select></div>
     <div><label for="bfMessage">您想要打造什么？</label><textarea id="bfMessage" name="message" required placeholder="A custom CRM, an AI agent, a new site..."></textarea></div>
     <div><button class="btn btn-fill" type="submit" data-i18n="brief">发送需求</button><span id="briefSending" hidden>发送中&hellip;</span></div>
-    <p class="ok" id="briefOk" role="status" hidden style="color:var(--acc)">Thank you. Your brief reached us; we reply within one working day.</p>
-    <div id="briefFail" role="alert" hidden style="color:#ff8c7a"><p>That didn&rsquo;t send. Email info@ummah-collective.com or WhatsApp us and we&rsquo;ll pick it up from there.</p><p style="margin-top:8px"><a href="mailto:info@ummah-collective.com" dir="ltr">info@ummah-collective.com</a> &middot; <a href="https://wa.me/601133262709" target="_blank" rel="noopener">WhatsApp</a></p></div></form>
+    <p class="ok" id="briefOk" role="status" hidden style="color:var(--acc)">谢谢。我们已收到您的需求简介，将在一个工作日内回复。</p>
+    <div id="briefFail" role="alert" hidden style="color:#ff8c7a"><p>发送失败。请发邮件至 info@ummah-collective.com 或通过 WhatsApp 联系我们，我们会接着跟进。</p><p style="margin-top:8px"><a href="mailto:info@ummah-collective.com" dir="ltr">info@ummah-collective.com</a> &middot; <a href="https://wa.me/601133262709" target="_blank" rel="noopener">WhatsApp</a></p></div></form>
 <script>(function(){var f=document.getElementById('briefForm');if(!f)return;var ok=document.getElementById('briefOk'),bad=document.getElementById('briefFail'),btn=f.querySelector('button[type=submit]'),lbl=btn.innerHTML,snd=document.getElementById('briefSending').textContent;
 function v(n){var e=f.querySelector('[name='+n+']');return e?e.value.trim():'';}
 f.addEventListener('submit',function(e){e.preventDefault();if(f.checkValidity&&!f.checkValidity()){f.reportValidity&&f.reportValidity();return;}
@@ -27,15 +27,15 @@ try{var x=new XMLHttpRequest();x.open('POST','https://formsubmit.co/ajax/info@um
 x.onload=function(){var j=null;try{j=JSON.parse(x.responseText);}catch(_){}done(x.status>=200&&x.status<300&&!!j&&(j.success===true||j.success==='true'));};
 x.onerror=x.ontimeout=function(){done(false);};x.timeout=20000;x.send(JSON.stringify(d));}catch(_){done(false);}});})();</script>
   <div class="reveal">
-    <p class="contact-helper">Fastest: WhatsApp. Most thorough: the free audit.</p>
+    <p class="contact-helper">最快：WhatsApp。最全面：免费审计。</p>
     <div class="eyebrow"><span class="t"></span><span class="mono">直接</span></div>
-    <p style="margin-bottom:18px"><a class="alink" href="booking.html?service=audit">Get your free audit <span class="ar">&rarr;</span></a></p>
+    <p style="margin-bottom:18px"><a class="alink" href="booking.html?service=audit">获取免费审计 <span class="ar">&rarr;</span></a></p>
     <p style="margin-bottom:18px"><a class="alink" href="booking.html" data-i18n="book">预约通话</a></p>
     <p style="margin-bottom:18px"><a class="alink" href="mailto:info@ummah-collective.com">info@ummah-collective.com <span class="ar">&rarr;</span></a></p>
     <p style="margin-bottom:18px"><a class="alink" href="https://wa.me/601133262709">WhatsApp +60 11 3326 2709 <span class="ar">&rarr;</span></a></p>
     <div class="eyebrow" style="margin-top:18px"><span class="t"></span><span class="mono">工作室</span></div><p style="margin-bottom:10px"><a class="alink" href="https://www.google.com/maps?cid=5094825734493406137" target="_blank" rel="noopener">Oval Damansara, TTDI, 60000 Kuala Lumpur <span class="ar">&rarr;</span></a></p><p>吉隆坡 · 柏林 · 无国界</p></div>
 </div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="riskrow reveal"><div class="rr"><b>Fixed quote</b><p>Scope and price agreed before we start.</p></div><div class="rr"><b>归你所有</b><p>Code, data, content and accounts stay yours.</p></div><div class="rr"><b>Your data stays yours</b><p>Private deployments on request; we never train models on your data.</p></div><div class="rr"><b>Senior team</b><p>The people you meet are the people who build.</p></div></div></div></section>
+<section style="padding-top:0"><div class="wrap"><div class="riskrow reveal"><div class="rr"><b>固定报价</b><p>开工前确定范围和价格。</p></div><div class="rr"><b>归你所有</b><p>代码、数据、内容和账户始终归您所有。</p></div><div class="rr"><b>您的数据归您所有</b><p>可按需私有化部署；我们绝不用您的数据训练模型。</p></div><div class="rr"><b>资深团队</b><p>与您见面的人，就是动手构建的人。</p></div></div></div></section>
 </main><footer><div class="wrap"><div class="f-grid">
     <div><a href="index.html" class="brand"><img class="logo" src="/assets/logo-white.png" alt="Ummah Collective" width="400" height="377"><span class="wmtext" style="display:none">Ummah Collective</span></a>
       <p style="margin-top:14px;max-width:32ch" data-i18n="ftag">智能，兼具诚信。面向信任经济的应用型 AI 工作室——为现代企业打造软件、智能体与系统。</p></div>

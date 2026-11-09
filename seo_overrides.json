@@ -185,8 +185,8 @@
 "title": "حزمة الإطلاق — إطلاق حصري لشركات قطاع الحلال"
 },
 "ar/noon-os.html": {
-"description": "Noon OS هو نظام CRM حلال ونظام تشغيل للأعمال موجّه لروّاد الأعمال المسلمين: المبيعات والمشاريع والمالية والمجتمع في لوحة واحدة.",
-"title": "Noon OS: CRM حلال وأنظمة مخصصة | Ummah Collective"
+"description": "أنظمة CRM وأنظمة داخلية مخصصة حول طريقة بيع فريقك: مراحلك وحقولك، وواتساب والبريد في سجل واحد، مع ربط الفواتير. الكود ملكك.",
+"title": "تطوير أنظمة CRM مخصصة في ماليزيا: أنظمة تملكها | Ummah Collective"
 },
 "ar/privacy.html": {
 "description": "كيف تتعامل Ummah Collective مع البيانات الشخصية وفق قانون PDPA 2010 الماليزي: جمع بالحد الأدنى، دون بيع، مع مراعاة GDPR، وإشعار بلغة الملايو."
@@ -548,8 +548,8 @@
 "title": "Launch-Paket — Exklusiv für Unternehmen der Halal-Branche"
 },
 "de/noon-os.html": {
-"description": "Noon OS ist das Halal-CRM und Business-Betriebssystem für muslimische Gründer: Vertrieb, Projekte, Finanzen und Community in einem einzigen Panel.",
-"title": "Noon OS: Halal-CRM &amp; individuelle Systeme | Ummah Collective"
+"description": "Individuelle CRMs und interne Systeme rund um Ihren Vertrieb: Ihre Phasen und Felder, WhatsApp und E-Mail in einer Zeitleiste, Rechnungen angebunden. Der Code gehört Ihnen.",
+"title": "Individuelle CRM-Entwicklung: Systeme, die Ihnen gehören | Ummah Collective"
 },
 "de/privacy.html": {
 "description": "Wie Ummah Collective Personendaten nach Malaysias PDPA 2010 verarbeitet: minimale Erhebung, kein Verkauf, DSGVO-bewusst, mit Hinweis in Bahasa Malaysia."
@@ -861,8 +861,8 @@
 "title": "Pakej Pelancaran — Eksklusif untuk Perniagaan Industri Halal"
 },
 "ms/noon-os.html": {
-"description": "Noon OS ialah CRM halal dan sistem pengendalian perniagaan untuk pengasas Muslim: jualan, projek, kewangan dan komuniti dalam satu panel.",
-"title": "Noon OS: CRM Halal &amp; Sistem Tersuai | Ummah Collective"
+"description": "CRM dan sistem dalaman tersuai mengikut cara pasukan anda menjual: peringkat dan medan anda, WhatsApp dan e-mel dalam satu garis masa, invois bersambung. Kod milik anda.",
+"title": "Pembangunan CRM Tersuai Malaysia: Sistem Milik Anda | Ummah Collective"
 },
 "ms/privacy.html": {
 "description": "Cara Ummah Collective mengendalikan data peribadi di bawah PDPA 2010 Malaysia: pengumpulan minimum, tiada penjualan, peka GDPR, notis Bahasa Malaysia."
@@ -1180,8 +1180,8 @@
 "title": "Lansman Paketi — Helal Sektörü İşletmelerine Özel Lansman"
 },
 "tr/noon-os.html": {
-"description": "Noon OS, Müslüman girişimciler için helal CRM ve iş işletim sistemidir: satış, projeler, finans ve topluluk, hepsi tek bir panelde bir arada.",
-"title": "Noon OS: Helal CRM ve Özel Sistemler | Ummah Collective"
+"description": "Ekibinizin satış biçimine göre kurulan özel CRM'ler ve iç sistemler: aşamalarınız ve alanlarınız, WhatsApp ve e-posta tek akışta, faturalar bağlı. Kod sizin.",
+"title": "Malezya'da Özel CRM Geliştirme: Size Ait Sistemler | Ummah Collective"
 },
 "tr/privacy.html": {
 "description": "Ummah Collective'in kişisel verileri Malezya PDPA 2010 kapsamında nasıl işlediği: asgari veri toplama, satış yok, GDPR bilinci, Bahasa Malaysia bildirimi."
@@ -1506,8 +1506,8 @@
 "title": "上线套餐 — 清真产业企业专属上线方案"
 },
 "zh/noon-os.html": {
-"description": "Noon OS是面向穆斯林创业者与清真经济品牌的清真CRM与商业操作系统——销售、项目、财务与社区尽在一个面板。我们也为您打造完全归您所有的定制CRM。",
-"title": "Noon OS：清真 CRM 与定制系统 | Ummah Collective"
+"description": "围绕团队销售方式打造的定制 CRM 和内部系统：您的阶段和字段，WhatsApp 与邮件在同一时间线，发票全部打通。代码归您所有。",
+"title": "马来西亚定制 CRM 开发：归您所有的系统 | Ummah Collective"
 },
 "zh/privacy.html": {
 "description": "Ummah Collective 如何依据马来西亚 PDPA 2010 处理个人数据：最少收集、绝不出售、兼顾 GDPR，并附马来语声明。"
@@ -1693,8 +1693,9 @@
 "title": "SEO &amp; Content for Google and AI Search | Ummah Collective"
 },
 "noon-os.html": {
-"title": "Noon OS: Halal CRM &amp; Custom Systems | Ummah Collective"
-  },
+"title": "Custom CRM Development Malaysia: Systems You Own | Ummah Collective",
+"description": "Custom CRMs and internal systems built around how your team sells: your stages and fields, WhatsApp and email in one timeline, invoices connected. You own the code."
+},
 "ms/article-marketing-automation-malaysia.html": {
 "title": "Automasi pemasaran di Malaysia: lima sistem pertama",
 "description": "Automasi pemasaran untuk PKS di Malaysia: lima automasi yang perlu dibina dahulu, kos mesej WhatsApp sebenar, PDPA dan apa yang kekal manusia."
