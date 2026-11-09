@@ -25,7 +25,8 @@
 "title": "قبل الأتمتة: تدقيق العمليات الذي يجعلها مجدية — Ummah Collective"
 },
 "ar/article-choose-ai-automation-agency-malaysia.html": {
-"description": "كل وكالة في البلاد تعلن اليوم عن أتمتة بالذكاء الاصطناعي، وتصفها جميعها تقريبًا بالطريقة نفسها. إليك ما يميّز بينها فعلًا قبل أن توقّع."
+"description": "تقارن بين وكالات أتمتة الذكاء الاصطناعي في ماليزيا؟ الأسئلة التي تطرحها قبل التوقيع، والفرق الحقيقي بين وكالة الذكاء الاصطناعي والمطوّر والمستشار.",
+"title": "وكالة أتمتة بالذكاء الاصطناعي في ماليزيا: كيف تختار الأنسب"
 },
 "ar/article-custom-crm-development-malaysia.html": {
 "description": "معظم الشركات لا تبحث عن CRM إلا بعد أن يضيع شيء ما. إليك التكلفة الفعلية لبناء نظام مخصص، وكيف ينبغي أن تسير العملية، والمزالق التي يجب تجنبها."
@@ -302,8 +303,8 @@
 "description": "Before you automate, map the work. The short operations audit that shows which processes are worth automating, and why buying the tool first fails."
 },
 "article-choose-ai-automation-agency-malaysia.html": {
-"description": "Choosing an AI automation agency in Malaysia? The questions that separate a studio that audits your workflow first from one that only sells a demo.",
-"title": "AI automation agency in Malaysia: how to choose one"
+"description": "Comparing AI automation agencies in Malaysia? The questions to ask before you sign, and how an AI agency, developer and consultant really differ.",
+"title": "AI Automation Agency in Malaysia: How to Choose the Right One"
 },
 "article-custom-crm-development-malaysia.html": {
 "description": "Planning a custom CRM system in Malaysia? What building one really costs, how a sound development process should run, and the pitfalls that repeat.",
@@ -384,7 +385,8 @@
 "title": "Ummah Collective auf der Blockchain Week 2024"
 },
 "de/article-choose-ai-automation-agency-malaysia.html": {
-"description": "Jede Agentur im Land wirbt inzwischen mit KI-Automatisierung, und fast alle beschreiben sie gleich. Was sie wirklich trennt, sollten Sie vorher wissen."
+"description": "Sie vergleichen KI-Automatisierungsagenturen in Malaysia? Die Fragen vor der Unterschrift und wie sich KI-Agentur, Entwickler und Berater unterscheiden.",
+"title": "KI-Automatisierungsagentur in Malaysia: die richtige wählen"
 },
 "de/article-custom-crm-development-malaysia.html": {
 "description": "Die meisten Firmen suchen erst ein CRM, wenn etwas verloren geht. Was eine Eigenentwicklung kostet, wie der Prozess läuft und wo die Fallstricke liegen."
@@ -694,7 +696,7 @@
 "title": "Ummah Collective di Blockchain Week 2024"
 },
 "ms/article-choose-ai-automation-agency-malaysia.html": {
-"description": "Setiap agensi di negara ini kini mengiklankan automasi AI, dan hampir semuanya menerangkannya dengan cara sama. Ketahui apa yang membezakan mereka dahulu.",
+"description": "Membandingkan agensi automasi AI di Malaysia? Soalan yang perlu ditanya sebelum menandatangani, dan beza sebenar antara agensi AI, pembangun dan perunding.",
 "title": "Agensi Automasi AI Malaysia: Cara Memilih yang Betul"
 },
 "ms/article-custom-crm-development-malaysia.html": {
@@ -1017,7 +1019,8 @@
 "title": "Blockchain Week 2024'te Ummah Collective"
 },
 "tr/article-choose-ai-automation-agency-malaysia.html": {
-"description": "Ülkedeki her ajans artık yapay zeka otomasyonu sunuyor ve neredeyse hepsi bunu aynı şekilde anlatıyor. Karar vermeden önce onları gerçekten ayıran nedir."
+"description": "Malezya'da yapay zeka otomasyon ajanslarını mı karşılaştırıyorsunuz? İmzadan önce sorulacak sorular ve ajans, geliştirici ile danışman arasındaki fark.",
+"title": "Malezya'da yapay zeka otomasyon ajansı: doğru ajans nasıl seçilir"
 },
 "tr/article-custom-crm-development-malaysia.html": {
 "description": "Çoğu şirket, bir şey gözden kaçana kadar CRM aramaya başlamaz. Bir CRM geliştirmenin gerçek maliyeti, sürecin nasıl işlemesi gerektiği ve başlıca tuzaklar."
@@ -1325,7 +1328,7 @@
 "description": "马来西亚正成为亚洲科技版图中的关键角色。我们参与了 2024 区块链周，共同探讨符合伊斯兰教法的创新。"
 },
 "zh/article-choose-ai-automation-agency-malaysia.html": {
-"description": "如今每家机构都在宣传 AI 自动化，说法几乎如出一辙。本指南帮助你在做决定之前，了解它们之间真正的差别。",
+"description": "正在比较马来西亚的 AI 自动化机构？签约前该问的问题，以及 AI 机构、开发商和顾问之间的真正区别。",
 "title": "如何在马来西亚选择一家 AI 自动化机构：买家指南 — Ummah Collective"
 },
 "zh/article-collaborate-digitalize.html": {
@@ -1691,5 +1694,13 @@
 },
 "noon-os.html": {
 "title": "Noon OS: Halal CRM &amp; Custom Systems | Ummah Collective"
+  },
+"ms/article-marketing-automation-malaysia.html": {
+"title": "Automasi pemasaran di Malaysia: lima sistem pertama",
+"description": "Automasi pemasaran untuk PKS di Malaysia: lima automasi yang perlu dibina dahulu, kos mesej WhatsApp sebenar, PDPA dan apa yang kekal manusia."
+},
+"ar/article-marketing-automation-malaysia.html": {
+"title": "أتمتة التسويق في ماليزيا: الأنظمة الخمسة الأولى",
+"description": "أتمتة التسويق للشركات الصغيرة والمتوسطة في ماليزيا: خمس أتمتات تُبنى أولاً، وتكلفة رسائل واتساب الفعلية، وقواعد حماية البيانات، وما يبقى بيد الإنسان."
 }
 }
