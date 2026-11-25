@@ -1610,3 +1610,13 @@ svg[data-word],svg[data-word] text{direction:ltr;unicode-bidi:isolate}
 .anaaka-res .stat .n{font-size:clamp(40px,5.2vw,80px)}
 .phero p.offer-line{font-size:14px;line-height:1.5;margin-top:14px;max-width:62ch;color:var(--dim)}
 .hero-alink{margin-inline-start:4px}
+/* Basira (ex-DeenGen) product card, 2026-11-26 */
+.pc-basira{background:radial-gradient(125% 105% at 100% 0%,#0E131A,#07090D);border-color:rgba(43,196,138,.28)}
+.pc-basira:hover{border-color:rgba(43,196,138,.55);box-shadow:0 32px 74px -34px rgba(43,196,138,.32)}
+.pc-basira .pc-desc{color:#A7B0BD}
+.pc-basira .pc-tags span{border-color:rgba(43,196,138,.3);color:#5BE0AB}
+.pc-basira .pc-go,.pc-basira .pc-meta{color:#5BE0AB}
+.pc-basira .pc-logo.word{background:#07090D;border-color:rgba(43,196,138,.35)}
+.pc-basira .pc-logo.word svg{height:19px}
+.prodshow{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1080px){.prodshow{grid-template-columns:1fr}}
