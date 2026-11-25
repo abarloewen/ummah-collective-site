@@ -395,6 +395,8 @@ def register(R):
     # ---------- services index + roles + ventures ----------
     R("Every capability of a full-service agency, rebuilt around applied AI — from the first line of code to the lead that closes itself.","Jede Fähigkeit einer Full-Service-Agentur, neu gedacht rund um angewandte KI — von der ersten Codezeile bis zum Lead, der sich selbst abschließt.","Setiap keupayaan agensi perkhidmatan penuh, dibina semula sekitar AI gunaan — dari baris kod pertama hingga prospek yang menutup sendiri.","كل قدرة لوكالة متكاملة الخدمات، أُعيد بناؤها حول الذكاء الاصطناعي التطبيقي — من أول سطر برمجي إلى عميل يُغلق نفسه.","全服务机构的每项能力，围绕应用型 AI 重建——从第一行代码到自动成交的潜客。")
     R("CEO & Co-Founder","CEO & Mitgründer","CEO & Pengasas Bersama","الرئيس التنفيذي والشريك المؤسس","首席执行官兼联合创始人")
+    R("AI & Agentic Specialist, Tech Lead","KI- & Agentic-Spezialist, Tech Lead","Pakar AI & Agentik, Ketua Teknologi","أخصائي الذكاء الاصطناعي والأنظمة الوكيلة، قائد التقنية","AI 与智能体专家、技术负责人")
+    R("Senior Front-End Developer","Senior Frontend-Entwickler","Pembangun Front-End Kanan","مطوّر واجهات أمامية أول","高级前端开发工程师")
     R("CTO / Technical Director","CTO / Technischer Leiter","CTO / Pengarah Teknikal","المدير التقني","首席技术官 / 技术总监")
     R("Content & Co-Founder","Content & Mitgründer","Kandungan & Pengasas Bersama","المحتوى والشريك المؤسس","内容负责人兼联合创始人")
     R("Sales Director","Vertriebsleiter","Pengarah Jualan","مدير المبيعات","销售总监")
@@ -933,7 +935,7 @@ def register(R):
     T("Recruiting on autopilot","Otomatik işe alım"); T("Strategy & Market Entry","Strateji & Pazara Giriş"); T("HR & overhead reduction","İK & genel gider azaltma"); T("Conversion optimisation","Dönüşüm optimizasyonu")
     T("Server-side, optimised.","Sunucu taraflı, optimize."); T("Customer-service agents","Müşteri hizmetleri ajanları"); T("Premium tactile design.","Premium dokunsal tasarım."); T("WhatsApp commerce agent","WhatsApp ticaret ajanı")
     T("Brand & marketing sites","Marka & pazarlama siteleri"); T("Company data, owner set","Şirket verisi, sorumlu atandı"); T("Accounting + fulfilment","Muhasebe + sevkiyat"); T("Confirm & pick your slot","Onaylayın & saatinizi seçin")
-    T("CTO / Technical Director","CTO / Teknik Direktör"); T("Mapped to each campaign.","Her kampanyaya eşlenmiş."); T("A little world of wonder","Küçük bir harikalar dünyası"); T("Straight into accounting","Doğrudan muhasebeye")
+    T("AI & Agentic Specialist, Tech Lead","Yapay Zekâ & Ajan Sistemleri Uzmanı, Teknik Lider"); T("Senior Front-End Developer","Kıdemli Front-End Geliştirici"); T("CTO / Technical Director","CTO / Teknik Direktör"); T("Mapped to each campaign.","Her kampanyaya eşlenmiş."); T("A little world of wonder","Küçük bir harikalar dünyası"); T("Straight into accounting","Doğrudan muhasebeye")
     T("So it scales everywhere.","Her yerde ölçeklensin diye."); T("How the systems connect.","Sistemler nasıl bağlanır."); T("Identity & brand systems","Kimlik & marka sistemleri"); T("A niche going mainstream","Ana akıma dönüşen bir niş")
     T("Online & in Kuala Lumpur","Online & Kuala Lumpur'da"); T("Onboarding & data import","Kurulum & veri aktarımı"); T("Custom systems, answered","Özel sistemler, cevaplandı"); T("In person · Kuala Lumpur","Yüz yüze · Kuala Lumpur")
     T("Lifecycle that converts.","Dönüştüren yaşam döngüsü."); T("Ship sharp, then harden.","Keskin teslim et, sonra sağlamlaştır."); T("How fast can it go live?","Ne kadar hızlı yayına girer?"); T("Deep integrations & APIs","Derin entegrasyonlar & API'ler")
