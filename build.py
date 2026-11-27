@@ -2480,7 +2480,11 @@ def services_overview():
 
 def about_page():
     TEAM=[("Attila von Barloewen","CEO &amp; Co-Founder","/assets/team-attila.jpg"),("Johan Iskandar","AI &amp; Agentic Specialist, Tech Lead","/assets/team-johan.jpg"),("MD. Safiqul Islam","Senior Front-End Developer","/assets/team-safik.jpg"),("Yusef Abu-Saiba","B2B Market Analyst &amp; Sales","/assets/team-yuseda.jpg"),("Saidah Sheikh Jaffar","Content &amp; Co-Founder","/assets/team-saidah.jpg"),("Zackry M. Fazillah","Sales Director","/assets/team-zackry.jpg"),("Ustadh Dr. Muhammad Lawal","Shariah Advisor &amp; Auditor",LAWAL_IMG)]
-    tcards="".join(f'<div class="card reveal">{img(p if (p.startswith("http") or p.startswith("/")) else RU+p,n,"tphoto")}<h3 style="font-size:21px">{n}</h3><p class="mono" style="color:var(--acc2)">{r}</p></div>' for n,r,p in TEAM)
+    TEAM_LINKS={"Johan Iskandar":"https://www.webuildco.com.au"}  # name links to an external profile (2026-11-26)
+    def tname(n):
+        u=TEAM_LINKS.get(n)
+        return n if not u else f'<a href="{u}" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px">{n} <span aria-hidden="true" style="font-size:.75em">&#8599;</span></a>'
+    tcards="".join(f'<div class="card reveal">{img(p if (p.startswith("http") or p.startswith("/")) else RU+p,n,"tphoto")}<h3 style="font-size:21px">{tname(n)}</h3><p class="mono" style="color:var(--acc2)">{r}</p></div>' for n,r,p in TEAM)
     FACTS=[("Founded","2022"),("Based in","Kuala Lumpur and Petaling Jaya"),("Client projects","100+"),("Clients","60+"),("Experience","12+ years of craft"),("Languages","Six"),("Markets","Malaysia and Southeast Asia, Germany and Europe, the Gulf")]
     facts="".join('<div><span>'+k+'</span><b>'+v+'</b></div>' for k,v in FACTS)
     body=phero('<a href="index.html">Home</a> / About',"The studio","European standards.<br>Cultural fluency.<br><em>Applied AI.</em>",
